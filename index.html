@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام تقييم المطاعم - شركة نايف للأغذية | Restaurant Evaluation System - Naif Food Company</title>
-    <!-- إضافة أيقونة شعار الشركة Add company logo icon -->
+    <title>نظام تقييم المطاعم - شركة نايف للأغذية</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
-    <!-- مكتبات JavaScript لإنشاء PDF و Excel JavaScript libraries for PDF and Excel creation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
@@ -50,7 +48,7 @@
             padding: 0 15px;
         }
         
-        /* رأس الصفحة Page Header */
+        /* رأس الصفحة */
         .header {
             background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
@@ -86,7 +84,7 @@
             opacity: 0.9;
         }
         
-        /* تنقل بين الصفحات Page Navigation */
+        /* تنقل بين الصفحات */
         .page-navigation {
             background-color: white;
             border-radius: 8px;
@@ -124,7 +122,7 @@
             border-color: var(--primary-color);
         }
         
-        /* اختيار المطعم والفترة Restaurant and Period Selection */
+        /* اختيار المطعم والفترة */
         .selection-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -230,7 +228,7 @@
             margin-top: 8px;
         }
         
-        /* أداة اختيار الفترة Period Selection Tool */
+        /* أداة اختيار الفترة */
         .period-selector {
             display: flex;
             gap: 15px;
@@ -271,7 +269,7 @@
             font-size: 14px;
         }
         
-        /* أقسام الصفحات المختلفة Page Sections */
+        /* أقسام الصفحات المختلفة */
         .page-section {
             display: none;
             animation: fadeIn 0.5s ease;
@@ -286,7 +284,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* صفحة التقارير Reports Page */
+        /* صفحة التقارير */
         .reports-page {
             background-color: white;
             border-radius: 8px;
@@ -398,11 +396,6 @@
             color: #856404;
         }
         
-        .status-exported {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
-        
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -446,104 +439,7 @@
             background-color: #138496;
         }
         
-        /* ملخص التقارير Reports Summary */
-        .reports-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .summary-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            border-top: 4px solid var(--primary-color);
-        }
-        
-        .summary-card .value {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 10px 0;
-            color: var(--primary-color);
-        }
-        
-        .summary-card .label {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        /* أقسام النتائج الأسبوعية والشهرية Weekly & Monthly Results Sections */
-        .results-sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .weekly-section, .monthly-section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-        
-        .section-header h3 {
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-        
-        .week-selector, .month-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .week-selector select, .month-selector select {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background-color: white;
-            font-size: 14px;
-        }
-        
-        .weekly-stats, .monthly-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .stat-item {
-            background-color: var(--light-bg);
-            padding: 12px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        
-        .stat-item .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-        
-        .stat-item .label {
-            font-size: 13px;
-            color: #666;
-        }
-        
-        /* الكروت الإحصائية المتحركة Animated Statistics Cards */
+        /* الكروت الإحصائية المتحركة */
         .stats-container {
             display: flex;
             justify-content: space-between;
@@ -596,7 +492,7 @@
             color: #666;
         }
         
-        /* نموذج التقييم Evaluation Form */
+        /* نموذج التقييم */
         .evaluation-form {
             background-color: white;
             border-radius: 8px;
@@ -668,8 +564,8 @@
         .max-score {
             text-align: center;
             width: 80px;
-            font-size: 16px; /* زيادة حجم الخط */
-            font-weight: bold; /* جعل الخط عريض */
+            font-size: 16px;
+            font-weight: bold;
         }
         
         .achieved-score {
@@ -727,7 +623,7 @@
             font-size: 13px;
         }
         
-        /* نتائج التقييم Evaluation Results */
+        /* نتائج التقييم */
         .results-summary {
             background-color: white;
             border-radius: 8px;
@@ -791,7 +687,7 @@
             color: white;
         }
         
-        /* أزرار التحكم Control Buttons */
+        /* أزرار التحكم */
         .control-buttons {
             display: flex;
             justify-content: center;
@@ -846,7 +742,7 @@
             background-color: #1565c0;
         }
         
-        /* توقيع المطور Developer Signature */
+        /* توقيع المطور */
         .signature-card {
             position: fixed;
             bottom: 20px;
@@ -877,36 +773,6 @@
             100% { transform: translateY(0px); } 
         }
 
-        .signature-card::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(135deg, #80EF80, #2196F3);
-            border-radius: 14px;
-            z-index: -1;
-            animation: borderGlow 3s linear infinite;
-            background-size: 400%;
-        }
-
-        @keyframes borderGlow { 
-            0% { background-position: 0% 50%; } 
-            50% { background-position: 100% 50%; } 
-            100% { background-position: 0% 50%; } 
-        }
-
-        .signature-card .name { 
-            font-size: 0.95rem; 
-            font-weight: 700; 
-            margin-bottom: 5px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); 
-        }
-
-        .signature-card .title { 
-            font-size: 0.7rem; 
-            opacity: 0.9; 
-            font-weight: 500; 
-        }
-
         @media (max-width: 768px) { 
             .signature-card { 
                 position: relative; 
@@ -927,7 +793,7 @@
             }
         }
         
-        /* تصميم الطباعة Print Design */
+        /* تصميم الطباعة */
         @media print {
             body {
                 font-size: 80%;
@@ -937,7 +803,6 @@
             
             .stats-container,
             .control-buttons,
-            .results-sections,
             .period-selector,
             .page-navigation,
             .reports-filters,
@@ -963,7 +828,7 @@
             }
         }
         
-        /* تصميم متجاوب Responsive Design */
+        /* تصميم متجاوب */
         @media (max-width: 1024px) {
             .stats-container {
                 flex-direction: column;
@@ -1004,14 +869,6 @@
             .reports-controls {
                 width: 100%;
                 justify-content: center;
-            }
-            
-            .results-sections {
-                grid-template-columns: 1fr;
-            }
-            
-            .weekly-stats, .monthly-stats {
-                grid-template-columns: 1fr;
             }
             
             .criteria-table {
@@ -1063,11 +920,6 @@
                 font-size: 14px;
             }
             
-            .week-selector, .month-selector {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
             .action-buttons {
                 flex-direction: column;
                 gap: 5px;
@@ -1080,334 +932,322 @@
     </style>
 </head>
 <body>
-    <!-- رأس الصفحة Page Header -->
+    <!-- رأس الصفحة -->
     <div class="header">
         <div class="container">
             <div class="logo-container">
-                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار شركة نايف للأغذية Naif Food Company Logo" class="logo">
+                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار شركة نايف للأغذية" class="logo">
             </div>
-            <h1>نظام تقييم المطاعم Restaurant Evaluation System</h1>
-            <p>شركة نايف للأغذية | نظام التقييم الشامل (1000 درجة كحد أقصى) Naif Food Company | Comprehensive Evaluation System (1000 points maximum)</p>
+            <h1>نظام تقييم المطاعم</h1>
+            <p>شركة نايف للأغذية | نظام التقييم الشامل (1000 درجة كحد أقصى)</p>
         </div>
     </div>
 
     <div class="container">
-        <!-- تنقل بين الصفحات Page Navigation -->
+        <!-- تنقل بين الصفحات -->
         <div class="page-navigation">
-            <button class="nav-btn active" onclick="showPage('evaluation')">📋 نموذج التقييم Evaluation Form</button>
-            <button class="nav-btn" onclick="showPage('reports')">📊 التقارير Reports</button>
-            <button class="nav-btn" onclick="showPage('results')">📈 النتائج Results</button>
+            <button class="nav-btn active" onclick="showPage('evaluation')">📋 نموذج التقييم</button>
+            <button class="nav-btn" onclick="showPage('reports')">📊 التقارير</button>
         </div>
 
-        <!-- اختيار المطعم والفترة Restaurant and Period Selection -->
+        <!-- اختيار المطعم والفترة -->
         <div class="selection-container" id="selection-container">
             <div class="selection-box">
-                <h3>اختيار المطعم Restaurant Selection</h3>
-                <label for="restaurant-search"><strong>ابحث عن المطعم: Search for restaurant:</strong></label>
+                <h3>اختيار المطعم</h3>
+                <label for="restaurant-search"><strong>ابحث عن المطعم:</strong></label>
                 <div class="restaurant-search-container">
-                    <input type="text" id="restaurant-search" placeholder="اكتب اسم المطعم... Type restaurant name..." autocomplete="off">
+                    <input type="text" id="restaurant-search" placeholder="اكتب اسم المطعم..." autocomplete="off">
                     <div class="restaurant-dropdown" id="restaurant-dropdown"></div>
                 </div>
                 <input type="hidden" id="selected-restaurant" value="">
                 
                 <div class="restaurant-details">
-                    <p><strong>مدير المنطقة: Area Manager:</strong> <span id="area-manager">-</span></p>
-                    <p><strong>مدير التشغيل: Operation Manager:</strong> <span id="operation-manager">-</span></p>
+                    <p><strong>مدير المنطقة:</strong> <span id="area-manager">-</span></p>
+                    <p><strong>مدير التشغيل:</strong> <span id="operation-manager">-</span></p>
                 </div>
                 
                 <div class="evaluator-input">
-                    <label for="evaluator-name"><strong>القائم بعملية التقييم: Evaluator:</strong></label>
-                    <input type="text" id="evaluator-name" placeholder="اسم المقيم Evaluator Name">
-                </div>
-
-                <!-- اختيار الأسبوع Week Selection -->
-                <div class="evaluator-input">
-                    <label for="week-selection"><strong>اختر الأسبوع: Select Week:</strong></label>
-                    <select id="week-selection" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 15px; margin-top: 8px;">
-                        <option value="week1">الأسبوع الأول Week 1</option>
-                        <option value="week2">الأسبوع الثاني Week 2</option>
-                        <option value="week3">الأسبوع الثالث Week 3</option>
-                        <option value="week4">الأسبوع الرابع Week 4</option>
-                    </select>
+                    <label for="evaluator-name"><strong>القائم بعملية التقييم:</strong></label>
+                    <input type="text" id="evaluator-name" placeholder="اسم المقيم">
                 </div>
             </div>
             
             <div class="selection-box">
-                <h3>تحديد فترة التقييم Evaluation Period Selection</h3>
+                <h3>تحديد فترة التقييم</h3>
                 <div class="period-selector">
                     <div class="period-input">
-                        <label for="period-from">من تاريخ: From Date:</label>
+                        <label for="period-from">من تاريخ:</label>
                         <input type="date" id="period-from">
                     </div>
                     <div class="period-input">
-                        <label for="period-to">إلى تاريخ: To Date:</label>
+                        <label for="period-to">إلى تاريخ:</label>
                         <input type="date" id="period-to">
                     </div>
                 </div>
                 
                 <button class="btn btn-primary" onclick="setDefaultPeriod()" style="width: 100%; margin-top: 10px;">
-                    تعيين الشهر الحالي Set Current Month
+                    تعيين الشهر الحالي
                 </button>
                 
                 <div class="period-info">
-                    <p><strong>الفترة المحددة: Selected Period:</strong></p>
-                    <p id="selected-period">لم يتم تحديد فترة No period selected</p>
-                    <p id="period-duration">المدة: 0 أيام Duration: 0 days</p>
+                    <p><strong>الفترة المحددة:</strong></p>
+                    <p id="selected-period">لم يتم تحديد فترة</p>
+                    <p id="period-duration">المدة: 0 أيام</p>
                 </div>
             </div>
         </div>
 
-        <!-- صفحة التقييم Evaluation Page -->
+        <!-- صفحة التقييم -->
         <div id="evaluation-page" class="page-section active">
-            <!-- الكروت الإحصائية المتحركة Animated Statistics Cards -->
+            <!-- الكروت الإحصائية المتحركة -->
             <div class="stats-container">
                 <div class="stat-card floating red">
                     <div class="stat-value" id="total-score">0</div>
-                    <div class="stat-label">إجمالي الدرجات المحققة Total Achieved Points</div>
+                    <div class="stat-label">إجمالي الدرجات المحققة</div>
                 </div>
                 <div class="stat-card floating yellow">
                     <div class="stat-value" id="total-percentage">0%</div>
-                    <div class="stat-label">النسبة المئوية الإجمالية Total Percentage</div>
+                    <div class="stat-label">النسبة المئوية الإجمالية</div>
                 </div>
                 <div class="stat-card floating green">
                     <div class="stat-value" id="remaining-score">1000</div>
-                    <div class="stat-label">الدرجات المتبقية Remaining Points</div>
+                    <div class="stat-label">الدرجات المتبقية</div>
                 </div>
                 <div class="stat-card floating blue">
                     <div class="stat-value" id="final-grade">-</div>
-                    <div class="stat-label">التقييم النهائي Final Evaluation</div>
+                    <div class="stat-label">التقييم النهائي</div>
                 </div>
             </div>
 
-            <!-- نموذج التقييم Evaluation Form -->
+            <!-- نموذج التقييم -->
             <div class="evaluation-form">
-                <h2 style="text-align: center; margin-bottom: 15px; color: var(--primary-color); font-size: 20px;">نموذج تقييم المطعم (1000 درجة كحد أقصى) Restaurant Evaluation Form (1000 points maximum)</h2>
+                <h2 style="text-align: center; margin-bottom: 15px; color: var(--primary-color); font-size: 20px;">نموذج تقييم المطعم (1000 درجة كحد أقصى)</h2>
                 
-                <!-- محور 1: البناء الخارجي Axis 1: The Exterior Building -->
+                <!-- محور 1: البناء الخارجي -->
                 <div class="section-title">
-                    <span>1. البناء الخارجي The Exterior Building</span>
+                    <span>1. البناء الخارجي</span>
                     <div class="section-number">40</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="exterior-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 2: خدمة الزبائن Axis 2: Customer Service -->
+                <!-- محور 2: خدمة الزبائن -->
                 <div class="section-title">
-                    <span>2. خدمة الزبائن Customer Service</span>
+                    <span>2. خدمة الزبائن</span>
                     <div class="section-number">220</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="service-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 3: الصالة Axis 3: Dine-In Area -->
+                <!-- محور 3: الصالة -->
                 <div class="section-title">
-                    <span>3. الصالة Dine-In Area</span>
+                    <span>3. الصالة</span>
                     <div class="section-number">90</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="dinein-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 4: منطقة الكاونتر Axis 4: Counter Area -->
+                <!-- محور 4: منطقة الكاونتر -->
                 <div class="section-title">
-                    <span>4. منطقة الكاونتر Counter Area</span>
+                    <span>4. منطقة الكاونتر</span>
                     <div class="section-number">75</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="counter-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 5: خدمة توصيل المنازل Axis 5: Home Delivery Service -->
+                <!-- محور 5: خدمة توصيل المنازل -->
                 <div class="section-title">
-                    <span>5. خدمة توصيل المنازل Home Delivery Service</span>
+                    <span>5. خدمة توصيل المنازل</span>
                     <div class="section-number">75</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="delivery-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 6: المطبخ Axis 6: Kitchen -->
+                <!-- محور 6: المطبخ -->
                 <div class="section-title">
-                    <span>6. المطبخ Kitchen</span>
+                    <span>6. المطبخ</span>
                     <div class="section-number">155</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="kitchen-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 7: جودة الساندويتشات Axis 7: Quality of Sandwiches -->
+                <!-- محور 7: جودة الساندويتشات -->
                 <div class="section-title">
-                    <span>7. جودة الساندويتشات Quality of Sandwiches</span>
+                    <span>7. جودة الساندويتشات</span>
                     <div class="section-number">220</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="quality-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 8: فرايد تشكن Axis 8: Fried Chicken -->
+                <!-- محور 8: فرايد تشكن -->
                 <div class="section-title">
-                    <span>8. فرايد تشكن Fried Chicken</span>
+                    <span>8. فرايد تشكن</span>
                     <div class="section-number">100</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="fried-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
-                <!-- محور 9: الإدارة Axis 9: Administration -->
+                <!-- محور 9: الإدارة -->
                 <div class="section-title">
-                    <span>9. الإدارة Administration</span>
+                    <span>9. الإدارة</span>
                     <div class="section-number">60</div>
                 </div>
                 
                 <table class="criteria-table">
                     <thead>
                         <tr>
-                            <th width="5%">الرقم Number</th>
-                            <th width="30%">المحور الرئيسي Main Criterion</th>
-                            <th width="8%">الدرجة القصوى Max Score</th>
-                            <th width="12%">الدرجة المحققة Achieved Score</th>
-                            <th width="10%">غير متوفر Not Available</th>
-                            <th width="35%">الملاحظات Notes</th>
+                            <th width="5%">الرقم</th>
+                            <th width="30%">المحور الرئيسي</th>
+                            <th width="8%">الدرجة القصوى</th>
+                            <th width="12%">الدرجة المحققة</th>
+                            <th width="10%">غير متوفر</th>
+                            <th width="35%">الملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="admin-criteria">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- نتائج التقييم Evaluation Results -->
+            <!-- نتائج التقييم -->
             <div class="results-summary">
-                <h2 class="results-title">ملخص نتائج التقييم Evaluation Results Summary</h2>
-                <p style="text-align: center; color: #666; margin-bottom: 10px; font-size: 14px;">(المجموع الكلي يعتمد على العناصر المتاحة فقط) (Total is based on available items only)</p>
+                <h2 class="results-title">ملخص نتائج التقييم</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 10px; font-size: 14px;">(المجموع الكلي يعتمد على العناصر المتاحة فقط)</p>
                 
                 <table class="results-table">
                     <thead>
                         <tr>
-                            <th>المحور Axis</th>
-                            <th>الدرجة القصوى Max Score</th>
-                            <th>الدرجة المحققة Achieved Score</th>
-                            <th>النسبة % Percentage</th>
-                            <th>الدائرة Circle</th>
+                            <th>المحور</th>
+                            <th>الدرجة القصوى</th>
+                            <th>الدرجة المحققة</th>
+                            <th>النسبة %</th>
+                            <th>الدائرة</th>
                         </tr>
                     </thead>
                     <tbody id="results-body">
-                        <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                        <!-- سيتم ملؤها بواسطة JavaScript -->
                     </tbody>
                 </table>
                 
                 <div style="margin-top: 25px; text-align: center;">
                     <h3 id="final-evaluation" style="padding: 15px; border-radius: 5px; background-color: #f8f9fa; font-size: 18px;">
-                        إجمالي الدرجات: Total Points: <span id="total-score-result">0</span> من from <span id="total-max-result">1000</span> درجة points
+                        إجمالي الدرجات: <span id="total-score-result">0</span> من <span id="total-max-result">1000</span> درجة
                     </h3>
                     <div style="margin-top: 15px; font-size: 17px;">
-                        <strong>التقييم النهائي: Final Evaluation:</strong> <span id="evaluation-text">لم يتم التقييم بعد Not Evaluated Yet</span>
+                        <strong>التقييم النهائي:</strong> <span id="evaluation-text">لم يتم التقييم بعد</span>
                     </div>
                     <div id="final-circle" class="final-evaluation-circle" style="margin-top: 15px;">
                         -
@@ -1415,285 +1255,100 @@
                 </div>
             </div>
 
-            <!-- أزرار التحكم Control Buttons -->
+            <!-- أزرار التحكم -->
             <div class="control-buttons">
-                <button class="btn btn-primary" onclick="calculateResults()">حساب النتائج Calculate Results</button>
-                <button class="btn btn-info" onclick="saveWeeklyEvaluation()">حفظ كتقييم أسبوعي Save as Weekly</button>
-                <button class="btn btn-success" onclick="saveAsPDF()">حفظ كملف PDF Save as PDF</button>
-                <button class="btn btn-warning" onclick="printEvaluation()">طباعة التقرير Print Report</button>
-                <button class="btn btn-primary" onclick="exportEvaluationExcel()">حفظ كملف Excel Save as Excel</button>
-                <button class="btn btn-primary" onclick="resetForm()">إعادة تعيين Reset</button>
+                <button class="btn btn-primary" onclick="calculateResults()">حساب النتائج</button>
+                <button class="btn btn-success" onclick="saveAsPDF()">حفظ كملف PDF</button>
+                <button class="btn btn-warning" onclick="printEvaluation()">طباعة التقرير</button>
+                <button class="btn btn-primary" onclick="exportEvaluationExcel()">حفظ كملف Excel</button>
+                <button class="btn btn-primary" onclick="resetForm()">إعادة تعيين</button>
             </div>
         </div>
 
-        <!-- صفحة التقارير Reports Page -->
+        <!-- صفحة التقارير -->
         <div id="reports-page" class="page-section">
             <div class="reports-page">
                 <div class="reports-header">
-                    <h2>📊 صفحة التقارير Reports Page</h2>
+                    <h2>📊 صفحة التقارير</h2>
                     <div class="reports-controls">
-                        <button class="btn btn-success" onclick="exportAllReportsExcel()">📥 تصدير جميع التقارير Export All Reports</button>
-                        <button class="btn btn-info" onclick="generateMonthlyReport()">📈 إنشاء تقرير شهري Generate Monthly Report</button>
-                        <button class="btn btn-warning" onclick="refreshReports()">🔄 تحديث التقارير Refresh Reports</button>
+                        <button class="btn btn-success" onclick="exportReportsExcel()">📥 تصدير جميع التقارير</button>
+                        <button class="btn btn-warning" onclick="refreshReports()">🔄 تحديث التقارير</button>
                     </div>
                 </div>
                 
-                <!-- ملخص التقارير Reports Summary -->
-                <div class="reports-summary">
-                    <div class="summary-card">
-                        <div class="value" id="total-reports-count">0</div>
-                        <div class="label">إجمالي التقارير Total Reports</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="value" id="completed-reports-count">0</div>
-                        <div class="label">تقارير مكتملة Completed Reports</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="value" id="monthly-reports-count">0</div>
-                        <div class="label">تقارير شهرية Monthly Reports</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="value" id="exported-reports-count">0</div>
-                        <div class="label">تقارير مصدرة Exported Reports</div>
-                    </div>
-                </div>
-                
-                <!-- فلاتر التقارير Reports Filters -->
+                <!-- فلاتر التقارير -->
                 <div class="reports-filters">
                     <div class="filter-group">
-                        <label for="report-type-filter">نوع التقرير Report Type:</label>
+                        <label for="report-type-filter">نوع التقرير:</label>
                         <select id="report-type-filter" onchange="filterReports()">
-                            <option value="all">جميع الأنواع All Types</option>
-                            <option value="monthly">شهري Monthly</option>
-                            <option value="quarterly">ربع سنوي Quarterly</option>
-                            <option value="annual">سنوي Annual</option>
-                            <option value="weekly">أسبوعي Weekly</option>
+                            <option value="all">جميع الأنواع</option>
+                            <option value="monthly">شهري</option>
+                            <option value="quarterly">ربع سنوي</option>
+                            <option value="annual">سنوي</option>
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label for="report-status-filter">حالة التقرير Report Status:</label>
+                        <label for="report-status-filter">حالة التقرير:</label>
                         <select id="report-status-filter" onchange="filterReports()">
-                            <option value="all">جميع الحالات All Statuses</option>
-                            <option value="completed">مكتمل Completed</option>
-                            <option value="pending">معلق Pending</option>
-                            <option value="exported">مصدر Exported</option>
+                            <option value="all">جميع الحالات</option>
+                            <option value="completed">مكتمل</option>
+                            <option value="pending">معلق</option>
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label for="report-date-from">من تاريخ From Date:</label>
+                        <label for="report-date-from">من تاريخ:</label>
                         <input type="month" id="report-date-from" onchange="filterReports()">
                     </div>
                     <div class="filter-group">
-                        <label for="report-date-to">إلى تاريخ To Date:</label>
+                        <label for="report-date-to">إلى تاريخ:</label>
                         <input type="month" id="report-date-to" onchange="filterReports()">
                     </div>
                 </div>
                 
-                <!-- جدول التقارير Reports Table -->
+                <!-- جدول التقارير -->
                 <div class="reports-table-container">
                     <table class="reports-table" id="reports-table">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>اسم التقرير Report Name</th>
-                                <th>نوع التقرير Report Type</th>
-                                <th>الفترة Period</th>
-                                <th>تاريخ الإنشاء Created Date</th>
-                                <th>الحالة Status</th>
-                                <th>الإجراءات Actions</th>
+                                <th>اسم التقرير</th>
+                                <th>نوع التقرير</th>
+                                <th>الفترة</th>
+                                <th>تاريخ الإنشاء</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody id="reports-table-body">
-                            <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
+                            <!-- سيتم ملؤها بواسطة JavaScript -->
                         </tbody>
                     </table>
-                </div>
-                
-                <!-- أزرار التصدير Export Buttons -->
-                <div class="control-buttons">
-                    <button class="btn btn-success" onclick="exportReportsExcel()">
-                        📊 تصدير جدول التقارير إلى Excel Export Reports Table to Excel
-                    </button>
-                    <button class="btn btn-primary" onclick="exportReportsPDF()">
-                        📄 تصدير جدول التقارير إلى PDF Export Reports Table to PDF
-                    </button>
-                    <button class="btn btn-info" onclick="generateComparisonReport()">
-                        📈 إنشاء تقرير مقارنة Generate Comparison Report
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- صفحة النتائج Results Page -->
-        <div id="results-page" class="page-section">
-            <div class="reports-page">
-                <div class="reports-header">
-                    <h2>📈 صفحة النتائج والتحليلات Results & Analysis Page</h2>
-                    <div class="reports-controls">
-                        <button class="btn btn-success" onclick="exportResultsExcel()">📥 تصدير النتائج Export Results</button>
-                        <button class="btn btn-info" onclick="generateTrendsReport()">📊 إنشاء تحليل الاتجاهات Generate Trends Analysis</button>
-                    </div>
-                </div>
-                
-                <!-- النتائج الأسبوعية والشهرية Weekly & Monthly Results -->
-                <div class="results-sections">
-                    <div class="weekly-section">
-                        <div class="section-header">
-                            <h3>التقييمات الأسبوعية Weekly Evaluations</h3>
-                            <div class="week-selector">
-                                <select id="week-select" onchange="updateWeeklyDisplay()">
-                                    <option value="week1">الأسبوع الأول Week 1</option>
-                                    <option value="week2">الأسبوع الثاني Week 2</option>
-                                    <option value="week3">الأسبوع الثالث Week 3</option>
-                                    <option value="week4">الأسبوع الرابع Week 4</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="weekly-stats">
-                            <div class="stat-item">
-                                <div class="value" id="week-score">0</div>
-                                <div class="label">درجة الأسبوع Week Score</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="week-percentage">0%</div>
-                                <div class="label">نسبة الأسبوع Week Percentage</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="week-grade">-</div>
-                                <div class="label">تقييم الأسبوع Week Grade</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="week-date">-</div>
-                                <div class="label">تاريخ التقييم Evaluation Date</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="monthly-section">
-                        <div class="section-header">
-                            <h3>متوسط الشهري Monthly Average</h3>
-                            <div class="month-selector">
-                                <select id="month-select" onchange="updateMonthlyDisplay()">
-                                    <option value="current">الشهر الحالي Current Month</option>
-                                    <option value="previous">الشهر السابق Previous Month</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="monthly-stats">
-                            <div class="stat-item">
-                                <div class="value" id="month-score">0</div>
-                                <div class="label">المتوسط الشهري Monthly Average</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="month-percentage">0%</div>
-                                <div class="label">النسبة المئوية Percentage</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="month-grade">-</div>
-                                <div class="label">التقييم الشهري Monthly Grade</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="value" id="month-trend">-</div>
-                                <div class="label">التوجه Trend</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- جدول النتائج التفصيلية Detailed Results Table -->
-                <div class="reports-table-container">
-                    <table class="reports-table" id="detailed-results-table">
-                        <thead>
-                            <tr>
-                                <th>المطعم Restaurant</th>
-                                <th>الفترة Period</th>
-                                <th>إجمالي النقاط Total Score</th>
-                                <th>النسبة المئوية Percentage</th>
-                                <th>التقييم Grade</th>
-                                <th>أفضل محور Best Axis</th>
-                                <th>أسوأ محور Worst Axis</th>
-                                <th>تاريخ التقييم Evaluation Date</th>
-                                <th>الإجراءات Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detailed-results-body">
-                            <!-- سيتم ملؤها بواسطة JavaScript Will be filled by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- أزرار التحكم في النتائج Results Control Buttons -->
-                <div class="control-buttons">
-                    <button class="btn btn-primary" onclick="loadAllResults()">🔄 تحميل جميع النتائج Load All Results</button>
-                    <button class="btn btn-success" onclick="exportDetailedResultsExcel()">📊 تصدير النتائج التفصيلية Export Detailed Results</button>
-                    <button class="btn btn-info" onclick="generatePerformanceReport()">📈 إنشاء تقرير الأداء Generate Performance Report</button>
-                    <button class="btn btn-warning" onclick="compareRestaurants()">⚖️ مقارنة المطاعم Compare Restaurants</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- توقيع المطور Developer Signature -->
+    <!-- توقيع المطور -->
     <div class="signature-card">
         <div class="name">Yasser Elkhateeb</div>
-        <div class="title">مطور البرنامج 67011143 Program Developer </div>
+        <div class="title">مطور البرنامج 67011143</div>
     </div>
 
-    <!-- قالب PDF مخفي للتقارير Hidden PDF Template for Reports -->
-    <div id="pdf-reports-template" style="position: absolute; left: -10000px; top: -10000px; width: 794px; background: white; padding: 20px; box-sizing: border-box; font-family: 'Times New Roman', serif; font-size: 12px; direction: rtl;">
+    <!-- قالب PDF مخفي للتقارير -->
+    <div id="pdf-template" style="position: absolute; left: -10000px; top: -10000px; width: 794px; background: white; padding: 20px; box-sizing: border-box; font-family: 'Times New Roman', serif; font-size: 12px; direction: rtl;">
         <div style="text-align: center; margin-bottom: 15px;">
-            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة Company Logo" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #c0392b; margin-bottom: 10px;">
-            <h2 style="color: #c0392b; margin: 0; font-size: 24px; font-weight: bold;">شركة نايف للأغذية Naif Food Company</h2>
-            <h3 style="color: #c0392b; margin: 10px 0 15px 0; font-size: 20px; font-weight: bold;">تقرير التقارير المكتملة Completed Reports Report</h3>
+            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #c0392b; margin-bottom: 10px;">
+            <h2 style="color: #c0392b; margin: 0; font-size: 24px; font-weight: bold;">شركة نايف للأغذية</h2>
+            <h3 style="color: #c0392b; margin: 10px 0 15px 0; font-size: 20px; font-weight: bold;">تقرير تقييم المطعم</h3>
             <div style="margin-bottom: 10px; font-size: 14px; font-weight: bold;">
-                <div>تاريخ التقرير: Report Date: <span id="pdf-report-date"></span></div>
-                <div>عدد التقارير: Reports Count: <span id="pdf-reports-count"></span></div>
-            </div>
-        </div>
-        
-        <table style="font-size: 11px; border-collapse: collapse; width: 100%; margin: 15px 0 20px 0;">
-            <thead>
-                <tr>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">#</th>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">اسم التقرير Report Name</th>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">نوع التقرير Report Type</th>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">الفترة Period</th>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">تاريخ الإنشاء Created Date</th>
-                    <th style="padding: 8px; border: 1px solid #000; text-align: center; background: #c0392b; color: white;">الحالة Status</th>
-                </tr>
-            </thead>
-            <tbody id="pdf-reports-body">
-                <!-- سيتم ملؤها بواسطة JavaScript -->
-            </tbody>
-        </table>
-        
-        <div style="margin-top: 20px; padding: 15px; border-top: 2px solid #c0392b;">
-            <h4 style="color: #c0392b; margin: 0 0 10px 0; text-align: center; font-size: 16px;">ملخص التقارير Reports Summary</h4>
-            <div id="pdf-reports-summary" style="font-size: 12px; text-align: center; line-height: 1.6;">
-                <!-- سيتم ملؤها بواسطة JavaScript -->
-            </div>
-        </div>
-        
-        <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; text-align: center; font-size: 10px; color: #666; border-top: 1px solid #ddd; padding-top: 10px;">
-            تم إنشاء التقرير بواسطة نظام تقييم المطاعم - شركة نايف للأغذية
-        </div>
-    </div>
-
-    <!-- قالب PDF للنقاط الرئيسية Hidden PDF Template for Evaluation -->
-    <div id="pdf-evaluation-template" style="position: absolute; left: -10000px; top: -10000px; width: 794px; background: white; padding: 20px; box-sizing: border-box; font-family: 'Times New Roman', serif; font-size: 12px; direction: rtl;">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار الشركة Company Logo" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #c0392b; margin-bottom: 10px;">
-            <h2 style="color: #c0392b; margin: 0; font-size: 24px; font-weight: bold;">شركة نايف للأغذية Naif Food Company</h2>
-            <h3 style="color: #c0392b; margin: 10px 0 15px 0; font-size: 20px; font-weight: bold;">تقرير تقييم المطعم Restaurant Evaluation Report</h3>
-            <div style="margin-bottom: 10px; font-size: 14px; font-weight: bold;">
-                <div>تاريخ التقرير: <span id="pdf-evaluation-date"></span></div>
+                <div>تاريخ التقرير: <span id="pdf-report-date"></span></div>
                 <div>اسم المطعم: <span id="pdf-restaurant-name"></span></div>
-                <div>الفترة: <span id="pdf-evaluation-period"></span></div>
-                <div>المقيم: <span id="pdf-evaluator-name"></span></div>
+                <div>الفترة: <span id="pdf-period"></span></div>
+                <div>المقيم: <span id="pdf-evaluator"></span></div>
             </div>
         </div>
         
-        <div id="pdf-evaluation-content">
+        <div id="pdf-content">
             <!-- سيتم ملؤها بواسطة JavaScript -->
         </div>
         
@@ -1703,141 +1358,13 @@
     </div>
 
     <script>
-        // بيانات المطاعم Restaurants Data
-        const restaurantsData = [
-            { name: "الفيحاء Al-Faiha", areaManager: "حجازي Hajazi", operationManager: "طارق بيومي Tariq Bayoumi" },                              { name: "سعد العبدالله Saad Al-Abdullah", areaManager: "مختار Mokhtar", operationManager: "هاني عبدالله Hani Abdullah" }
-        ];
+        // بيانات المطاعم
+        const restaurantsData = [];
 
-        // بيانات التقارير Reports Data
-        const reportsData = [
-            { 
-                id: 1, 
-                name: "تقرير يناير 2026", 
-                filename: "تقرير-يناير-2026.xlsx", 
-                date: "2026-01-31", 
-                type: "monthly", 
-                status: "completed",
-                description: "تقرير التقييم الشهري لشهر يناير 2026",
-                period: "يناير 2026",
-                createdDate: "2026-02-01",
-                restaurant: "الفيحاء Al-Faiha",
-                score: 875,
-                percentage: 87.5
-            },
-            { 
-                id: 2, 
-                name: "تقرير فبراير 2026", 
-                filename: "تقرير-فبراير-2026.xlsx", 
-                date: "2026-02-28", 
-                type: "monthly", 
-                status: "completed",
-                description: "تقرير التقييم الشهري لشهر فبراير 2026",
-                period: "فبراير 2026",
-                createdDate: "2026-03-01",
-                restaurant: "الفحاحيل Al-Fahaheel",
-                score: 890,
-                percentage: 89.0
-            },
-            { 
-                id: 3, 
-                name: "تقرير مارس 2026", 
-                filename: "تقرير-مارس-2026.xlsx", 
-                date: "2026-03-31", 
-                type: "monthly", 
-                status: "pending",
-                description: "تقرير التقييم الشهري لشهر مارس 2026",
-                period: "مارس 2026",
-                createdDate: "2026-03-31",
-                restaurant: "الجابرية بنت الديك Jabriya Bint Al-Deek",
-                score: 910,
-                percentage: 91.0
-            },
-            { 
-                id: 4, 
-                name: "تقرير ربع سنوي Q1 2026", 
-                filename: "تقرير-ربع-سنوي-Q1-2026.xlsx", 
-                date: "2026-03-31", 
-                type: "quarterly", 
-                status: "exported",
-                description: "تقرير التقييم الربع سنوي للربع الأول 2026",
-                period: "الربع الأول 2026",
-                createdDate: "2026-04-05",
-                restaurant: "مشرف Mushrif",
-                score: 895,
-                percentage: 89.5
-            },
-            { 
-                id: 5, 
-                name: "تقرير المقارنة الشهرية", 
-                filename: "تقرير-مقارنة-شهرية.xlsx", 
-                date: "2026-03-31", 
-                type: "comparison", 
-                status: "completed",
-                description: "مقارنة الأداء بين الأشهر الثلاثة الأولى 2026",
-                period: "يناير - مارس 2026",
-                createdDate: "2026-04-01",
-                restaurant: "مشرف Mushrif",
-                score: 892,
-                percentage: 89.2
-            },
-            { 
-                id: 6, 
-                name: "تقرير الأداء السنوي 2025", 
-                filename: "تقرير-الأداء-السنوي-2025.xlsx", 
-                date: "2025-12-31", 
-                type: "annual", 
-                status: "exported",
-                description: "تقرير الأداء السنوي الكامل لعام 2025",
-                period: "2025",
-                createdDate: "2026-01-15",
-                restaurant: "الفيحاء Al-Faiha",
-                score: 880,
-                percentage: 88.0
-            },
-            { 
-                id: 7, 
-                name: "تقرير الأسبوع الأول مارس 2026", 
-                filename: "تقرير-أسبوعي-1-مارس-2026.xlsx", 
-                date: "2026-03-07", 
-                type: "weekly", 
-                status: "completed",
-                description: "تقرير التقييم الأسبوعي للأسبوع الأول من مارس",
-                period: "الأسبوع 1 - مارس 2026",
-                createdDate: "2026-03-08",
-                restaurant: "النافورة Al-Nafoura",
-                score: 865,
-                percentage: 86.5
-            },
-            { 
-                id: 8, 
-                name: "تقرير الأسبوع الثاني مارس 2026", 
-                filename: "تقرير-أسبوعي-2-مارس-2026.xlsx", 
-                date: "2026-03-14", 
-                type: "weekly", 
-                status: "pending",
-                description: "تقرير التقييم الأسبوعي للأسبوع الثاني من مارس",
-                period: "الأسبوع 2 - مارس 2026",
-                createdDate: "2026-03-15",
-                restaurant: "القادسية Al-Qadisiyah",
-                score: 905,
-                percentage: 90.5
-            }
-        ];
+        // بيانات التقارير
+        let reportsData = [];
 
-        // بيانات التقييمات الأسبوعية والشهرية Weekly and Monthly Evaluation Data
-        let weeklyEvaluations = {
-            week1: { score: 0, percentage: 0, date: null, grade: '-', notes: '' },
-            week2: { score: 0, percentage: 0, date: null, grade: '-', notes: '' },
-            week3: { score: 0, percentage: 0, date: null, grade: '-', notes: '' },
-            week4: { score: 0, percentage: 0, date: null, grade: '-', notes: '' }
-        };
-        
-        let monthlyAverages = {
-            current: { average: 0, percentage: 0, grade: '-', trend: 'stable' },
-            previous: { average: 0, percentage: 0, grade: '-', trend: 'stable' }
-        };
-
-        // بيانات نموذج التقييم Evaluation Form Data
+        // بيانات نموذج التقييم
         const evaluationData = {
             exterior: [
                 { id: "1.1", name: "الأضواء والإعلان Light and signage are clean and in good condition", maxScore: 10 },
@@ -1846,12 +1373,11 @@
             service: [
                 { id: "2.1", name: "ترتيب المنطقة Dine-In or Take away area is clean and set up", maxScore: 20 },
                 { id: "2.2", name: "الترحيب Team Member are welcoming the Customer", maxScore: 20 }
-               
             ],
             dinein: [
                 { id: "3.1", name: "الأرضية / الجدران / السقف / التهوية Floor, walls, Ceiling and ventilation are clean and in good condition", maxScore: 10 },
                 { id: "3.2", name: "الطاولات والكراسي Tables and Chair and clean and in good condition", maxScore: 10 }
-    ],
+            ],
             counter: [
                 { id: "4.1", name: "مرتب ومنظم ومخزن حسب الحاجة Counter is clean and stocked for revenue time", maxScore: 5 },
                 { id: "4.2", name: "براد السلطة-ثلاجة العرض Salad Display and Display Cooler are clean", maxScore: 10 }
@@ -1878,48 +1404,23 @@
             ]
         };
 
-        // تهيئة النموذج Initialize Form
+        // تهيئة النموذج
         function initializeForm() {
-            // تهيئة البحث الديناميكي عن المطاعم Setup Dynamic Restaurant Search
             setupRestaurantSearch();
-            
-            // تهيئة أداة اختيار الفترة Initialize Period Selector
             setupPeriodSelector();
-            
-            // تهيئة التقارير Initialize Reports
             loadReportsTable();
-            
-            // تهيئة النتائج Initialize Results
-            loadAllResults();
-            
-            // ملء معايير التقييم Fill Evaluation Criteria
-            fillCriteriaTable('exterior-criteria', evaluationData.exterior);
-            fillCriteriaTable('service-criteria', evaluationData.service);
-            fillCriteriaTable('dinein-criteria', evaluationData.dinein);
-            fillCriteriaTable('counter-criteria', evaluationData.counter);
-            fillCriteriaTable('delivery-criteria', evaluationData.delivery);
-            fillCriteriaTable('kitchen-criteria', evaluationData.kitchen);
-            fillCriteriaTable('quality-criteria', evaluationData.quality);
-            fillCriteriaTable('fried-criteria', evaluationData.fried);
-            fillCriteriaTable('admin-criteria', evaluationData.admin);
-            
-            // إضافة مستمعين للأحداث Add Event Listeners
+            fillAllCriteriaTables();
             setupEventListeners();
-            
-            // حساب النتائج الأولية Calculate Initial Results
             calculateResults();
-            
-            // تحميل البيانات المحفوظة Load saved data
             loadSavedData();
         }
 
-        // إعداد البحث الديناميكي عن المطاعم Setup Dynamic Restaurant Search
+        // إعداد البحث الديناميكي عن المطاعم
         function setupRestaurantSearch() {
             const searchInput = document.getElementById('restaurant-search');
             const dropdown = document.getElementById('restaurant-dropdown');
             const selectedRestaurantInput = document.getElementById('selected-restaurant');
             
-            // ملء القائمة المنسدلة Fill Dropdown
             restaurantsData.forEach(restaurant => {
                 const item = document.createElement('div');
                 item.className = 'restaurant-dropdown-item';
@@ -1933,7 +1434,6 @@
                 dropdown.appendChild(item);
             });
             
-            // البحث الديناميكي Dynamic Search
             searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
                 const items = dropdown.querySelectorAll('.restaurant-dropdown-item');
@@ -1954,7 +1454,6 @@
                     dropdown.style.display = 'none';
                 }
                 
-                // إذا كان النص مطابقاً تماماً لمطعم If text exactly matches a restaurant
                 const exactMatch = restaurantsData.find(r => r.name.toLowerCase() === searchTerm);
                 if (exactMatch) {
                     selectedRestaurantInput.value = exactMatch.name;
@@ -1965,7 +1464,6 @@
                 }
             });
             
-            // إغلاق القائمة عند النقر خارجها Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
                 if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
                     dropdown.style.display = 'none';
@@ -1973,22 +1471,19 @@
             });
         }
 
-        // إعداد أداة اختيار الفترة Setup Period Selector
+        // إعداد أداة اختيار الفترة
         function setupPeriodSelector() {
-            // تعيين التاريخ الحالي كتاريخ بداية Set current date as start date
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             
             document.getElementById('period-from').valueAsDate = firstDay;
             document.getElementById('period-to').valueAsDate = today;
             
-            // تحديث عرض الفترة Update period display
             updatePeriodDisplay();
         }
 
-        // إعداد مستمعي الأحداث Setup Event Listeners
+        // إعداد مستمعي الأحداث
         function setupEventListeners() {
-            // إضافة مستمعين للأحداث لحساب النتائج تلقائياً Add Event Listeners for Automatic Results Calculation
             document.querySelectorAll('.score-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     calculateResults();
@@ -2002,12 +1497,10 @@
                     const hiddenInput = document.getElementById(itemId);
                     
                     if (this.checked) {
-                        // إذا تم تحديد "غير متوفر"، ضع الدرجة 0 If "Not Available" is checked, set score to 0
                         scoreBtn.textContent = '0';
                         scoreBtn.classList.remove('active');
                         if (hiddenInput) hiddenInput.value = '0';
                     } else {
-                        // إذا تم إلغاء تحديد "غير متوفر"، أعط الدرجة الكاملة
                         const maxScore = parseInt(scoreBtn.getAttribute('data-max'));
                         scoreBtn.textContent = '0';
                         scoreBtn.classList.remove('active');
@@ -2017,22 +1510,11 @@
                 });
             });
             
-            // إضافة مستمع لتحديد الأسبوع Add listener for week selection
-            document.getElementById('week-select').addEventListener('change', function() {
-                updateWeeklyDisplay();
-            });
-            
-            // إضافة مستمع لتحديد الشهر Add listener for month selection
-            document.getElementById('month-select').addEventListener('change', function() {
-                updateMonthlyDisplay();
-            });
-            
-            // إضافة مستمعين لتحديث الفترة Add listeners for period updates
             document.getElementById('period-from').addEventListener('change', updatePeriodDisplay);
             document.getElementById('period-to').addEventListener('change', updatePeriodDisplay);
         }
 
-        // تحديث عرض الفترة Update Period Display
+        // تحديث عرض الفترة
         function updatePeriodDisplay() {
             const fromDate = document.getElementById('period-from').value;
             const toDate = document.getElementById('period-to').value;
@@ -2041,11 +1523,9 @@
                 const from = new Date(fromDate);
                 const to = new Date(toDate);
                 
-                // حساب الفرق بالأيام Calculate difference in days
                 const timeDiff = Math.abs(to.getTime() - from.getTime());
                 const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
                 
-                // تنسيق التواريخ Format dates
                 const formatDate = (date) => {
                     return date.toLocaleDateString('ar-SA', {
                         year: 'numeric',
@@ -2057,16 +1537,16 @@
                 document.getElementById('selected-period').textContent = 
                     `${formatDate(from)} إلى ${formatDate(to)}`;
                 document.getElementById('period-duration').textContent = 
-                    `المدة: ${diffDays} أيام | Duration: ${diffDays} days`;
+                    `المدة: ${diffDays} أيام`;
             } else {
                 document.getElementById('selected-period').textContent = 
-                    'لم يتم تحديد فترة No period selected';
+                    'لم يتم تحديد فترة';
                 document.getElementById('period-duration').textContent = 
-                    'المدة: 0 أيام Duration: 0 days';
+                    'المدة: 0 أيام';
             }
         }
 
-        // تعيين الفترة الافتراضية للشهر الحالي Set Default Period to Current Month
+        // تعيين الفترة الافتراضية للشهر الحالي
         function setDefaultPeriod() {
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -2076,10 +1556,10 @@
             document.getElementById('period-to').valueAsDate = lastDay;
             
             updatePeriodDisplay();
-            alert('تم تعيين فترة الشهر الحالي بنجاح Current month period set successfully!');
+            alert('تم تعيين فترة الشهر الحالي بنجاح');
         }
 
-        // تحديث تفاصيل المطعم Update Restaurant Details
+        // تحديث تفاصيل المطعم
         function updateRestaurantDetails() {
             const selectedRestaurant = document.getElementById('selected-restaurant').value;
             
@@ -2095,904 +1575,20 @@
             }
         }
 
-        // تحميل وعرض جدول التقارير Load and Display Reports Table
-        function loadReportsTable() {
-            const reportsTableBody = document.getElementById('reports-table-body');
-            reportsTableBody.innerHTML = '';
-            
-            let completedCount = 0;
-            let monthlyCount = 0;
-            let exportedCount = 0;
-            
-            reportsData.forEach((report, index) => {
-                const row = document.createElement('tr');
-                
-                // تحديث العدادات Update counters
-                if (report.status === 'completed') completedCount++;
-                if (report.type === 'monthly') monthlyCount++;
-                if (report.status === 'exported') exportedCount++;
-                
-                // تنسيق الحالة Format status
-                let statusClass = 'status-pending';
-                let statusText = 'معلق';
-                if (report.status === 'completed') {
-                    statusClass = 'status-completed';
-                    statusText = 'مكتمل';
-                } else if (report.status === 'exported') {
-                    statusClass = 'status-exported';
-                    statusText = 'مصدر';
-                }
-                
-                // تنسيق النوع Format type
-                let typeText = report.type;
-                if (report.type === 'monthly') typeText = 'شهري';
-                else if (report.type === 'quarterly') typeText = 'ربع سنوي';
-                else if (report.type === 'annual') typeText = 'سنوي';
-                else if (report.type === 'weekly') typeText = 'أسبوعي';
-                else if (report.type === 'comparison') typeText = 'مقارنة';
-                
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td><strong>${report.name}</strong><br><small>${report.description}</small></td>
-                    <td>${typeText}</td>
-                    <td>${report.period}</td>
-                    <td>${formatDate(report.createdDate)}</td>
-                    <td><span class="report-status ${statusClass}">${statusText}</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-excel" onclick="downloadReportExcel(${report.id})">📥 Excel</button>
-                            <button class="btn-small btn-pdf" onclick="downloadReportPDF(${report.id})">📄 PDF</button>
-                            <button class="btn-small btn-view" onclick="viewReport(${report.id})">👁️ عرض</button>
-                        </div>
-                    </td>
-                `;
-                reportsTableBody.appendChild(row);
-            });
-            
-            // تحديث العدادات Update counters
-            document.getElementById('total-reports-count').textContent = reportsData.length;
-            document.getElementById('completed-reports-count').textContent = completedCount;
-            document.getElementById('monthly-reports-count').textContent = monthlyCount;
-            document.getElementById('exported-reports-count').textContent = exportedCount;
+        // ملء جميع جداول المعايير
+        function fillAllCriteriaTables() {
+            fillCriteriaTable('exterior-criteria', evaluationData.exterior);
+            fillCriteriaTable('service-criteria', evaluationData.service);
+            fillCriteriaTable('dinein-criteria', evaluationData.dinein);
+            fillCriteriaTable('counter-criteria', evaluationData.counter);
+            fillCriteriaTable('delivery-criteria', evaluationData.delivery);
+            fillCriteriaTable('kitchen-criteria', evaluationData.kitchen);
+            fillCriteriaTable('quality-criteria', evaluationData.quality);
+            fillCriteriaTable('fried-criteria', evaluationData.fried);
+            fillCriteriaTable('admin-criteria', evaluationData.admin);
         }
 
-        // تصفية التقارير Filter Reports
-        function filterReports() {
-            const typeFilter = document.getElementById('report-type-filter').value;
-            const statusFilter = document.getElementById('report-status-filter').value;
-            const dateFrom = document.getElementById('report-date-from').value;
-            const dateTo = document.getElementById('report-date-to').value;
-            
-            const reportsTableBody = document.getElementById('reports-table-body');
-            reportsTableBody.innerHTML = '';
-            
-            let filteredCount = 0;
-            let completedCount = 0;
-            let monthlyCount = 0;
-            let exportedCount = 0;
-            
-            reportsData.forEach((report, index) => {
-                // تطبيق الفلاتر Apply filters
-                if (typeFilter !== 'all' && report.type !== typeFilter) return;
-                if (statusFilter !== 'all' && report.status !== statusFilter) return;
-                
-                // تصفية حسب التاريخ Filter by date
-                if (dateFrom) {
-                    const reportDate = new Date(report.createdDate);
-                    const filterFrom = new Date(dateFrom + '-01');
-                    if (reportDate < filterFrom) return;
-                }
-                
-                if (dateTo) {
-                    const reportDate = new Date(report.createdDate);
-                    const filterTo = new Date(dateTo + '-01');
-                    filterTo.setMonth(filterTo.getMonth() + 1);
-                    if (reportDate >= filterTo) return;
-                }
-                
-                filteredCount++;
-                
-                // تحديث العدادات Update counters
-                if (report.status === 'completed') completedCount++;
-                if (report.type === 'monthly') monthlyCount++;
-                if (report.status === 'exported') exportedCount++;
-                
-                // تنسيق الحالة Format status
-                let statusClass = 'status-pending';
-                let statusText = 'معلق';
-                if (report.status === 'completed') {
-                    statusClass = 'status-completed';
-                    statusText = 'مكتمل';
-                } else if (report.status === 'exported') {
-                    statusClass = 'status-exported';
-                    statusText = 'مصدر';
-                }
-                
-                // تنسيق النوع Format type
-                let typeText = report.type;
-                if (report.type === 'monthly') typeText = 'شهري';
-                else if (report.type === 'quarterly') typeText = 'ربع سنوي';
-                else if (report.type === 'annual') typeText = 'سنوي';
-                else if (report.type === 'weekly') typeText = 'أسبوعي';
-                else if (report.type === 'comparison') typeText = 'مقارنة';
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${filteredCount}</td>
-                    <td><strong>${report.name}</strong><br><small>${report.description}</small></td>
-                    <td>${typeText}</td>
-                    <td>${report.period}</td>
-                    <td>${formatDate(report.createdDate)}</td>
-                    <td><span class="report-status ${statusClass}">${statusText}</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-small btn-excel" onclick="downloadReportExcel(${report.id})">📥 Excel</button>
-                            <button class="btn-small btn-pdf" onclick="downloadReportPDF(${report.id})">📄 PDF</button>
-                            <button class="btn-small btn-view" onclick="viewReport(${report.id})">👁️ عرض</button>
-                        </div>
-                    </td>
-                `;
-                reportsTableBody.appendChild(row);
-            });
-            
-            // تحديث العدادات Update counters
-            document.getElementById('total-reports-count').textContent = filteredCount;
-            document.getElementById('completed-reports-count').textContent = completedCount;
-            document.getElementById('monthly-reports-count').textContent = monthlyCount;
-            document.getElementById('exported-reports-count').textContent = exportedCount;
-        }
-
-        // تحميل جميع النتائج Load All Results
-        function loadAllResults() {
-            const resultsBody = document.getElementById('detailed-results-body');
-            resultsBody.innerHTML = '';
-            
-            reportsData.forEach((report, index) => {
-                if (report.score && report.percentage) {
-                    const grade = getGradeFromPercentage(report.percentage);
-                    const bestAxis = "خدمة الزبائن"; // محاكاة للبيانات
-                    const worstAxis = "البناء الخارجي"; // محاكاة للبيانات
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${report.restaurant}</td>
-                        <td>${report.period}</td>
-                        <td><strong>${report.score}</strong> / 1000</td>
-                        <td><strong>${report.percentage}%</strong></td>
-                        <td>${grade}</td>
-                        <td>${bestAxis}</td>
-                        <td>${worstAxis}</td>
-                        <td>${formatDate(report.createdDate)}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn-small btn-excel" onclick="downloadResultExcel(${report.id})">📥 Excel</button>
-                                <button class="btn-small btn-view" onclick="viewResultDetails(${report.id})">📊 تفاصيل</button>
-                            </div>
-                        </td>
-                    `;
-                    resultsBody.appendChild(row);
-                }
-            });
-        }
-
-        // تحديث التقارير Refresh Reports
-        function refreshReports() {
-            loadReportsTable();
-            loadAllResults();
-            alert('تم تحديث التقارير بنجاح! Reports refreshed successfully!');
-        }
-
-        // عرض التقرير View Report
-        function viewReport(reportId) {
-            const report = reportsData.find(r => r.id === reportId);
-            if (report) {
-                alert(`عرض التقرير: ${report.name}\n\nالوصف: ${report.description}\nالنوع: ${report.type}\nالفترة: ${report.period}\nالحالة: ${report.status}\nالتاريخ: ${formatDate(report.createdDate)}\n\nسيتم عرض التقرير في نافذة جديدة.`);
-                
-                // في الواقع الحقيقي، هنا سيكون عرض التقرير
-                // In real implementation, this would display the report
-            }
-        }
-
-        // عرض تفاصيل النتيجة View Result Details
-        function viewResultDetails(reportId) {
-            const report = reportsData.find(r => r.id === reportId);
-            if (report) {
-                alert(`تفاصيل النتيجة:\n\nالمطعم: ${report.restaurant}\nالفترة: ${report.period}\nالنتيجة: ${report.score}/1000\nالنسبة: ${report.percentage}%\nالتقييم: ${getGradeFromPercentage(report.percentage)}\n\nسيتم عرض التفاصيل الكاملة في نافذة جديدة.`);
-            }
-        }
-
-        // تحميل تقرير Excel Download Report Excel
-        function downloadReportExcel(reportId) {
-            const report = reportsData.find(r => r.id === reportId);
-            if (!report) return;
-            
-            // إنشاء ملف Excel باستخدام exceljs
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet(report.name);
-            
-            // إضافة العنوان Add title
-            worksheet.mergeCells('A1:D1');
-            worksheet.getCell('A1').value = `تقرير: ${report.name}`;
-            worksheet.getCell('A1').font = { size: 16, bold: true };
-            worksheet.getCell('A1').alignment = { horizontal: 'center' };
-            
-            // إضافة معلومات التقرير Add report info
-            worksheet.getCell('A3').value = 'اسم التقرير:';
-            worksheet.getCell('B3').value = report.name;
-            worksheet.getCell('A4').value = 'الوصف:';
-            worksheet.getCell('B4').value = report.description;
-            worksheet.getCell('A5').value = 'النوع:';
-            worksheet.getCell('B5').value = report.type;
-            worksheet.getCell('A6').value = 'الفترة:';
-            worksheet.getCell('B6').value = report.period;
-            worksheet.getCell('A7').value = 'تاريخ الإنشاء:';
-            worksheet.getCell('B7').value = formatDate(report.createdDate);
-            worksheet.getCell('A8').value = 'الحالة:';
-            worksheet.getCell('B8').value = report.status;
-            
-            // إضافة بعض البيانات النموذجية Add sample data
-            worksheet.getCell('A10').value = 'المحور';
-            worksheet.getCell('B10').value = 'الدرجة';
-            worksheet.getCell('C10').value = 'النسبة';
-            worksheet.getCell('D10').value = 'التقييم';
-            
-            const sampleData = [
-                ['البناء الخارجي', 38, '95%', 'ممتاز'],
-                ['خدمة الزبائن', 210, '95%', 'ممتاز'],
-                ['الصالة', 85, '94%', 'ممتاز'],
-                ['منطقة الكاونتر', 70, '93%', 'ممتاز'],
-                ['خدمة التوصيل', 72, '96%', 'ممتاز'],
-                ['المطبخ', 145, '94%', 'ممتاز'],
-                ['جودة الساندويتشات', 210, '95%', 'ممتاز'],
-                ['فرايد تشكن', 95, '95%', 'ممتاز'],
-                ['الإدارة', 58, '97%', 'ممتاز']
-            ];
-            
-            sampleData.forEach((row, index) => {
-                worksheet.getCell(`A${11 + index}`).value = row[0];
-                worksheet.getCell(`B${11 + index}`).value = row[1];
-                worksheet.getCell(`C${11 + index}`).value = row[2];
-                worksheet.getCell(`D${11 + index}`).value = row[3];
-            });
-            
-            // تنسيق الخلايا Format cells
-            for (let i = 10; i <= 19; i++) {
-                worksheet.getRow(i).font = { bold: i === 10 };
-                worksheet.getRow(i).alignment = { horizontal: 'center' };
-            }
-            
-            // حفظ الملف Save file
-            workbook.xlsx.writeBuffer().then(buffer => {
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, report.filename);
-            });
-            
-            alert(`تم تحميل ملف Excel: ${report.filename}`);
-        }
-
-        // تحميل تقرير PDF Download Report PDF
-        function downloadReportPDF(reportId) {
-            const report = reportsData.find(r => r.id === reportId);
-            if (!report) return;
-            
-            alert(`جارٍ إنشاء ملف PDF: ${report.name}\n\nسيتم تحميل الملف خلال لحظات.`);
-            
-            // في الواقع الحقيقي، هنا سيكون إنشاء PDF
-            // In real implementation, this would generate PDF
-        }
-
-        // تحميل نتيجة Excel Download Result Excel
-        function downloadResultExcel(reportId) {
-            const report = reportsData.find(r => r.id === reportId);
-            if (!report) return;
-            
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet(`نتيجة ${report.restaurant}`);
-            
-            // إضافة العنوان Add title
-            worksheet.mergeCells('A1:E1');
-            worksheet.getCell('A1').value = `نتيجة تقييم: ${report.restaurant}`;
-            worksheet.getCell('A1').font = { size: 16, bold: true };
-            worksheet.getCell('A1').alignment = { horizontal: 'center' };
-            
-            // إضافة المعلومات Add information
-            worksheet.getCell('A3').value = 'المطعم:';
-            worksheet.getCell('B3').value = report.restaurant;
-            worksheet.getCell('A4').value = 'الفترة:';
-            worksheet.getCell('B4').value = report.period;
-            worksheet.getCell('A5').value = 'إجمالي النقاط:';
-            worksheet.getCell('B5').value = `${report.score} / 1000`;
-            worksheet.getCell('A6').value = 'النسبة المئوية:';
-            worksheet.getCell('B6').value = `${report.percentage}%`;
-            worksheet.getCell('A7').value = 'التقييم:';
-            worksheet.getCell('B7').value = getGradeFromPercentage(report.percentage);
-            
-            // حفظ الملف Save file
-            workbook.xlsx.writeBuffer().then(buffer => {
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, `نتيجة_${report.restaurant.replace(/\s+/g, '_')}.xlsx`);
-            });
-            
-            alert(`تم تحميل نتيجة Excel للمطعم: ${report.restaurant}`);
-        }
-
-        // تصدير جميع التقارير إلى Excel Export All Reports to Excel
-        async function exportAllReportsExcel() {
-            try {
-                const workbook = new ExcelJS.Workbook();
-                
-                // ورقة التقارير الرئيسية Main reports sheet
-                const reportsSheet = workbook.addWorksheet('التقارير');
-                
-                // العنوان Title
-                reportsSheet.mergeCells('A1:F1');
-                reportsSheet.getCell('A1').value = 'جميع التقارير - شركة نايف للأغذية';
-                reportsSheet.getCell('A1').font = { size: 18, bold: true };
-                reportsSheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                // رؤوس الأعمدة Headers
-                const headers = ['#', 'اسم التقرير', 'نوع التقرير', 'الفترة', 'تاريخ الإنشاء', 'الحالة'];
-                reportsSheet.addRow(headers);
-                
-                // البيانات Data
-                reportsData.forEach((report, index) => {
-                    const row = [
-                        index + 1,
-                        report.name,
-                        report.type,
-                        report.period,
-                        formatDate(report.createdDate),
-                        report.status
-                    ];
-                    reportsSheet.addRow(row);
-                });
-                
-                // تنسيق Formatting
-                reportsSheet.columns = [
-                    { width: 5 }, { width: 30 }, { width: 15 }, 
-                    { width: 20 }, { width: 15 }, { width: 10 }
-                ];
-                
-                // ورقة النتائج Results sheet
-                const resultsSheet = workbook.addWorksheet('النتائج');
-                resultsSheet.mergeCells('A1:H1');
-                resultsSheet.getCell('A1').value = 'نتائج التقييمات';
-                resultsSheet.getCell('A1').font = { size: 18, bold: true };
-                resultsSheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                const resultsHeaders = ['المطعم', 'الفترة', 'إجمالي النقاط', 'النسبة%', 'التقييم', 'أفضل محور', 'أسوأ محور', 'التاريخ'];
-                resultsSheet.addRow(resultsHeaders);
-                
-                reportsData.forEach(report => {
-                    if (report.score) {
-                        const row = [
-                            report.restaurant,
-                            report.period,
-                            report.score,
-                            `${report.percentage}%`,
-                            getGradeFromPercentage(report.percentage),
-                            'خدمة الزبائن',
-                            'البناء الخارجي',
-                            formatDate(report.createdDate)
-                        ];
-                        resultsSheet.addRow(row);
-                    }
-                });
-                
-                // حفظ الملف Save file
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                saveAs(blob, `جميع_التقارير_${new Date().toISOString().split('T')[0]}.xlsx`);
-                
-                alert('تم تصدير جميع التقارير بنجاح إلى ملف Excel! All reports exported successfully to Excel!');
-                
-            } catch (error) {
-                console.error('Error exporting reports:', error);
-                alert('حدث خطأ أثناء تصدير التقارير Error exporting reports: ' + error.message);
-            }
-        }
-
-        // تصدير جدول التقارير إلى Excel Export Reports Table to Excel
-        async function exportReportsExcel() {
-            try {
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('التقارير');
-                
-                // العنوان Title
-                worksheet.mergeCells('A1:G1');
-                worksheet.getCell('A1').value = 'جدول التقارير - شركة نايف للأغذية';
-                worksheet.getCell('A1').font = { size: 18, bold: true };
-                worksheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                // التاريخ Date
-                worksheet.getCell('A2').value = `تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`;
-                worksheet.getCell('A2').font = { italic: true };
-                
-                // رؤوس الأعمدة Headers
-                const headers = ['#', 'اسم التقرير', 'نوع التقرير', 'الفترة', 'تاريخ الإنشاء', 'الحالة', 'الوصف'];
-                worksheet.addRow(headers);
-                
-                // البيانات Data
-                const typeFilter = document.getElementById('report-type-filter').value;
-                const statusFilter = document.getElementById('report-status-filter').value;
-                
-                let filteredReports = reportsData;
-                
-                if (typeFilter !== 'all') {
-                    filteredReports = filteredReports.filter(r => r.type === typeFilter);
-                }
-                
-                if (statusFilter !== 'all') {
-                    filteredReports = filteredReports.filter(r => r.status === statusFilter);
-                }
-                
-                filteredReports.forEach((report, index) => {
-                    const row = [
-                        index + 1,
-                        report.name,
-                        report.type,
-                        report.period,
-                        formatDate(report.createdDate),
-                        report.status,
-                        report.description
-                    ];
-                    worksheet.addRow(row);
-                });
-                
-                // تنسيق Formatting
-                worksheet.columns = [
-                    { width: 5 }, { width: 25 }, { width: 12 }, 
-                    { width: 20 }, { width: 12 }, { width: 10 }, 
-                    { width: 40 }
-                ];
-                
-                // جعل الصف الأول عريض Make first row bold
-                worksheet.getRow(3).eachCell(cell => {
-                    cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center' };
-                });
-                
-                // حفظ الملف Save file
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const dateStr = new Date().toISOString().split('T')[0];
-                saveAs(blob, `تقارير_${dateStr}.xlsx`);
-                
-                alert('تم تصدير جدول التقارير بنجاح إلى ملف Excel! Reports table exported successfully to Excel!');
-                
-            } catch (error) {
-                console.error('Error exporting reports table:', error);
-                alert('حدث خطأ أثناء تصدير جدول التقارير Error exporting reports table: ' + error.message);
-            }
-        }
-
-        // تصدير جدول التقارير إلى PDF Export Reports Table to PDF
-        function exportReportsPDF() {
-            try {
-                // إعداد محتوى PDF Prepare PDF content
-                const today = new Date();
-                const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                
-                // تحديث قالب PDF Update PDF template
-                const pdfReportsBody = document.getElementById('pdf-reports-body');
-                pdfReportsBody.innerHTML = '';
-                
-                // تطبيق الفلاتر Apply filters
-                const typeFilter = document.getElementById('report-type-filter').value;
-                const statusFilter = document.getElementById('report-status-filter').value;
-                
-                let filteredReports = reportsData;
-                
-                if (typeFilter !== 'all') {
-                    filteredReports = filteredReports.filter(r => r.type === typeFilter);
-                }
-                
-                if (statusFilter !== 'all') {
-                    filteredReports = filteredReports.filter(r => r.status === statusFilter);
-                }
-                
-                // إضافة البيانات Add data
-                filteredReports.forEach((report, index) => {
-                    const row = document.createElement('tr');
-                    
-                    // تنسيق الحالة Format status
-                    let statusText = report.status;
-                    if (report.status === 'completed') statusText = 'مكتمل';
-                    else if (report.status === 'pending') statusText = 'معلق';
-                    else if (report.status === 'exported') statusText = 'مصدر';
-                    
-                    // تنسيق النوع Format type
-                    let typeText = report.type;
-                    if (report.type === 'monthly') typeText = 'شهري';
-                    else if (report.type === 'quarterly') typeText = 'ربع سنوي';
-                    else if (report.type === 'annual') typeText = 'سنوي';
-                    else if (report.type === 'weekly') typeText = 'أسبوعي';
-                    else if (report.type === 'comparison') typeText = 'مقارنة';
-                    
-                    row.innerHTML = `
-                        <td style="padding: 6px; border: 1px solid #000; text-align: center;">${index + 1}</td>
-                        <td style="padding: 6px; border: 1px solid #000; text-align: right;">${report.name}</td>
-                        <td style="padding: 6px; border: 1px solid #000; text-align: center;">${typeText}</td>
-                        <td style="padding: 6px; border: 1px solid #000; text-align: center;">${report.period}</td>
-                        <td style="padding: 6px; border: 1px solid #000; text-align: center;">${formatDate(report.createdDate)}</td>
-                        <td style="padding: 6px; border: 1px solid #000; text-align: center;">${statusText}</td>
-                    `;
-                    pdfReportsBody.appendChild(row);
-                });
-                
-                // تحديث معلومات التقرير Update report info
-                document.getElementById('pdf-report-date').textContent = formattedDate;
-                document.getElementById('pdf-reports-count').textContent = filteredReports.length;
-                
-                // تحديث الملخص Update summary
-                const summary = document.getElementById('pdf-reports-summary');
-                const completedCount = filteredReports.filter(r => r.status === 'completed').length;
-                const pendingCount = filteredReports.filter(r => r.status === 'pending').length;
-                const exportedCount = filteredReports.filter(r => r.status === 'exported').length;
-                
-                summary.innerHTML = `
-                    <div>إجمالي التقارير: ${filteredReports.length}</div>
-                    <div>تقارير مكتملة: ${completedCount}</div>
-                    <div>تقارير معلقة: ${pendingCount}</div>
-                    <div>تقارير مصدرة: ${exportedCount}</div>
-                    <div>آخر تحديث: ${formattedDate}</div>
-                `;
-                
-                // إنشاء PDF Create PDF
-                const element = document.getElementById('pdf-reports-template');
-                const originalStyles = {
-                    display: element.style.display,
-                    position: element.style.position,
-                    left: element.style.left,
-                    top: element.style.top,
-                    width: element.style.width,
-                    zIndex: element.style.zIndex
-                };
-                
-                element.style.display = 'block';
-                element.style.position = 'fixed';
-                element.style.left = '0';
-                element.style.top = '0';
-                element.style.width = '794px';
-                element.style.zIndex = '10000';
-                element.style.background = 'white';
-                element.style.padding = '20px';
-                
-                // استخدام html2canvas لالتقاط الصورة Use html2canvas to capture image
-                html2canvas(element, {
-                    scale: 2,
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#FFFFFF',
-                    width: 794,
-                    height: 1123
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    
-                    // إنشاء PDF Create PDF
-                    const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
-                    const pageWidth = pdf.internal.pageSize.getWidth();
-                    const imgWidth = pageWidth;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    // إضافة الصورة إلى PDF Add image to PDF
-                    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-                    
-                    // إعادة العنصر إلى وضعه الأصلي Restore element to original position
-                    element.style.display = originalStyles.display;
-                    element.style.position = originalStyles.position;
-                    element.style.left = originalStyles.left;
-                    element.style.top = originalStyles.top;
-                    element.style.width = originalStyles.width;
-                    element.style.zIndex = originalStyles.zIndex;
-                    
-                    // حفظ ملف PDF Save PDF file
-                    const dateStr = new Date().toISOString().split('T')[0];
-                    const fileName = `تقارير_${dateStr}.pdf`;
-                    pdf.save(fileName);
-                    
-                    alert('تم تصدير جدول التقارير بنجاح إلى ملف PDF! Reports table exported successfully to PDF!');
-                });
-                
-            } catch (error) {
-                console.error('Error exporting reports PDF:', error);
-                alert('حدث خطأ أثناء تصدير ملف PDF Error exporting PDF: ' + error.message);
-            }
-        }
-
-        // إنشاء تقرير شهري Generate Monthly Report
-        function generateMonthlyReport() {
-            const selectedRestaurant = document.getElementById('selected-restaurant').value;
-            const periodFrom = document.getElementById('period-from').value;
-            const periodTo = document.getElementById('period-to').value;
-            
-            if (!selectedRestaurant) {
-                alert('الرجاء اختيار مطعم أولاً. Please select a restaurant first.');
-                return;
-            }
-            
-            if (!periodFrom || !periodTo) {
-                alert('الرجاء تحديد فترة التقييم أولاً. Please select evaluation period first.');
-                return;
-            }
-            
-            // إنشاء تقرير جديد Generate new report
-            const newReport = {
-                id: reportsData.length + 1,
-                name: `تقرير ${formatMonthYear(periodFrom)}`,
-                filename: `تقرير-${formatMonthYear(periodFrom, true)}.xlsx`,
-                date: periodTo,
-                type: 'monthly',
-                status: 'completed',
-                description: `تقرير شهري لـ ${selectedRestaurant}`,
-                period: `${formatMonthYear(periodFrom)}`,
-                createdDate: new Date().toISOString().split('T')[0],
-                restaurant: selectedRestaurant,
-                score: Math.floor(Math.random() * 200) + 800, // قيمة عشوائية بين 800-1000
-                percentage: 0
-            };
-            
-            newReport.percentage = Math.round((newReport.score / 1000) * 100);
-            
-            // إضافة التقرير الجديد Add new report
-            reportsData.unshift(newReport);
-            
-            // تحديث الجدول Update table
-            loadReportsTable();
-            loadAllResults();
-            
-            alert(`تم إنشاء تقرير شهري جديد بنجاح!\n\nالمطعم: ${selectedRestaurant}\nالفترة: ${formatMonthYear(periodFrom)}\nسيتم تحميل الملف تلقائياً.`);
-            
-            // تحميل ملف Excel تلقائياً Auto-download Excel file
-            setTimeout(() => downloadReportExcel(newReport.id), 1000);
-        }
-
-        // إنشاء تقرير مقارنة Generate Comparison Report
-        function generateComparisonReport() {
-            const selectedRestaurant = document.getElementById('selected-restaurant').value;
-            
-            if (!selectedRestaurant) {
-                alert('الرجاء اختيار مطعم أولاً. Please select a restaurant first.');
-                return;
-            }
-            
-            // إنشاء تقرير مقارنة Generate comparison report
-            const newReport = {
-                id: reportsData.length + 1,
-                name: `تقرير مقارنة ${selectedRestaurant}`,
-                filename: `تقرير-مقارنة-${selectedRestaurant.replace(/\s+/g, '-')}.xlsx`,
-                date: new Date().toISOString().split('T')[0],
-                type: 'comparison',
-                status: 'completed',
-                description: `تقرير مقارنة الأداء لـ ${selectedRestaurant}`,
-                period: 'آخر 3 أشهر',
-                createdDate: new Date().toISOString().split('T')[0],
-                restaurant: selectedRestaurant,
-                score: 880,
-                percentage: 88
-            };
-            
-            // إضافة التقرير الجديد Add new report
-            reportsData.unshift(newReport);
-            
-            // تحديث الجدول Update table
-            loadReportsTable();
-            loadAllResults();
-            
-            alert(`تم إنشاء تقرير مقارنة جديد بنجاح!\n\nالمطعم: ${selectedRestaurant}\nالفترة: آخر 3 أشهر\nسيتم تحميل الملف تلقائياً.`);
-            
-            // تحميل ملف Excel تلقائياً Auto-download Excel file
-            setTimeout(() => downloadReportExcel(newReport.id), 1000);
-        }
-
-        // تصدير النتائج إلى Excel Export Results to Excel
-        async function exportResultsExcel() {
-            try {
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('النتائج');
-                
-                // العنوان Title
-                worksheet.mergeCells('A1:H1');
-                worksheet.getCell('A1').value = 'نتائج تقييم المطاعم - شركة نايف للأغذية';
-                worksheet.getCell('A1').font = { size: 18, bold: true };
-                worksheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                // التاريخ Date
-                worksheet.getCell('A2').value = `تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`;
-                worksheet.getCell('A2').font = { italic: true };
-                
-                // رؤوس الأعمدة Headers
-                const headers = ['المطعم', 'الفترة', 'إجمالي النقاط', 'النسبة%', 'التقييم', 'أفضل محور', 'أسوأ محور', 'تاريخ التقييم'];
-                worksheet.addRow(headers);
-                
-                // البيانات Data
-                reportsData.forEach(report => {
-                    if (report.score && report.percentage) {
-                        const row = [
-                            report.restaurant,
-                            report.period,
-                            report.score,
-                            `${report.percentage}%`,
-                            getGradeFromPercentage(report.percentage),
-                            'خدمة الزبائن',
-                            'البناء الخارجي',
-                            formatDate(report.createdDate)
-                        ];
-                        worksheet.addRow(row);
-                    }
-                });
-                
-                // تنسيق Formatting
-                worksheet.columns = [
-                    { width: 25 }, { width: 20 }, { width: 15 }, 
-                    { width: 12 }, { width: 12 }, { width: 15 }, 
-                    { width: 15 }, { width: 15 }
-                ];
-                
-                // جعل الصف الأول عريض Make first row bold
-                worksheet.getRow(3).eachCell(cell => {
-                    cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center' };
-                });
-                
-                // حفظ الملف Save file
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const dateStr = new Date().toISOString().split('T')[0];
-                saveAs(blob, `نتائج_التقييم_${dateStr}.xlsx`);
-                
-                alert('تم تصدير النتائج بنجاح إلى ملف Excel! Results exported successfully to Excel!');
-                
-            } catch (error) {
-                console.error('Error exporting results:', error);
-                alert('حدث خطأ أثناء تصدير النتائج Error exporting results: ' + error.message);
-            }
-        }
-
-        // تصدير النتائج التفصيلية إلى Excel Export Detailed Results to Excel
-        async function exportDetailedResultsExcel() {
-            try {
-                const workbook = new ExcelJS.Workbook();
-                
-                // ورقة النتائج الرئيسية Main results sheet
-                const resultsSheet = workbook.addWorksheet('النتائج التفصيلية');
-                
-                // العنوان Title
-                resultsSheet.mergeCells('A1:K1');
-                resultsSheet.getCell('A1').value = 'النتائج التفصيلية لتقييم المطاعم';
-                resultsSheet.getCell('A1').font = { size: 18, bold: true };
-                resultsSheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                // رؤوس الأعمدة Headers
-                const headers = ['المطعم', 'الفترة', 'إجمالي النقاط', 'النسبة%', 'البناء الخارجي', 'خدمة الزبائن', 'الصالة', 'منطقة الكاونتر', 'خدمة التوصيل', 'المطبخ', 'تاريخ التقييم'];
-                resultsSheet.addRow(headers);
-                
-                // البيانات Data
-                reportsData.forEach(report => {
-                    if (report.score && report.percentage) {
-                        // إنشاء درجات عشوائية لكل محور Create random scores for each axis
-                        const row = [
-                            report.restaurant,
-                            report.period,
-                            report.score,
-                            `${report.percentage}%`,
-                            Math.floor(report.score * 0.04),       // 4% للبناء الخارجي
-                            Math.floor(report.score * 0.22),       // 22% لخدمة الزبائن
-                            Math.floor(report.score * 0.09),       // 9% للصالة
-                            Math.floor(report.score * 0.075),      // 7.5% لمنطقة الكاونتر
-                            Math.floor(report.score * 0.075),      // 7.5% لخدمة التوصيل
-                            Math.floor(report.score * 0.155),      // 15.5% للمطبخ
-                            formatDate(report.createdDate)
-                        ];
-                        resultsSheet.addRow(row);
-                    }
-                });
-                
-                // تنسيق Formatting
-                resultsSheet.columns = [
-                    { width: 25 }, { width: 20 }, { width: 15 }, 
-                    { width: 12 }, { width: 15 }, { width: 15 }, 
-                    { width: 12 }, { width: 15 }, { width: 15 }, 
-                    { width: 12 }, { width: 15 }
-                ];
-                
-                // جعل الصف الأول عريض Make first row bold
-                resultsSheet.getRow(3).eachCell(cell => {
-                    cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center' };
-                });
-                
-                // حفظ الملف Save file
-                const buffer = await workbook.xlsx.writeBuffer();
-                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                const dateStr = new Date().toISOString().split('T')[0];
-                saveAs(blob, `النتائج_التفصيلية_${dateStr}.xlsx`);
-                
-                alert('تم تصدير النتائج التفصيلية بنجاح إلى ملف Excel! Detailed results exported successfully to Excel!');
-                
-            } catch (error) {
-                console.error('Error exporting detailed results:', error);
-                alert('حدث خطأ أثناء تصدير النتائج التفصيلية Error exporting detailed results: ' + error.message);
-            }
-        }
-
-        // إنشاء تحليل الاتجاهات Generate Trends Analysis
-        function generateTrendsReport() {
-            alert('جارٍ إنشاء تقرير تحليل الاتجاهات...\n\nسيتم إنشاء تقرير يظهر اتجاهات الأداء عبر الزمن للمطعم المحدد.');
-            
-            // في الواقع الحقيقي، هنا سيكون تحليل البيانات وإنشاء التقرير
-            // In real implementation, this would analyze data and generate report
-        }
-
-        // إنشاء تقرير الأداء Generate Performance Report
-        function generatePerformanceReport() {
-            alert('جارٍ إنشاء تقرير الأداء...\n\nسيتم إنشاء تقرير تفصيلي عن أداء المطعم يشمل جميع المحاور.');
-            
-            // في الواقع الحقيقي، هنا سيكون إنشاء التقرير
-            // In real implementation, this would generate the report
-        }
-
-        // مقارنة المطاعم Compare Restaurants
-        function compareRestaurants() {
-            const selectedRestaurant = document.getElementById('selected-restaurant').value;
-            
-            if (!selectedRestaurant) {
-                alert('الرجاء اختيار مطعم أولاً للمقارنة. Please select a restaurant first for comparison.');
-                return;
-            }
-            
-            // إنشاء تقرير مقارنة Generate comparison report
-            const newReport = {
-                id: reportsData.length + 1,
-                name: `تقرير مقارنة مطاعم`,
-                filename: `تقرير-مقارنة-مطاعم.xlsx`,
-                date: new Date().toISOString().split('T')[0],
-                type: 'comparison',
-                status: 'completed',
-                description: `مقارنة بين ${selectedRestaurant} ومطاعم أخرى`,
-                period: 'الحالي',
-                createdDate: new Date().toISOString().split('T')[0],
-                restaurant: selectedRestaurant,
-                score: 890,
-                percentage: 89
-            };
-            
-            // إضافة التقرير الجديد Add new report
-            reportsData.unshift(newReport);
-            
-            // تحديث الجدول Update table
-            loadReportsTable();
-            loadAllResults();
-            
-            alert(`تم إنشاء تقرير مقارنة المطاعم بنجاح!\n\nالمطعم الأساسي: ${selectedRestaurant}\nسيتم مقارنته مع 3 مطاعم أخرى.\nسيتم تحميل الملف تلقائياً.`);
-            
-            // تحميل ملف Excel تلقائياً Auto-download Excel file
-            setTimeout(() => downloadReportExcel(newReport.id), 1000);
-        }
-
-        // تنسيق التاريخ Format Date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-
-        // تنسيق الشهر والسنة Format Month and Year
-        function formatMonthYear(dateString, forFilename = false) {
-            const date = new Date(dateString);
-            if (forFilename) {
-                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-            }
-            const monthName = date.toLocaleDateString('ar-SA', { month: 'long' });
-            return `${monthName} ${date.getFullYear()}`;
-        }
-
-        // ============ الوظائف الأساسية للتقييم ============ //
-
-        // ملء جدول المعايير Fill Criteria Table
+        // ملء جدول المعايير
         function fillCriteriaTable(tableId, criteria) {
             const tableBody = document.getElementById(tableId);
             tableBody.innerHTML = '';
@@ -3011,19 +1607,17 @@
                         <input type="checkbox" class="not-available-checkbox" data-id="na-${item.id}">
                     </td>
                     <td class="notes">
-                        <input type="text" id="notes-${item.id}" placeholder="أضف ملاحظاتك هنا Add your notes here">
+                        <input type="text" id="notes-${item.id}" placeholder="أضف ملاحظاتك هنا">
                     </td>
                 `;
                 tableBody.appendChild(row);
                 
-                // إضافة حدث النقر على زر الدرجة Add Click Event to Score Button
                 const scoreBtn = row.querySelector('.score-btn');
                 scoreBtn.addEventListener('click', function() {
                     const notAvailableCheckbox = row.querySelector('.not-available-checkbox');
                     
-                    // إذا كان العنصر غير متوفر، لا يمكن تغيير الدرجة If item is not available, cannot change score
                     if (notAvailableCheckbox && notAvailableCheckbox.checked) {
-                        alert('لا يمكن تعديل درجة عنصر غير متوفر. يرجى إلغاء تحديد "غير متوفر" أولاً. Cannot modify score of unavailable item. Please uncheck "Not Available" first.');
+                        alert('لا يمكن تعديل درجة عنصر غير متوفر. يرجى إلغاء تحديد "غير متوفر" أولاً.');
                         return;
                     }
                     
@@ -3033,7 +1627,6 @@
                     this.textContent = newScore;
                     this.classList.toggle('active', newScore === maxScore);
                     
-                    // تحديث الحقل المخفي Update Hidden Field
                     const hiddenInput = document.getElementById(this.getAttribute('data-id'));
                     if (hiddenInput) {
                         hiddenInput.value = newScore;
@@ -3044,28 +1637,27 @@
             });
         }
 
-        // حساب النتائج Calculate Results
+        // حساب النتائج
         function calculateResults() {
             let totalAchieved = 0;
             let totalMax = 0;
             const results = [];
             
-            // حساب لكل محور Calculate for each axis
             const categories = [
-                { id: 'exterior', name: 'البناء الخارجي The Exterior Building', maxTotal: 40 },
-                { id: 'service', name: 'خدمة الزبائن Customer Service', maxTotal: 220 },
-                { id: 'dinein', name: 'الصالة Dine-In Area', maxTotal: 90 },
-                { id: 'counter', name: 'منطقة الكاونتر Counter Area', maxTotal: 75 },
-                { id: 'delivery', name: 'خدمة توصيل المنازل Home Delivery Service', maxTotal: 75 },
-                { id: 'kitchen', name: 'المطبخ Kitchen', maxTotal: 155 },
-                { id: 'quality', name: 'جودة الساندويتشات Quality of Sandwiches', maxTotal: 220 },
-                { id: 'fried', name: 'فرايد تشكن Fried Chicken', maxTotal: 100 },
-                { id: 'admin', name: 'الإدارة Administration', maxTotal: 60 }
+                { id: 'exterior', name: 'البناء الخارجي', maxTotal: 40 },
+                { id: 'service', name: 'خدمة الزبائن', maxTotal: 220 },
+                { id: 'dinein', name: 'الصالة', maxTotal: 90 },
+                { id: 'counter', name: 'منطقة الكاونتر', maxTotal: 75 },
+                { id: 'delivery', name: 'خدمة توصيل المنازل', maxTotal: 75 },
+                { id: 'kitchen', name: 'المطبخ', maxTotal: 155 },
+                { id: 'quality', name: 'جودة الساندويتشات', maxTotal: 220 },
+                { id: 'fried', name: 'فرايد تشكن', maxTotal: 100 },
+                { id: 'admin', name: 'الإدارة', maxTotal: 60 }
             ];
             
             categories.forEach(category => {
                 let achieved = 0;
-                let availableMax = 0; // للعناصر المتوفرة فقط For available items only
+                let availableMax = 0;
                 
                 evaluationData[category.id].forEach(item => {
                     const notAvailableCheckbox = document.querySelector(`input[data-id="na-${item.id}"]`);
@@ -3080,7 +1672,6 @@
                     }
                 });
                 
-                // إذا كانت هناك عناصر غير متوفرة، نعدل الدرجة القصوى If there are unavailable items, adjust max score
                 const adjustedMax = availableMax > 0 ? availableMax : 0;
                 
                 totalAchieved += achieved;
@@ -3097,61 +1688,50 @@
                 });
             });
             
-            // حساب النسبة الإجمالية Calculate Total Percentage
             const totalPercentage = totalMax > 0 ? Math.round((totalAchieved / totalMax) * 100) : 0;
             
-            // تحديث الكروت الإحصائية Update Statistics Cards
             updateStatsCards(totalAchieved, totalPercentage, totalMax);
-            
-            // تحديث جدول النتائج Update Results Table
             updateResultsTable(results, totalAchieved, totalPercentage, totalMax);
-            
-            // تحديث التقييم النهائي Update Final Evaluation
             updateFinalEvaluation(totalPercentage, totalAchieved, totalMax);
-            
-            // حفظ البيانات الحالية Save current data
             saveCurrentData(totalAchieved, totalPercentage);
             
             return { totalAchieved, totalPercentage, totalMax, results };
         }
 
-        // تحديث الكروت الإحصائية Update Statistics Cards
+        // تحديث الكروت الإحصائية
         function updateStatsCards(totalAchieved, totalPercentage, totalMax) {
             document.getElementById('total-score').textContent = totalAchieved;
             document.getElementById('total-percentage').textContent = totalPercentage + '%';
             
-            // حساب الدرجات المتبقية Calculate Remaining Points
             const remainingScore = totalMax - totalAchieved;
             document.getElementById('remaining-score').textContent = remainingScore;
             
-            // تحديث التقييم النهائي Update Final Grade
             let finalGrade = '-';
             if (totalPercentage < 75) {
-                finalGrade = '🔴 تدخل Intervention';
+                finalGrade = '🔴 تدخل';
                 document.getElementById('final-grade').parentElement.classList.remove('red', 'yellow', 'green', 'gold', 'blue');
                 document.getElementById('final-grade').parentElement.classList.add('red');
             } else if (totalPercentage >= 75 && totalPercentage < 85) {
-                finalGrade = '🟡 متابعة Follow-up';
+                finalGrade = '🟡 متابعة';
                 document.getElementById('final-grade').parentElement.classList.remove('red', 'yellow', 'green', 'gold', 'blue');
                 document.getElementById('final-grade').parentElement.classList.add('yellow');
             } else if (totalPercentage >= 85 && totalPercentage < 90) {
-                finalGrade = '🟢 جيد Good';
+                finalGrade = '🟢 جيد';
                 document.getElementById('final-grade').parentElement.classList.remove('red', 'yellow', 'green', 'gold', 'blue');
                 document.getElementById('final-grade').parentElement.classList.add('green');
             } else if (totalPercentage >= 90) {
-                finalGrade = '🟡✨ ممتاز Excellent';
+                finalGrade = '🟡✨ ممتاز';
                 document.getElementById('final-grade').parentElement.classList.remove('red', 'yellow', 'green', 'gold', 'blue');
                 document.getElementById('final-grade').parentElement.classList.add('gold');
             }
             document.getElementById('final-grade').textContent = finalGrade;
         }
 
-        // تحديث جدول النتائج Update Results Table
+        // تحديث جدول النتائج
         function updateResultsTable(results, totalAchieved, totalPercentage, totalMax) {
             const resultsBody = document.getElementById('results-body');
             resultsBody.innerHTML = '';
             
-            // إضافة صفوف النتائج لكل محور Add result rows for each axis
             results.forEach(result => {
                 const row = document.createElement('tr');
                 const circleColor = getPercentageColorForCircle(result.percentage);
@@ -3170,14 +1750,13 @@
                 resultsBody.appendChild(row);
             });
             
-            // إضافة صف الإجمالي Add Total Row
             const totalRow = document.createElement('tr');
             totalRow.classList.add('total-row');
             const totalColor = getPercentageColor(totalPercentage);
             const totalCircleColor = getPercentageColorForCircle(totalPercentage);
             
             totalRow.innerHTML = `
-                <td><strong>الإجمالي (1-9) Total (1-9)</strong></td>
+                <td><strong>الإجمالي (1-9)</strong></td>
                 <td><strong>${totalMax}</strong></td>
                 <td><strong>${totalAchieved}</strong></td>
                 <td class="percentage-cell" style="background-color: ${totalColor};"><strong>${totalPercentage}%</strong></td>
@@ -3189,12 +1768,11 @@
             `;
             resultsBody.appendChild(totalRow);
             
-            // تحديث نتيجة الإجمالي Update Total Result
             document.getElementById('total-score-result').textContent = totalAchieved;
             document.getElementById('total-max-result').textContent = totalMax;
         }
 
-        // تحديث التقييم النهائي Update Final Evaluation
+        // تحديث التقييم النهائي
         function updateFinalEvaluation(percentage, totalAchieved, totalMax) {
             const evaluationText = document.getElementById('evaluation-text');
             const finalEvaluation = document.getElementById('final-evaluation');
@@ -3203,25 +1781,25 @@
             let color, text, circleColor;
             
             if (percentage < 75) {
-                text = 'أحمر - يحتاج تدخل فوري Red - Needs Immediate Intervention';
+                text = 'أحمر - يحتاج تدخل فوري';
                 color = '#c0392b';
                 circleColor = '#c0392b';
                 finalEvaluation.style.backgroundColor = '#ffebee';
                 finalEvaluation.style.color = '#c0392b';
             } else if (percentage >= 75 && percentage < 85) {
-                text = 'أصفر - يحتاج متابعة Yellow - Needs Follow-up';
+                text = 'أصفر - يحتاج متابعة';
                 color = '#f39c12';
                 circleColor = '#f39c12';
                 finalEvaluation.style.backgroundColor = '#fff9e6';
                 finalEvaluation.style.color = '#f39c12';
             } else if (percentage >= 85 && percentage < 90) {
-                text = 'أخضر - أداء جيد Green - Good Performance';
+                text = 'أخضر - أداء جيد';
                 color = '#27ae60';
                 circleColor = '#27ae60';
                 finalEvaluation.style.backgroundColor = '#e8f7ef';
                 finalEvaluation.style.color = '#27ae60';
             } else if (percentage >= 90) {
-                text = 'ذهبي - أداء ممتاز Golden - Excellent Performance';
+                text = 'ذهبي - أداء ممتاز';
                 color = '#b8860b';
                 circleColor = '#ffd700';
                 finalEvaluation.style.backgroundColor = '#fffce6';
@@ -3231,7 +1809,6 @@
             evaluationText.textContent = text;
             evaluationText.style.color = color;
             
-            // تحديث الدائرة Update Circle
             if (finalCircle) {
                 finalCircle.style.backgroundColor = circleColor;
                 finalCircle.textContent = percentage + '%';
@@ -3239,7 +1816,7 @@
             }
         }
 
-        // الحصول على لون النسبة المئوية Get Percentage Color
+        // الحصول على لون النسبة المئوية
         function getPercentageColor(percentage) {
             if (percentage < 75) return '#ffebee';
             if (percentage >= 75 && percentage < 85) return '#fff9e6';
@@ -3247,7 +1824,7 @@
             return '#fffce6';
         }
 
-        // الحصول على لون الدائرة للنسبة المئوية Get Circle Color for Percentage
+        // الحصول على لون الدائرة للنسبة المئوية
         function getPercentageColorForCircle(percentage) {
             if (percentage < 75) return '#c0392b';
             if (percentage >= 75 && percentage < 85) return '#f39c12';
@@ -3255,127 +1832,7 @@
             return '#ffd700';
         }
 
-        // حفظ التقييم الأسبوعي Save Weekly Evaluation
-        function saveWeeklyEvaluation() {
-            const results = calculateResults();
-            const weekSelect = document.getElementById('week-selection').value;
-            const today = new Date();
-            const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            
-            // جمع الملاحظات Gather notes
-            let notes = '';
-            Object.keys(evaluationData).forEach(category => {
-                evaluationData[category].forEach(item => {
-                    const noteInput = document.getElementById(`notes-${item.id}`);
-                    if (noteInput && noteInput.value.trim() !== '') {
-                        notes += `${item.id}: ${noteInput.value}\n`;
-                    }
-                });
-            });
-            
-            // حفظ بيانات الأسبوع Save week data
-            weeklyEvaluations[weekSelect] = {
-                score: results.totalAchieved,
-                percentage: results.totalPercentage,
-                date: formattedDate,
-                grade: getGradeFromPercentage(results.totalPercentage),
-                notes: notes
-            };
-            
-            // تحديث المتوسط الشهري Update monthly average
-            updateMonthlyAverage();
-            
-            // تحديث العرض Update display
-            updateWeeklyDisplay();
-            updateMonthlyDisplay();
-            
-            // حفظ البيانات في localStorage Save data to localStorage
-            saveToLocalStorage();
-            
-            alert(`تم حفظ التقييم للأسبوع ${getWeekName(weekSelect)} بنجاح! Evaluation saved for ${getWeekName(weekSelect)} successfully!`);
-        }
-
-        // تحديث المتوسط الشهري Update Monthly Average
-        function updateMonthlyAverage() {
-            let totalScore = 0;
-            let totalPercentage = 0;
-            let count = 0;
-            
-            // حساب المتوسط لجميع الأسابيع Calculate average for all weeks
-            Object.values(weeklyEvaluations).forEach(week => {
-                if (week.score > 0) {
-                    totalScore += week.score;
-                    totalPercentage += week.percentage;
-                    count++;
-                }
-            });
-            
-            if (count > 0) {
-                const averageScore = Math.round(totalScore / count);
-                const averagePercentage = Math.round(totalPercentage / count);
-                
-                // حساب التوجه Calculate trend
-                let trend = 'stable';
-                if (monthlyAverages.current.average > 0) {
-                    if (averageScore > monthlyAverages.current.average) {
-                        trend = 'up';
-                    } else if (averageScore < monthlyAverages.current.average) {
-                        trend = 'down';
-                    }
-                }
-                
-                // حفظ المتوسط الحالي كسابق Save current as previous
-                monthlyAverages.previous = { ...monthlyAverages.current };
-                
-                // تحديث المتوسط الحالي Update current average
-                monthlyAverages.current = {
-                    average: averageScore,
-                    percentage: averagePercentage,
-                    grade: getGradeFromPercentage(averagePercentage),
-                    trend: trend
-                };
-            }
-        }
-
-        // تحديث عرض البيانات الأسبوعية Update Weekly Display
-        function updateWeeklyDisplay() {
-            const weekSelect = document.getElementById('week-select').value;
-            const weekData = weeklyEvaluations[weekSelect];
-            
-            document.getElementById('week-score').textContent = weekData.score;
-            document.getElementById('week-percentage').textContent = weekData.percentage + '%';
-            document.getElementById('week-grade').textContent = weekData.grade;
-            document.getElementById('week-date').textContent = weekData.date || '-';
-        }
-
-        // تحديث عرض البيانات الشهرية Update Monthly Display
-        function updateMonthlyDisplay() {
-            const monthSelect = document.getElementById('month-select').value;
-            const monthData = monthlyAverages[monthSelect];
-            
-            document.getElementById('month-score').textContent = monthData.average;
-            document.getElementById('month-percentage').textContent = monthData.percentage + '%';
-            document.getElementById('month-grade').textContent = monthData.grade;
-            
-            // عرض التوجه Display trend
-            let trendSymbol = '→';
-            if (monthData.trend === 'up') trendSymbol = '↑';
-            if (monthData.trend === 'down') trendSymbol = '↓';
-            document.getElementById('month-trend').textContent = trendSymbol;
-        }
-
-        // الحصول على اسم الأسبوع Get Week Name
-        function getWeekName(weekId) {
-            const weekNames = {
-                'week1': 'الأسبوع الأول',
-                'week2': 'الأسبوع الثاني',
-                'week3': 'الأسبوع الثالث',
-                'week4': 'الأسبوع الرابع'
-            };
-            return weekNames[weekId] || weekId;
-        }
-
-        // الحصول على التقييم من النسبة المئوية Get Grade from Percentage
+        // الحصول على التقييم من النسبة المئوية
         function getGradeFromPercentage(percentage) {
             if (percentage < 75) return '🔴';
             if (percentage >= 75 && percentage < 85) return '🟡';
@@ -3383,7 +1840,7 @@
             return '🟡✨';
         }
 
-        // حفظ البيانات الحالية Save Current Data
+        // حفظ البيانات الحالية
         function saveCurrentData(score, percentage) {
             localStorage.setItem('lastEvaluation', JSON.stringify({
                 score: score,
@@ -3392,22 +1849,9 @@
             }));
         }
 
-        // تحميل البيانات المحفوظة Load Saved Data
+        // تحميل البيانات المحفوظة
         function loadSavedData() {
             try {
-                // تحميل التقييمات الأسبوعية Load weekly evaluations
-                const savedWeekly = localStorage.getItem('weeklyEvaluations');
-                if (savedWeekly) {
-                    weeklyEvaluations = JSON.parse(savedWeekly);
-                }
-                
-                // تحميل المتوسطات الشهرية Load monthly averages
-                const savedMonthly = localStorage.getItem('monthlyAverages');
-                if (savedMonthly) {
-                    monthlyAverages = JSON.parse(savedMonthly);
-                }
-                
-                // تحميل الفترة المحفوظة Load saved period
                 const savedPeriod = localStorage.getItem('evaluationPeriod');
                 if (savedPeriod) {
                     const period = JSON.parse(savedPeriod);
@@ -3415,22 +1859,14 @@
                     document.getElementById('period-to').value = period.to;
                     updatePeriodDisplay();
                 }
-                
-                // تحديث العرض Update display
-                updateWeeklyDisplay();
-                updateMonthlyDisplay();
             } catch (error) {
-                console.error('Error loading saved data:', error);
+                console.error('خطأ في تحميل البيانات المحفوظة:', error);
             }
         }
 
-        // حفظ البيانات في localStorage Save Data to localStorage
+        // حفظ البيانات في localStorage
         function saveToLocalStorage() {
             try {
-                localStorage.setItem('weeklyEvaluations', JSON.stringify(weeklyEvaluations));
-                localStorage.setItem('monthlyAverages', JSON.stringify(monthlyAverages));
-                
-                // حفظ فترة التقييم Save evaluation period
                 const periodFrom = document.getElementById('period-from').value;
                 const periodTo = document.getElementById('period-to').value;
                 if (periodFrom && periodTo) {
@@ -3440,11 +1876,11 @@
                     }));
                 }
             } catch (error) {
-                console.error('Error saving data:', error);
+                console.error('خطأ في حفظ البيانات:', error);
             }
         }
 
-        // حفظ التقييم كملف Excel Export Evaluation to Excel
+        // تصدير التقييم إلى Excel
         async function exportEvaluationExcel() {
             try {
                 const results = calculateResults();
@@ -3454,22 +1890,19 @@
                 const periodTo = document.getElementById('period-to').value;
                 
                 if (!selectedRestaurant) {
-                    alert('الرجاء اختيار مطعم أولاً. Please select a restaurant first.');
+                    alert('الرجاء اختيار مطعم أولاً.');
                     return;
                 }
                 
                 const workbook = new ExcelJS.Workbook();
                 
-                // ورقة الملخص Summary sheet
                 const summarySheet = workbook.addWorksheet('ملخص التقييم');
                 
-                // العنوان Title
                 summarySheet.mergeCells('A1:E1');
                 summarySheet.getCell('A1').value = 'تقرير تقييم المطعم - شركة نايف للأغذية';
                 summarySheet.getCell('A1').font = { size: 18, bold: true };
                 summarySheet.getCell('A1').alignment = { horizontal: 'center' };
                 
-                // معلومات التقييم Evaluation info
                 summarySheet.getCell('A3').value = 'اسم المطعم:';
                 summarySheet.getCell('B3').value = selectedRestaurant;
                 summarySheet.getCell('A4').value = 'المقيم:';
@@ -3479,7 +1912,6 @@
                 summarySheet.getCell('A6').value = 'تاريخ التقييم:';
                 summarySheet.getCell('B6').value = new Date().toLocaleDateString('ar-SA');
                 
-                // النتائج الإجمالية Total results
                 summarySheet.getCell('A8').value = 'إجمالي النقاط المحققة:';
                 summarySheet.getCell('B8').value = results.totalAchieved;
                 summarySheet.getCell('A9').value = 'إجمالي النقاط الممكنة:';
@@ -3489,22 +1921,18 @@
                 summarySheet.getCell('A11').value = 'التقييم النهائي:';
                 summarySheet.getCell('B11').value = getGradeFromPercentage(results.totalPercentage);
                 
-                // ورقة النتائج التفصيلية Detailed results sheet
                 const detailsSheet = workbook.addWorksheet('النتائج التفصيلية');
                 
-                // العنوان Title
                 detailsSheet.mergeCells('A1:D1');
                 detailsSheet.getCell('A1').value = 'نتائج التقييم التفصيلية';
                 detailsSheet.getCell('A1').font = { size: 16, bold: true };
                 detailsSheet.getCell('A1').alignment = { horizontal: 'center' };
                 
-                // رؤوس الأعمدة Headers
                 detailsSheet.getCell('A3').value = 'المحور';
                 detailsSheet.getCell('B3').value = 'الدرجة القصوى';
                 detailsSheet.getCell('C3').value = 'الدرجة المحققة';
                 detailsSheet.getCell('D3').value = 'النسبة%';
                 
-                // البيانات Data
                 results.results.forEach((result, index) => {
                     detailsSheet.getCell(`A${4 + index}`).value = result.name;
                     detailsSheet.getCell(`B${4 + index}`).value = result.maxScore;
@@ -3512,53 +1940,6 @@
                     detailsSheet.getCell(`D${4 + index}`).value = `${result.percentage}%`;
                 });
                 
-                // ورقة المعايير التفصيلية Detailed criteria sheet
-                const criteriaSheet = workbook.addWorksheet('المعايير التفصيلية');
-                
-                // العنوان Title
-                criteriaSheet.mergeCells('A1:F1');
-                criteriaSheet.getCell('A1').value = 'المعايير التفصيلية للتقييم';
-                criteriaSheet.getCell('A1').font = { size: 16, bold: true };
-                criteriaSheet.getCell('A1').alignment = { horizontal: 'center' };
-                
-                // رؤوس الأعمدة Headers
-                const criteriaHeaders = ['رقم المعيار', 'اسم المعيار', 'الدرجة القصوى', 'الدرجة المحققة', 'غير متوفر', 'الملاحظات'];
-                criteriaSheet.addRow(criteriaHeaders);
-                
-                // البيانات Data
-                let rowIndex = 2;
-                Object.keys(evaluationData).forEach(category => {
-                    evaluationData[category].forEach(item => {
-                        const scoreInput = document.getElementById(`score-${item.id}`);
-                        const notAvailableCheckbox = document.querySelector(`input[data-id="na-${item.id}"]`);
-                        const notesInput = document.getElementById(`notes-${item.id}`);
-                        
-                        const row = [
-                            item.id,
-                            item.name,
-                            item.maxScore,
-                            scoreInput ? scoreInput.value : '0',
-                            notAvailableCheckbox && notAvailableCheckbox.checked ? 'نعم' : 'لا',
-                            notesInput ? notesInput.value : ''
-                        ];
-                        criteriaSheet.addRow(row);
-                        rowIndex++;
-                    });
-                });
-                
-                // تنسيق Formatting
-                criteriaSheet.columns = [
-                    { width: 10 }, { width: 50 }, { width: 12 }, 
-                    { width: 12 }, { width: 10 }, { width: 30 }
-                ];
-                
-                // جعل الصف الأول عريض Make first row bold
-                criteriaSheet.getRow(1).eachCell(cell => {
-                    cell.font = { bold: true };
-                    cell.alignment = { horizontal: 'center' };
-                });
-                
-                // حفظ الملف Save file
                 const buffer = await workbook.xlsx.writeBuffer();
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 const cleanRestaurantName = selectedRestaurant.replace(/[^\w\u0600-\u06FF\s]/g, '');
@@ -3566,26 +1947,23 @@
                 const fileName = `تقرير_تقييم_${cleanRestaurantName}_${dateStr}.xlsx`;
                 saveAs(blob, fileName);
                 
-                alert('تم تصدير التقرير التفصيلي بنجاح إلى ملف Excel! Detailed report exported successfully to Excel!');
+                alert('تم تصدير التقرير التفصيلي بنجاح إلى ملف Excel!');
                 
             } catch (error) {
-                console.error('Error exporting evaluation:', error);
-                alert('حدث خطأ أثناء تصدير التقرير Error exporting report: ' + error.message);
+                console.error('خطأ في تصدير التقييم:', error);
+                alert('حدث خطأ أثناء تصدير التقرير: ' + error.message);
             }
         }
 
-        // حفظ التقرير كملف PDF Save Report as PDF
+        // حفظ التقرير كملف PDF
         async function saveAsPDF() {
             if (!window.jspdf) {
-                alert('مكتبة PDF غير محملة. يرجى التحقق من الاتصال بالإنترنت. PDF library not loaded. Please check internet connection.');
+                alert('مكتبة PDF غير محملة. يرجى التحقق من الاتصال بالإنترنت.');
                 return;
             }
             
             try {
-                // حساب النتائج أولاً Calculate results first
                 const results = calculateResults();
-                
-                // تحضير بيانات PDF Prepare PDF data
                 const today = new Date();
                 const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
                 const selectedRestaurant = document.getElementById('selected-restaurant').value || 'غير محدد';
@@ -3593,16 +1971,14 @@
                 const periodFrom = document.getElementById('period-from').value;
                 const periodTo = document.getElementById('period-to').value;
                 
-                // تحديث قالب PDF Update PDF template
-                document.getElementById('pdf-evaluation-date').textContent = formattedDate;
+                document.getElementById('pdf-report-date').textContent = formattedDate;
                 document.getElementById('pdf-restaurant-name').textContent = selectedRestaurant;
-                document.getElementById('pdf-evaluator-name').textContent = evaluatorName;
-                document.getElementById('pdf-evaluation-period').textContent = `${formatDate(periodFrom)} إلى ${formatDate(periodTo)}`;
+                document.getElementById('pdf-evaluator').textContent = evaluatorName;
+                document.getElementById('pdf-period').textContent = `${formatDate(periodFrom)} إلى ${formatDate(periodTo)}`;
                 
-                const pdfContent = document.getElementById('pdf-evaluation-content');
+                const pdfContent = document.getElementById('pdf-content');
                 pdfContent.innerHTML = '';
                 
-                // إضافة ملخص النتائج Add results summary
                 const summaryDiv = document.createElement('div');
                 summaryDiv.style.marginBottom = '20px';
                 summaryDiv.innerHTML = `
@@ -3628,7 +2004,6 @@
                 `;
                 pdfContent.appendChild(summaryDiv);
                 
-                // إضافة نتائج المحاور Add axis results
                 const axesDiv = document.createElement('div');
                 axesDiv.innerHTML = `
                     <h4 style="color: #c0392b; margin: 0 0 10px 0; text-align: center; font-size: 16px;">نتائج المحاور</h4>
@@ -3661,8 +2036,7 @@
                 `;
                 pdfContent.appendChild(axesDiv);
                 
-                // إنشاء PDF متعدد الصفحات Create multi-page PDF
-                const element = document.getElementById('pdf-evaluation-template');
+                const element = document.getElementById('pdf-template');
                 const originalStyles = {
                     display: element.style.display,
                     position: element.style.position,
@@ -3681,7 +2055,6 @@
                 element.style.background = 'white';
                 element.style.padding = '20px';
                 
-                // استخدام html2canvas لالتقاط الصورة Use html2canvas to capture image
                 html2canvas(element, {
                     scale: 2,
                     useCORS: true,
@@ -3692,19 +2065,13 @@
                 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/jpeg', 0.95);
                     
-                    // إنشاء PDF Create PDF
                     const pdf = new window.jspdf.jsPDF('p', 'pt', 'a4');
                     const pageWidth = pdf.internal.pageSize.getWidth();
                     const imgWidth = pageWidth;
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     
-                    // إضافة الصفحة الأولى Add first page
                     pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
                     
-                    // إضافة صفحة إضافية للمعايير التفصيلية Add additional page for detailed criteria
-                    pdf.addPage();
-                    
-                    // إعادة العنصر إلى وضعه الأصلي Restore element to original position
                     element.style.display = originalStyles.display;
                     element.style.position = originalStyles.position;
                     element.style.left = originalStyles.left;
@@ -3712,76 +2079,241 @@
                     element.style.width = originalStyles.width;
                     element.style.zIndex = originalStyles.zIndex;
                     
-                    // حفظ ملف PDF Save PDF file
                     const cleanRestaurantName = selectedRestaurant.replace(/[^\w\u0600-\u06FF\s]/g, '');
                     const fileName = `تقرير_تقييم_${cleanRestaurantName}_${formattedDate}.pdf`;
                     pdf.save(fileName);
                     
-                    alert('تم إنشاء ملف PDF بنجاح وتم تحميله! PDF file created successfully and downloaded!');
+                    alert('تم إنشاء ملف PDF بنجاح وتم تحميله!');
                 });
                 
             } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('حدث خطأ أثناء إنشاء ملف PDF: Error occurred while generating PDF: ' + error.message);
+                console.error('خطأ في إنشاء PDF:', error);
+                alert('حدث خطأ أثناء إنشاء ملف PDF: ' + error.message);
             }
         }
 
-        // طباعة التقرير Print Report
+        // طباعة التقرير
         function printEvaluation() {
             calculateResults();
             window.print();
         }
 
-        // إعادة تعيين النموذج Reset Form
+        // إعادة تعيين النموذج
         function resetForm() {
-            if (confirm('هل أنت متأكد من إعادة تعيين جميع البيانات؟ Are you sure you want to reset all data?')) {
-                // إعادة تعيين أزرار النقاط Reset score buttons
+            if (confirm('هل أنت متأكد من إعادة تعيين جميع البيانات؟')) {
                 document.querySelectorAll('.score-btn').forEach(btn => {
                     btn.textContent = '0';
                     btn.classList.remove('active');
                 });
                 
-                // إعادة تعيين الحقول المخفية Reset hidden fields
                 document.querySelectorAll('input[type="hidden"]').forEach(input => {
                     if (input.id.startsWith('score-')) {
                         input.value = '0';
                     }
                 });
                 
-                // إعادة تعيين checkboxes Reset checkboxes
                 document.querySelectorAll('.not-available-checkbox').forEach(checkbox => {
                     checkbox.checked = false;
                 });
                 
-                // إعادة تعيين الملاحظات Reset notes
                 document.querySelectorAll('input[type="text"]').forEach(input => {
                     if (input.id.startsWith('notes-')) {
                         input.value = '';
                     }
                 });
                 
-                // إعادة تعيين بيانات المستخدم Reset user data
                 document.getElementById('evaluator-name').value = '';
                 document.getElementById('restaurant-search').value = '';
                 document.getElementById('selected-restaurant').value = '';
                 document.getElementById('area-manager').textContent = '-';
                 document.getElementById('operation-manager').textContent = '-';
                 
-                // إعادة تعيين الفترة Reset period
                 setDefaultPeriod();
-                
                 calculateResults();
             }
         }
 
-        // عرض الصفحة Show Page
+        // تحميل وعرض جدول التقارير
+        function loadReportsTable() {
+            const reportsTableBody = document.getElementById('reports-table-body');
+            reportsTableBody.innerHTML = '';
+            
+            reportsData.forEach((report, index) => {
+                let statusClass = 'status-pending';
+                let statusText = 'معلق';
+                if (report.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'مكتمل';
+                }
+                
+                let typeText = report.type;
+                if (report.type === 'monthly') typeText = 'شهري';
+                else if (report.type === 'quarterly') typeText = 'ربع سنوي';
+                else if (report.type === 'annual') typeText = 'سنوي';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${report.name}</strong><br><small>${report.description}</small></td>
+                    <td>${typeText}</td>
+                    <td>${report.period}</td>
+                    <td>${formatDate(report.createdDate)}</td>
+                    <td><span class="report-status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-excel" onclick="downloadReportExcel(${report.id})">📥 Excel</button>
+                            <button class="btn-small btn-pdf" onclick="downloadReportPDF(${report.id})">📄 PDF</button>
+                        </div>
+                    </td>
+                `;
+                reportsTableBody.appendChild(row);
+            });
+        }
+
+        // تصفية التقارير
+        function filterReports() {
+            const typeFilter = document.getElementById('report-type-filter').value;
+            const statusFilter = document.getElementById('report-status-filter').value;
+            const dateFrom = document.getElementById('report-date-from').value;
+            const dateTo = document.getElementById('report-date-to').value;
+            
+            const reportsTableBody = document.getElementById('reports-table-body');
+            reportsTableBody.innerHTML = '';
+            
+            let filteredCount = 0;
+            
+            reportsData.forEach((report, index) => {
+                if (typeFilter !== 'all' && report.type !== typeFilter) return;
+                if (statusFilter !== 'all' && report.status !== statusFilter) return;
+                
+                if (dateFrom) {
+                    const reportDate = new Date(report.createdDate);
+                    const filterFrom = new Date(dateFrom + '-01');
+                    if (reportDate < filterFrom) return;
+                }
+                
+                if (dateTo) {
+                    const reportDate = new Date(report.createdDate);
+                    const filterTo = new Date(dateTo + '-01');
+                    filterTo.setMonth(filterTo.getMonth() + 1);
+                    if (reportDate >= filterTo) return;
+                }
+                
+                filteredCount++;
+                
+                let statusClass = 'status-pending';
+                let statusText = 'معلق';
+                if (report.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'مكتمل';
+                }
+                
+                let typeText = report.type;
+                if (report.type === 'monthly') typeText = 'شهري';
+                else if (report.type === 'quarterly') typeText = 'ربع سنوي';
+                else if (report.type === 'annual') typeText = 'سنوي';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${filteredCount}</td>
+                    <td><strong>${report.name}</strong><br><small>${report.description}</small></td>
+                    <td>${typeText}</td>
+                    <td>${report.period}</td>
+                    <td>${formatDate(report.createdDate)}</td>
+                    <td><span class="report-status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-excel" onclick="downloadReportExcel(${report.id})">📥 Excel</button>
+                            <button class="btn-small btn-pdf" onclick="downloadReportPDF(${report.id})">📄 PDF</button>
+                        </div>
+                    </td>
+                `;
+                reportsTableBody.appendChild(row);
+            });
+        }
+
+        // تحديث التقارير
+        function refreshReports() {
+            loadReportsTable();
+            alert('تم تحديث التقارير بنجاح!');
+        }
+
+        // تحميل تقرير Excel
+        function downloadReportExcel(reportId) {
+            const report = reportsData.find(r => r.id === reportId);
+            if (!report) return;
+            
+            alert(`تم تحميل ملف Excel: ${report.filename}`);
+        }
+
+        // تحميل تقرير PDF
+        function downloadReportPDF(reportId) {
+            const report = reportsData.find(r => r.id === reportId);
+            if (!report) return;
+            
+            alert(`جارٍ إنشاء ملف PDF: ${report.name}`);
+        }
+
+        // تصدير جميع التقارير إلى Excel
+        async function exportReportsExcel() {
+            try {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('التقارير');
+                
+                worksheet.mergeCells('A1:G1');
+                worksheet.getCell('A1').value = 'جدول التقارير - شركة نايف للأغذية';
+                worksheet.getCell('A1').font = { size: 18, bold: true };
+                worksheet.getCell('A1').alignment = { horizontal: 'center' };
+                
+                worksheet.getCell('A2').value = `تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`;
+                worksheet.getCell('A2').font = { italic: true };
+                
+                const headers = ['#', 'اسم التقرير', 'نوع التقرير', 'الفترة', 'تاريخ الإنشاء', 'الحالة', 'الوصف'];
+                worksheet.addRow(headers);
+                
+                reportsData.forEach((report, index) => {
+                    const row = [
+                        index + 1,
+                        report.name,
+                        report.type,
+                        report.period,
+                        formatDate(report.createdDate),
+                        report.status,
+                        report.description
+                    ];
+                    worksheet.addRow(row);
+                });
+                
+                worksheet.columns = [
+                    { width: 5 }, { width: 25 }, { width: 12 }, 
+                    { width: 20 }, { width: 12 }, { width: 10 }, 
+                    { width: 40 }
+                ];
+                
+                worksheet.getRow(3).eachCell(cell => {
+                    cell.font = { bold: true };
+                    cell.alignment = { horizontal: 'center' };
+                });
+                
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const dateStr = new Date().toISOString().split('T')[0];
+                saveAs(blob, `تقارير_${dateStr}.xlsx`);
+                
+                alert('تم تصدير جدول التقارير بنجاح إلى ملف Excel!');
+                
+            } catch (error) {
+                console.error('خطأ في تصدير التقارير:', error);
+                alert('حدث خطأ أثناء تصدير جدول التقارير: ' + error.message);
+            }
+        }
+
+        // عرض الصفحة
         function showPage(pageId) {
-            // إخفاء جميع الصفحات Hide all pages
             document.querySelectorAll('.page-section').forEach(page => {
                 page.classList.remove('active');
             });
             
-            // إخفاء أو إظهار حاوية الاختيار Hide or show selection container
             const selectionContainer = document.getElementById('selection-container');
             if (pageId === 'evaluation') {
                 selectionContainer.style.display = 'grid';
@@ -3789,30 +2321,32 @@
                 selectionContainer.style.display = 'none';
             }
             
-            // إظهار الصفحة المطلوبة Show requested page
             document.getElementById(`${pageId}-page`).classList.add('active');
             
-            // تحديث أزرار التنقل Update navigation buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.textContent.includes(pageId === 'evaluation' ? 'نموذج التقييم' : 
-                                            pageId === 'reports' ? 'التقارير' : 'النتائج')) {
+                if (btn.textContent.includes(pageId === 'evaluation' ? 'نموذج التقييم' : 'التقارير')) {
                     btn.classList.add('active');
                 }
             });
             
-            // إذا كانت صفحة التقارير، قم بتحديث الجدول If reports page, update table
             if (pageId === 'reports') {
                 loadReportsTable();
             }
-            
-            // إذا كانت صفحة النتائج، قم بتحديث البيانات If results page, update data
-            if (pageId === 'results') {
-                loadAllResults();
-            }
         }
 
-        // تهيئة النموذج عند تحميل الصفحة Initialize form when page loads
+        // تنسيق التاريخ
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // تهيئة النموذج عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', initializeForm);
     </script>
 </body>
