@@ -1,11 +1,9 @@
-تم تحديث الكود لاستخدام ملف الترجمة الجديد أسماء المطاعم حسب السيستم ومترجمة.xlsx الذي يحتوي على الاسم العربي مقابل الاسم الإنجليزي. كما تم إضافة إمكانية تحميل ملف منفصل للمديرين (بنفس الهيكل السابق) لعرض أسماء مدير التشغيل ومدير المنطقة. إذا لم يتم تحميل ملف الترجمة، سيتم البحث عن الاسم العربي داخل ملف المديرين أو عرض الاسم الإنجليزي كبديل.
+تم تعديل الكود ليشمل بيانات الترجمة (العربي/الإنجليزي) وبيانات المدراء (مدير التشغيل ومدير المنطقة) مباشرة داخل الجافاسكريبت، دون الحاجة لرفع ملفات خارجية. تم بناء الخرائط بناءً على الملفين المرفقين سابقاً:
 
-التحسينات:
+· translationMap: ربط الاسم الإنجليزي (كما يظهر في ملفات المخزون) بالاسم العربي.
+· managerMap: ربط الاسم الإنجليزي (Site Name) بمدير التشغيل ومدير المنطقة.
 
-· إضافة حقل رفع جديد لملف الترجمة.
-· مطابقة دقيقة للأسماء الإنجليزية (مثل "360 Mall" -> "مجمع 360").
-· دمج البيانات: الاسم العربي (من ملف الترجمة) + بيانات الإدارة (من ملف المديرين إن وجد).
-· عرض جميع الأعمدة في التقرير والتصدير.
+الآن يمكنك استخدام الأداة مباشرة بعد تحميل ملفات المخزون فقط، وستظهر الأسماء العربية والإدارة تلقائياً.
 
 ```html
 <!DOCTYPE html>
@@ -13,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>نايف للأغذية - تقرير COGS مع الترجمة والإدارة</title>
+    <title>نايف للأغذية - تقرير COGS مع الترجمة والإدارة (مضمن)</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -30,7 +28,7 @@
         .report-title-badge { background: rgba(255,255,240,0.2); padding: 8px 18px; border-radius: 40px; color: white; }
         .upload-area { background: #f8fafd; border: 2px dashed #bdd3e8; border-radius: 28px; padding: 20px; text-align: center; margin: 25px 0; }
         .upload-label { background: #1e4668; color: white; padding: 12px 32px; border-radius: 60px; cursor: pointer; display: inline-block; margin: 5px; }
-        #fileInput, #mappingFileInput, #translationFileInput { display: none; }
+        #fileInput { display: none; }
         .file-stats { margin-top: 8px; font-size: 0.8rem; background: #e9f0f5; display: inline-block; padding: 4px 16px; border-radius: 50px; margin: 5px; }
         .error-msg { color: #c0392b; background: #ffe6e5; padding: 8px 15px; border-radius: 30px; margin-top: 12px; display: none; }
         .date-filter { display: flex; flex-wrap: wrap; gap: 20px; background: #fef7e0; padding: 18px 20px; border-radius: 32px; margin-bottom: 25px; align-items: flex-end; }
@@ -69,22 +67,15 @@
             <img class="logo-img" src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="Naif Logo" onerror="this.src='https://via.placeholder.com/55?text=NAIF'">
             <div class="company-name">شركة نايف للأغذية <small>NAIF FOOD COMPANY</small></div>
         </div>
-        <div class="report-title-badge">📊 تقرير COGS - الترجمة والإدارة</div>
+        <div class="report-title-badge">📊 تقرير COGS - الترجمة والإدارة (مضمن)</div>
     </div>
 
     <div class="upload-area">
         <label for="fileInput" class="upload-label">📂 رفع ملفات المخزون (Excel)</label>
         <input type="file" id="fileInput" multiple accept=".xlsx, .xls, .xlsm" />
         <div id="uploadStatus" class="file-stats">⏳ لم يتم رفع ملفات المخزون</div>
-        <br>
-        <label for="translationFileInput" class="upload-label">🌐 رفع ملف الترجمة (عربي - إنجليزي)</label>
-        <input type="file" id="translationFileInput" accept=".xlsx, .xls" />
-        <div id="translationStatus" class="file-stats">📖 لم يتم رفع ملف الترجمة</div>
-        <br>
-        <label for="mappingFileInput" class="upload-label">👥 رفع ملف المديرين (اختياري)</label>
-        <input type="file" id="mappingFileInput" accept=".xlsx, .xls" />
-        <div id="mappingStatus" class="file-stats">📎 لم يتم رفع ملف المديرين</div>
         <div id="errorContainer" class="error-msg"></div>
+        <div class="file-stats" style="background:#e8f0fe;">✅ بيانات الترجمة والإدارة مضمّنة في الكود</div>
     </div>
 
     <div class="date-filter">
@@ -127,9 +118,9 @@
                     <th>رصيد آخر</th>
                 </tr>
             </thead>
-            <tbody id="tableBody"><tr class="empty-row"><td colspan="11">📁 قم برفع ملفات المخزون وملف الترجمة (ويفضل ملف المديرين) ثم اختر صنفاً</td></tr>
+            <tbody id="tableBody"><tr class="empty-row"><td colspan="11">📁 قم برفع ملفات المخزون ثم اختر صنفاً</td></tr>
             </tbody>
-         </table>
+        </table>
     </div>
 
     <div class="developer-signature">
@@ -139,25 +130,187 @@
 </div>
 
 <script>
-    // --------------------- المتغيرات -------------------------
-    let allRestaurantsData = [];          // بيانات المخزون: { restaurantNameEng, reportDateObj, reportDateRaw, items }
+    // --------------------- بيانات الترجمة والإدارة مضمنة -------------------------
+    // 1. خريطة الترجمة: الاسم الإنجليزي (المطابق لملفات المخزون) -> الاسم العربي
+    const translationData = [
+        ["360 Mall", "مجمع 360"],
+        ["Abu Fatira Co-Op", "جمعية أبو فطيرة"],
+        ["Abu Halifa", "ابو حليفة"],
+        ["Ahmadi Ind", "الاحمدي الصناعية"],
+        ["Al Rai", "الري"],
+        ["AlKout", "مجمع الكوت"],
+        ["Avenues", "مجمع الأفنيوز"],
+        ["Dabaya", "الضباعية"],
+        ["Dasma", "الدسمة"],
+        ["Fahaheel", "الفحيحيل"],
+        ["Faiha", "الفيحاء"],
+        ["Farwaniya", "الفروانية"],
+        ["Fintas", "الفنطاس"],
+        ["Hadiya", "هدية"],
+        ["Hawally Park", "حولي بارك"],
+        ["Jaber Al-Ahmed", "جابر الأحمد"],
+        ["Jabriya 1 - Jabriya Tikka", "الجابرية 1 - تكا"],
+        ["Jabriya 2 - Jabriya BD", "الجابرية 2 - بنت الديك"],
+        ["Jahra 2 - Jahra Ind", "الجهراء 2 - الصناعية"],
+        ["Jahra Layaly Elsharq", "الجهراء ليالي الشرق"],
+        ["Jahra Makkah", "الجهراء مكة"],
+        ["Jahra1-Duwaik", "الجهراء 1 - الزويخ"],
+        ["Jleeb Al-Shiyoukh", "جليب الشيوخ"],
+        ["Kabed", "كبد"],
+        ["Khairan Oia", "الخيران أويا"],
+        ["Khairan Outlet Mall", "مجمع الخيران"],
+        ["Khaitan New", "خيطان الجديدة"],
+        ["Khioul", "الخيول"],
+        ["Mangaf", "المنقف"],
+        ["Marina Mall", "مجمع المارينا"],
+        ["Mishref", "مشرف"],
+        ["New Ardiya", "العارضية الجديدة"],
+        ["New Farwaniya", "الفروانية الجديدة"],
+        ["Qadsiya", "القادسية"],
+        ["Qairawan", "القيروان"],
+        ["Qurain", "القرين"],
+        ["Reggai", "الرقعي"],
+        ["Rehab", "الرحاب"],
+        ["Riqqa", "الرقة"],
+        ["Sabah al Ahmed", "صباح الأحمد"],
+        ["Sabah Salem", "صباح السالم"],
+        ["Sabah-Salem Alareen", "صباح السالم العرين"],
+        ["Salmiya 1 - Nafura", "السالمية 1 - النافورة"],
+        ["Salmiya 2 - Sindhibad", "السالمية 2 - السندباد"],
+        ["Salmiya 3 - Bahrain Street", "السالمية 3 - شارع البحرين"],
+        ["Salmiya 4 - Sayed Yasin", "السالمية 4 - سيد ياسين"],
+        ["Salwa", "سلوى"],
+        ["Sharq", "الشرق"],
+        ["Shuhada", "الشهداء"],
+        ["Shuwaikh", "الشويخ"],
+        ["Souq Qurain", "أسواق القرين"],
+        ["Sulaibiya CO-OP", "جمعية الصليبية"],
+        ["Sulebhikat", "الصليبخات"],
+        ["Suleibiya", "الصليبية"],
+        ["Wafra", "الوفرة"],
+        ["West Abu Fatira", "غرب ابو فطيرة"],
+        ["Zahra", "الزهراء"]
+    ];
+
+    // 2. خريطة المديرين: الاسم الإنجليزي (Site Name) -> { operationManager, regionManager }
+    const managerData = [
+        ["Souq Qurain", "مرتضى", "طارق بيومي"],
+        ["Jabriya 2 - Jabriya BD", "طارق", "هاني عبدالله"],
+        ["Jabriya 1 - Jabriya Tikka", "طارق", "هاني عبدالله"],
+        ["Jahra Layaly Elsharq", "ثروت", "طارق بيومي"],
+        ["Jahra Makkah", "وليد", "طارق بيومي"],
+        ["Jahra1-Duwaik", "وليد", "طارق بيومي"],
+        ["Jahra 2 - Jahra Ind", "ثروت", "طارق بيومي"],
+        ["Khairan Outlet Mall", "عماد", "هاني عبدالله"],
+        ["Khairan Oia", "عماد", "هاني عبدالله"],
+        ["Khioul", "حجازي", "هاني عبدالله"],
+        ["Dasma", "انور", "هاني عبدالله"],
+        ["Rehab", "مختار", "طارق بيومي"],
+        ["Riqqa", "حجازي", "هاني عبدالله"],
+        ["Reggai", "ثروت", "طارق بيومي"],
+        ["Al Rai", "طارق", "هاني عبدالله"],
+        ["Salmiya 2 - Sindhibad", "طارق", "هاني عبدالله"],
+        ["Sharq", "انور", "هاني عبدالله"],
+        ["Shuwaikh", "ثروت", "طارق بيومي"],
+        ["Suleibiya", "مختار", "طارق بيومي"],
+        ["Dabaya", "عماد", "هاني عبدالله"],
+        ["New Ardiya", "ثروت", "طارق بيومي"],
+        ["Fahaheel", "عماد", "هاني عبدالله"],
+        ["Farwaniya", "مختار", "طارق بيومي"],
+        ["New Farwaniya", "مختار", "طارق بيومي"],
+        ["Fintas", "انور", "هاني عبدالله"],
+        ["Faiha", "وليد", "طارق بيومي"],
+        ["Qadsiya", "وليد", "طارق بيومي"],
+        ["Airport", "ثروت", "طارق بيومي"],  // المطار
+        ["Mangaf", "عماد", "هاني عبدالله"],
+        ["Salmiya 1 - Nafura", "طارق", "هاني عبدالله"],
+        ["Abu Halifa", "حجازي", "هاني عبدالله"],
+        ["Zahra", "وليد", "طارق بيومي"],
+        ["Shuhada", "وليد", "طارق بيومي"],
+        ["Sulaibiya CO-OP", "مختار", "طارق بيومي"],
+        ["Qurain", "مرتضى", "طارق بيومي"],
+        ["Qairawan", "مختار", "طارق بيومي"],
+        ["Wafra", "حجازي", "هاني عبدالله"],
+        ["Abu Fatira Co-Op", "عماد", "هاني عبدالله"],
+        ["Jaber Al-Ahmed", "ثروت", "طارق بيومي"],
+        ["Hawally Park", "وليد", "طارق بيومي"],
+        ["Khaitan New", "مرتضى", "طارق بيومي"],
+        ["Salwa", "انور", "هاني عبدالله"],
+        ["Jleeb Al-Shiyoukh", "مختار", "طارق بيومي"],
+        ["Salmiya 4 - Sayed Yasin", "طارق", "هاني عبدالله"],
+        ["Salmiya 3 - Bahrain Street", "طارق", "هاني عبدالله"],
+        ["Ahmadi Ind", "حجازي", "هاني عبدالله"],
+        ["Sabah Salem", "انور", "هاني عبدالله"],
+        ["Sabah-Salem Alareen", "انور", "هاني عبدالله"],
+        ["West Abu Fatira", "مرتضى", "طارق بيومي"],
+        ["Kabed", "مختار", "طارق بيومي"],
+        ["Marina Mall", "طارق", "هاني عبدالله"],
+        ["Avenues", "مرتضى", "طارق بيومي"],
+        ["AlKout", "عماد", "هاني عبدالله"],
+        ["Saad Al Abdullah", "ثروت", "طارق بيومي"],
+        ["Sabah al Ahmed", "حجازي", "هاني عبدالله"],
+        ["Mishref", "انور", "هاني عبدالله"],
+        ["360 Mall", "وليد", "طارق بيومي"],
+        ["Sulebhikat", "ثروت", "طارق بيومي"],
+        ["Hadiya", "حجازي", "هاني عبدالله"]
+    ];
+
+    // بناء الخرائط
+    const translationMap = new Map();
+    translationData.forEach(([eng, arb]) => {
+        translationMap.set(eng, arb);
+        translationMap.set(eng.toLowerCase(), arb);
+    });
+
+    const managerMap = new Map();
+    managerData.forEach(([site, opMgr, regMgr]) => {
+        managerMap.set(site, { operationManager: opMgr, regionManager: regMgr });
+        managerMap.set(site.toLowerCase(), { operationManager: opMgr, regionManager: regMgr });
+    });
+
+    // دالة الحصول على معلومات المطعم (عربي + إدارة)
+    function getRestaurantInfo(englishName) {
+        let arabicName = englishName;
+        if (translationMap.has(englishName)) arabicName = translationMap.get(englishName);
+        else if (translationMap.has(englishName.toLowerCase())) arabicName = translationMap.get(englishName.toLowerCase());
+        else {
+            // بحث جزئي
+            for (let [key, val] of translationMap.entries()) {
+                if (englishName.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(englishName.toLowerCase())) {
+                    arabicName = val;
+                    break;
+                }
+            }
+        }
+        let opMgr = "—", regMgr = "—";
+        if (managerMap.has(englishName)) {
+            opMgr = managerMap.get(englishName).operationManager;
+            regMgr = managerMap.get(englishName).regionManager;
+        } else if (managerMap.has(englishName.toLowerCase())) {
+            opMgr = managerMap.get(englishName.toLowerCase()).operationManager;
+            regMgr = managerMap.get(englishName.toLowerCase()).regionManager;
+        } else {
+            for (let [key, val] of managerMap.entries()) {
+                if (englishName.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(englishName.toLowerCase())) {
+                    opMgr = val.operationManager;
+                    regMgr = val.regionManager;
+                    break;
+                }
+            }
+        }
+        return { arabicName, operationManager: opMgr, regionManager: regMgr };
+    }
+
+    // --------------------- باقي الكود (معالجة المخزون، الفلاتر، التصدير) -------------------------
+    let allRestaurantsData = [];
     let uniqueItemsSet = new Set();
     let currentFilteredRestaurants = [];
     let currentSelectedItem = "";
     let currentReportData = [];
 
-    // خريطة الترجمة: مفتاح = الاسم الإنجليزي (بعد تنظيف) -> الاسم العربي
-    let translationMap = new Map();
-    // خريطة المديرين: مفتاح = الاسم الإنجليزي -> { operationManager, regionManager }
-    let managerMap = new Map();
-
-    // DOM
+    // DOM elements
     const fileInput = document.getElementById('fileInput');
-    const translationFileInput = document.getElementById('translationFileInput');
-    const mappingFileInput = document.getElementById('mappingFileInput');
     const uploadStatus = document.getElementById('uploadStatus');
-    const translationStatus = document.getElementById('translationStatus');
-    const mappingStatus = document.getElementById('mappingStatus');
     const errorDiv = document.getElementById('errorContainer');
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
@@ -173,145 +326,6 @@
 
     function showError(msg) { errorDiv.innerHTML = `⚠️ ${msg}`; errorDiv.style.display = 'block'; setTimeout(() => errorDiv.style.display = 'none', 8000); }
 
-    // ------------------- تحميل ملف الترجمة (عربي/إنجليزي) -------------------
-    async function loadTranslationFile(file) {
-        if (!file) return false;
-        translationStatus.innerHTML = "⏳ جاري تحميل الترجمة...";
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
-                    if (!rows || rows.length < 2) { resolve(false); return; }
-                    let headerRow = rows[0];
-                    let colArab = -1, colEng = -1;
-                    for (let c = 0; c < headerRow.length; c++) {
-                        let cell = String(headerRow[c] || "").trim();
-                        if (cell.includes("العربي") || cell.includes("عربي")) colArab = c;
-                        else if (cell.includes("الإنجليزي") || cell.includes("انجليزي") || cell.includes("english")) colEng = c;
-                    }
-                    if (colArab === -1 || colEng === -1) {
-                        // افتراض: العمود الأول عربي والثاني إنجليزي
-                        colArab = 0; colEng = 1;
-                    }
-                    const newMap = new Map();
-                    for (let r = 1; r < rows.length; r++) {
-                        const row = rows[r];
-                        if (!row || row.every(cell => !cell || String(cell).trim() === "")) continue;
-                        let arabic = row[colArab] ? String(row[colArab]).trim() : "";
-                        let english = row[colEng] ? String(row[colEng]).trim() : "";
-                        if (english !== "" && arabic !== "") {
-                            newMap.set(english, arabic);
-                            newMap.set(english.toLowerCase(), arabic);
-                        }
-                    }
-                    translationMap = newMap;
-                    translationStatus.innerHTML = `✅ تم تحميل ${newMap.size / 2} ترجمة`;
-                    resolve(true);
-                } catch(err) { console.error(err); resolve(false); }
-            };
-            reader.onerror = () => resolve(false);
-            reader.readAsArrayBuffer(file);
-        });
-    }
-
-    // ------------------- تحميل ملف المديرين (نفس الهيكل السابق) -------------------
-    async function loadManagerFile(file) {
-        if (!file) return false;
-        mappingStatus.innerHTML = "⏳ جاري تحميل المديرين...";
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
-                    if (!rows || rows.length < 2) { resolve(false); return; }
-                    let headerRow = null;
-                    let headerIdx = -1;
-                    for (let i = 0; i < rows.length; i++) {
-                        const row = rows[i];
-                        if (!row) continue;
-                        const rowText = row.map(c => String(c || "").toLowerCase()).join(" ");
-                        if (rowText.includes("المطعم") && rowText.includes("site name")) {
-                            headerRow = row;
-                            headerIdx = i;
-                            break;
-                        }
-                    }
-                    if (!headerRow) { headerRow = rows[0]; headerIdx = 0; }
-                    let colArab = -1, colRegionMgr = -1, colOpMgr = -1, colSite = -1;
-                    for (let c = 0; c < headerRow.length; c++) {
-                        let cell = String(headerRow[c] || "").trim();
-                        if (cell.includes("المطعم") && !cell.includes("مدير")) colArab = c;
-                        else if (cell.includes("مدير المنطقة") || cell.includes("منطقة")) colRegionMgr = c;
-                        else if (cell.includes("مدير التشغيل") || cell.includes("تشغيل")) colOpMgr = c;
-                        else if (cell.toLowerCase().includes("site name") || cell.includes("الاسم الانجليزي") || cell.includes("site")) colSite = c;
-                    }
-                    if (colSite === -1) colSite = colArab; // fallback
-                    const newMap = new Map();
-                    for (let r = headerIdx + 1; r < rows.length; r++) {
-                        const row = rows[r];
-                        if (!row || row.every(cell => !cell || String(cell).trim() === "")) continue;
-                        let siteName = (colSite !== -1 && row[colSite]) ? String(row[colSite]).trim() : "";
-                        let opMgr = (colOpMgr !== -1 && row[colOpMgr]) ? String(row[colOpMgr]).trim() : "";
-                        let regionMgr = (colRegionMgr !== -1 && row[colRegionMgr]) ? String(row[colRegionMgr]).trim() : "";
-                        if (siteName !== "") {
-                            newMap.set(siteName, { operationManager: opMgr || "—", regionManager: regionMgr || "—" });
-                            newMap.set(siteName.toLowerCase(), { operationManager: opMgr || "—", regionManager: regionMgr || "—" });
-                        }
-                    }
-                    managerMap = newMap;
-                    mappingStatus.innerHTML = `✅ تم تحميل مديرين لـ ${newMap.size / 2} موقع`;
-                    resolve(true);
-                } catch(err) { console.error(err); resolve(false); }
-            };
-            reader.onerror = () => resolve(false);
-            reader.readAsArrayBuffer(file);
-        });
-    }
-
-    // ------------------- دالة الحصول على الاسم العربي والمديرين -------------------
-    function getRestaurantInfo(englishName) {
-        // 1. الاسم العربي من ملف الترجمة
-        let arabicName = englishName;
-        if (translationMap.size > 0) {
-            let direct = translationMap.get(englishName);
-            if (!direct) direct = translationMap.get(englishName.toLowerCase());
-            if (!direct) {
-                // بحث جزئي
-                for (let [key, val] of translationMap.entries()) {
-                    if (englishName.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(englishName.toLowerCase())) {
-                        direct = val;
-                        break;
-                    }
-                }
-            }
-            if (direct) arabicName = direct;
-        }
-        // 2. المديرين
-        let opMgr = "—", regMgr = "—";
-        if (managerMap.size > 0) {
-            let mgr = managerMap.get(englishName);
-            if (!mgr) mgr = managerMap.get(englishName.toLowerCase());
-            if (!mgr) {
-                for (let [key, val] of managerMap.entries()) {
-                    if (englishName.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(englishName.toLowerCase())) {
-                        mgr = val;
-                        break;
-                    }
-                }
-            }
-            if (mgr) { opMgr = mgr.operationManager; regMgr = mgr.regionManager; }
-        }
-        return { arabicName, operationManager: opMgr, regionManager: regMgr };
-    }
-
-    // دوال استخراج البيانات من ملفات المخزون (مثل السابق)
     function extractReportDate(worksheet) {
         try {
             const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1:Z100');
@@ -580,7 +594,7 @@
     }
     
     async function exportToPDF() {
-        if(!currentReportData || currentReportData.length === 0) { 
+        if(!currentReportData || !currentReportData.length) { 
             alert("⚠️ لا توجد بيانات معروضة. الرجاء اختيار صنف صالح أولاً.");
             return; 
         }
@@ -670,8 +684,6 @@
     
     // أحداث
     fileInput.addEventListener('change', (e) => { if(e.target.files.length) handleInventoryFiles(e.target.files); e.target.value = ''; });
-    translationFileInput.addEventListener('change', async (e) => { if(e.target.files.length) { await loadTranslationFile(e.target.files[0]); } e.target.value = ''; });
-    mappingFileInput.addEventListener('change', async (e) => { if(e.target.files.length) { await loadManagerFile(e.target.files[0]); } e.target.value = ''; });
     applyDateBtn.addEventListener('click', () => applyDateFilter());
     itemSearch.addEventListener('input', refreshSearch);
     generateBtn.addEventListener('click', () => {
