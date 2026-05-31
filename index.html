@@ -577,7 +577,7 @@
             let currentIdx = 0, pageNum = 1;
             const margin = 10, contentWidth = pdf.internal.pageSize.getWidth() - margin*2;
             while(currentIdx < currentReportData.length) {
-                const chunk = currentReportData.slice(currentIdx, currentIdx+10);
+                const chunk = currentReportData.slice(currentIdx, currentIdx+15);
                 const container = document.createElement('div');
                 container.style.position = 'absolute'; container.style.left = '-9999px'; container.style.top = '0';
                 container.style.width = '1350px'; container.style.backgroundColor = 'white'; container.style.padding = '20px'; container.style.direction = 'rtl';
