@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>نايف للأغذية - تقرير COGS </title>
+    <title>نايف للأغذية - تقرير COGS | معالج شاورما دجاج + ملاحظة خاصة</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f0f2f5; padding: 25px 20px; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+        body { background: #f0f2f5; padding: 25px 20px; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; position: relative; min-height: 100vh; }
         .app-container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); overflow: hidden; padding: 0 28px 35px; }
         .top-bar { background: #d32f2f; margin: 0 -28px 0 -28px; padding: 15px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
         .logo-area { display: flex; align-items: center; gap: 15px; }
@@ -48,10 +48,63 @@
         td:first-child { font-size: 1rem; font-weight: 700; text-align: right; font-family: 'Segoe UI', sans-serif; }
         td:nth-child(2), td:nth-child(3) { font-family: 'Segoe UI', sans-serif; font-weight: 500; font-size: 0.95rem; }
         .empty-row td { font-size: 1rem; color: #6c7a89; font-style: italic; padding: 40px; }
-        .developer-signature { margin-top: 30px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-        .signature-card-clean { display: inline-flex; align-items: center; gap: 8px; background: transparent; padding: 5px 10px; border-radius: 40px; font-size: 0.7rem; border: 1px solid #cbd5e0; transform: scale(0.85); }
-        footer { font-size: 0.7rem; text-align: center; margin-top: 10px; color: #6c86a3; }
-        @media (max-width: 700px) { .app-container { padding: 0 15px 20px; } td { font-size: 0.9rem; } }
+        .special-note {
+            background: #fff3cd;
+            border-right: 4px solid #ffc107;
+            padding: 12px 20px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #856404;
+            text-align: right;
+            font-weight: 500;
+        }
+        /* توقيع متحرك على يسار الشاشة في الأسفل */
+        .developer-signature {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            transform: scale(1.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .developer-signature:hover {
+            transform: scale(1.2);
+        }
+        .signature-card-clean {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 2px solid #d32f2f;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: #1e4668;
+            font-weight: bold;
+            transition: background 0.2s;
+            line-height: 1.3;
+            text-align: center;
+        }
+        .signature-card-clean:hover {
+            background: #fff5f5;
+            border-color: #b13e3e;
+        }
+        .signature-card-clean .name {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #b13e3e;
+        }
+        .signature-card-clean .title {
+            font-size: 0.7rem;
+            color: #2c3e50;
+        }
+        footer { font-size: 0.7rem; text-align: center; margin-top: 30px; padding-bottom: 20px; color: #6c86a3; }
+        @media (max-width: 700px) { .app-container { padding: 0 15px 20px; } td { font-size: 0.9rem; } .developer-signature { transform: scale(0.9); } }
     </style>
 </head>
 <body>
@@ -61,7 +114,7 @@
             <img class="logo-img" src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="Naif Logo" onerror="this.src='https://via.placeholder.com/55?text=NAIF'">
             <div class="company-name">شركة نايف للأغذية <small>NAIF FOOD COMPANY</small></div>
         </div>
-        <div class="report-title-badge">📊 تقرير تحليل المخزون (COGS) - بأسماء المطاعم العربية والمدراء</div>
+        <div class="report-title-badge">📊 تقرير COGS - معالج شاورما دجاج (+20% Waste/Usage)</div>
     </div>
 
     <div class="upload-area">
@@ -71,7 +124,7 @@
         <div id="errorContainer" class="error-msg"></div>
     </div>
 
-    <!-- الفترة الزمنية يدوية – فقط للتسمية ولا تؤثر على البيانات -->
+    <!-- الفترة الزمنية يدوية – فقط للتسمية -->
     <div class="date-filter">
         <div class="date-group"><label>📅 تاريخ البداية (من)</label><input type="date" id="startDate"></div>
         <div class="date-group"><label>📅 تاريخ النهاية (إلى)</label><input type="date" id="endDate"></div>
@@ -83,7 +136,7 @@
         <div class="filter-group">
             <label>🔎 بحث ديناميكي عن الصنف:</label>
             <div class="search-wrapper">
-                <input type="text" id="itemSearchInput" placeholder="مثال: برجر, زبدة..." autocomplete="off" list="itemDatalist" disabled>
+                <input type="text" id="itemSearchInput" placeholder="مثال: برجر, شاورما دجاج..." autocomplete="off" list="itemDatalist" disabled>
                 <datalist id="itemDatalist"></datalist>
                 <span id="matchCountDisplay" class="match-counter">0 صنف</span>
             </div>
@@ -112,27 +165,32 @@
                     <th>رصيد آخر<br><small>End Qty</small></th>
                 </tr>
             </thead>
-            <tbody id="tableBody"><tr class="empty-row"><td colspan="11">📁 قم برفع الملفات واختر صنفاً للمشاهدة<br>📌 سيتم التعرف على أسماء المطاعم بالإنجليزية أو العربية وعرض المدراء تلقائياً</td></tr>
+            <tbody id="tableBody"><tr class="empty-row"><td colspan="11">📁 قم برفع الملفات واختر صنفاً للمشاهدة<br>📌 صنف "شاورما دجاج" سيتم زيادة التوالف والاستخدام 20% وإعادة حساب الرصيد النهائي تلقائياً</td></tr>
             </tbody>
         </table>
     </div>
-
-    <div class="developer-signature">
-        <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card-clean" target="_blank"><span class="name">Yasser Elkhateeb</span><span class="title">مطور البرنامج | 67011143</span></a>
+    <div id="specialNoteContainer" style="display: none;" class="special-note">
+        ⚠️ ملاحظة: تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة.
     </div>
-    <footer>شركة نايف للأغذية</footer>
+
+    <footer>جميع الأرقام بالدينار الكويتي</footer>
+</div>
+
+<!-- توقيع متحرك خارج الحاوية ليكون ثابتاً -->
+<div class="developer-signature">
+    <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card-clean" target="_blank">
+        <span class="name">Yasser Elkhateeb</span>
+        <span class="title">مطور البرنامج | 67011143</span>
+    </a>
 </div>
 
 <script>
     // --------------------------------------------------------------
-    // قاعدة بيانات متكاملة: الاسم العربي القياسي + مدير المنطقة + مدير التشغيل
-    // مع إضافة مرادفات إنجليزية من ملف "أسماء المطاعم حسب السيستم ومترجمة.xlsx"
+    // قاعدة بيانات متكاملة (الأسماء والمدراء) مع دعم الإنجليزي والعربي
     // --------------------------------------------------------------
-    const RESTAURANT_MASTER = new Map(); // المفتاح: الاسم العربي القياسي أو المرادف (عربي/إنجليزي) , القيمة: {displayName, regionManager, opsManager}
+    const RESTAURANT_MASTER = new Map();
     
     function buildMasterDatabase() {
-        // البيانات الأساسية حسب ملف "Naif Restaurants with Managers Name.xlsx"
-        // مع تحديد الاسم العربي القياسي كـ "displayName"
         const managersData = [
             { stdAr: "مول 360", region: "وليد", ops: "طارق بيومي" },
             { stdAr: "جمعية أبو فطيرة", region: "عماد", ops: "هاني عبدالله" },
@@ -204,153 +262,68 @@
             { stdAr: "الزهراء", region: "وليد", ops: "طارق بيومي" }
         ];
         
-        // أولاً: إدخال الأسماء العربية القياسية
         for (const item of managersData) {
             RESTAURANT_MASTER.set(item.stdAr, { displayName: item.stdAr, regionManager: item.region, operationsManager: item.ops });
         }
         
-        // --------------------------------------------------------------
-        // إضافة المرادفات (عربية وإنجليزية) مستمدة من ملف "أسماء المطاعم حسب السيستم ومترجمة.xlsx"
-        // --------------------------------------------------------------
+        // المرادفات من ملف الترجمة
         const synonyms = [
-            { ar: "مول 360", en: "360 Mall" },
-            { ar: "جمعية أبو فطيرة", en: "Abu Fatira Co-Op" },
-            { ar: "أبوحليفة", en: "Abu Halifa" },
-            { ar: "الاحمدي الصناعية", en: "Ahmadi Ind" },
-            { ar: "المطار", en: "Airport" },
-            { ar: "الري", en: "Al Rai" },
-            { ar: "الري -2", en: "Al Rai- 2" },
-            { ar: "مجمع الكوت", en: "AlKout" },
-            { ar: "مجمع الأفنيوز", en: "Avenues" },
-            { ar: "الضباعية", en: "Dabaya" },
-            { ar: "الدسمة", en: "Dasma" },
-            { ar: "الفحيحيل", en: "Fahaheel" },
-            { ar: "الفحيحيل -2", en: "Fahaheel- 2" },
-            { ar: "الفيحاء", en: "Faiha" },
-            { ar: "الفروانية", en: "Farwaniya" },
-            { ar: "الفنطاس", en: "Fintas" },
-            { ar: "هدية", en: "Hadiya" },
-            { ar: "هدية -2", en: "Hadiya- 2" },
-            { ar: "حولي بارك", en: "Hawally Park" },
-            { ar: "جابر الأحمد", en: "Jaber Al-Ahmed" },
-            { ar: "الجابرية تكا", en: "Jabriya 1 - Jabriya Tikka" },
-            { ar: "الجابرية بنت الديك", en: "Jabriya 2 - Jabriya BD" },
-            { ar: "الجهراء الصناعية", en: "Jahra 2 - Jahra Ind" },
-            { ar: "الجهراء ليالي الشرق", en: "Jahra Layaly Elsharq" },
-            { ar: "الجهراء مكة", en: "Jahra Makkah" },
-            { ar: "الجهراء الزويخ", en: "Jahra1-Duwaik" },
-            { ar: "جليب الشيوخ", en: "Jleeb Al-Shiyoukh" },
-            { ar: "كبد", en: "Kabed" },
-            { ar: "الخيران أويا", en: "Khairan Oia" },
-            { ar: "الخيران أوتليت", en: "Khairan Outlet Mall" },
-            { ar: "خيطان الجديدة", en: "Khaitan New" },
-            { ar: "الخيول", en: "Khioul" },
-            { ar: "المنقف", en: "Mangaf" },
-            { ar: "مارينا مول", en: "Marina Mall" },
-            { ar: "مشرف", en: "Mishref" },
-            { ar: "العارضية الجديدة", en: "New Ardiya" },
-            { ar: "الفروانية الجديدة", en: "New Farwaniya" },
-            { ar: "القادسية", en: "Qadsiya" },
-            { ar: "القيروان", en: "Qairawan" },
-            { ar: "القرين", en: "Qurain" },
-            { ar: "الرقعي", en: "Reggai" },
-            { ar: "الرحاب", en: "Rehab" },
-            { ar: "الرقة", en: "Riqqa" },
-            { ar: "سعد العبدالله", en: "Saad Al Abdullah" },
-            { ar: "صباح الأحمد", en: "Sabah al Ahmed" },
-            { ar: "صباح السالم", en: "Sabah Salem" },
-            { ar: "صباح السالم العرين", en: "Sabah-Salem Alareen" },
-            { ar: "صباح السالم العرين -2", en: "Sabah-Salem Alareen- 2" },
-            { ar: "النافورة", en: "Salmiya 1 - Nafura" },
-            { ar: "السندباد", en: "Salmiya 2 - Sindhibad" },
-            { ar: "شارع البحرين", en: "Salmiya 3 - Bahrain Street" },
-            { ar: "سيد ياسين", en: "Salmiya 4 - Sayed Yasin" },
-            { ar: "سيد ياسين -2", en: "Salmiya 4 - Sayed Yasin- 2" },
-            { ar: "سلوى", en: "Salwa" },
-            { ar: "الشرق", en: "Sharq" },
-            { ar: "الشرق -2", en: "Sharq- 2" },
-            { ar: "الشهداء", en: "Shuhada" },
-            { ar: "الشويخ", en: "Shuwaikh" },
-            { ar: "أسواق القرين", en: "Souq Qurain" },
-            { ar: "أسواق القرين -2", en: "Souq Qurain- 2" },
-            { ar: "جمعية الصليبية", en: "Sulaibiya CO-OP" },
-            { ar: "جمعية الصليبية -2", en: "Sulaibiya CO-OP- 2" },
-            { ar: "الصليبخات", en: "Sulebhikat" },
-            { ar: "الصليبخات -2", en: "Sulebhikat- 2" },
-            { ar: "الصليبية", en: "Suleibiya" },
-            { ar: "الوفرة", en: "Wafra" },
-            { ar: "غرب أبو فطيرة", en: "West Abu Fatira" },
-            { ar: "الزهراء", en: "Zahra" }
+            { ar: "مول 360", en: "360 Mall" }, { ar: "جمعية أبو فطيرة", en: "Abu Fatira Co-Op" }, { ar: "أبوحليفة", en: "Abu Halifa" },
+            { ar: "الاحمدي الصناعية", en: "Ahmadi Ind" }, { ar: "المطار", en: "Airport" }, { ar: "الري", en: "Al Rai" },
+            { ar: "الري -2", en: "Al Rai- 2" }, { ar: "مجمع الكوت", en: "AlKout" }, { ar: "مجمع الأفنيوز", en: "Avenues" },
+            { ar: "الضباعية", en: "Dabaya" }, { ar: "الدسمة", en: "Dasma" }, { ar: "الفحيحيل", en: "Fahaheel" },
+            { ar: "الفحيحيل -2", en: "Fahaheel- 2" }, { ar: "الفيحاء", en: "Faiha" }, { ar: "الفروانية", en: "Farwaniya" },
+            { ar: "الفنطاس", en: "Fintas" }, { ar: "هدية", en: "Hadiya" }, { ar: "هدية -2", en: "Hadiya- 2" },
+            { ar: "حولي بارك", en: "Hawally Park" }, { ar: "جابر الأحمد", en: "Jaber Al-Ahmed" }, { ar: "الجابرية تكا", en: "Jabriya 1 - Jabriya Tikka" },
+            { ar: "الجابرية بنت الديك", en: "Jabriya 2 - Jabriya BD" }, { ar: "الجهراء الصناعية", en: "Jahra 2 - Jahra Ind" },
+            { ar: "الجهراء ليالي الشرق", en: "Jahra Layaly Elsharq" }, { ar: "الجهراء مكة", en: "Jahra Makkah" }, { ar: "الجهراء الزويخ", en: "Jahra1-Duwaik" },
+            { ar: "جليب الشيوخ", en: "Jleeb Al-Shiyoukh" }, { ar: "كبد", en: "Kabed" }, { ar: "الخيران أويا", en: "Khairan Oia" },
+            { ar: "الخيران أوتليت", en: "Khairan Outlet Mall" }, { ar: "خيطان الجديدة", en: "Khaitan New" }, { ar: "الخيول", en: "Khioul" },
+            { ar: "المنقف", en: "Mangaf" }, { ar: "مارينا مول", en: "Marina Mall" }, { ar: "مشرف", en: "Mishref" },
+            { ar: "العارضية الجديدة", en: "New Ardiya" }, { ar: "الفروانية الجديدة", en: "New Farwaniya" }, { ar: "القادسية", en: "Qadsiya" },
+            { ar: "القيروان", en: "Qairawan" }, { ar: "القرين", en: "Qurain" }, { ar: "الرقعي", en: "Reggai" }, { ar: "الرحاب", en: "Rehab" },
+            { ar: "الرقة", en: "Riqqa" }, { ar: "سعد العبدالله", en: "Saad Al Abdullah" }, { ar: "صباح الأحمد", en: "Sabah al Ahmed" },
+            { ar: "صباح السالم", en: "Sabah Salem" }, { ar: "صباح السالم العرين", en: "Sabah-Salem Alareen" }, { ar: "صباح السالم العرين -2", en: "Sabah-Salem Alareen- 2" },
+            { ar: "النافورة", en: "Salmiya 1 - Nafura" }, { ar: "السندباد", en: "Salmiya 2 - Sindhibad" }, { ar: "شارع البحرين", en: "Salmiya 3 - Bahrain Street" },
+            { ar: "سيد ياسين", en: "Salmiya 4 - Sayed Yasin" }, { ar: "سيد ياسين -2", en: "Salmiya 4 - Sayed Yasin- 2" }, { ar: "سلوى", en: "Salwa" },
+            { ar: "الشرق", en: "Sharq" }, { ar: "الشرق -2", en: "Sharq- 2" }, { ar: "الشهداء", en: "Shuhada" }, { ar: "الشويخ", en: "Shuwaikh" },
+            { ar: "أسواق القرين", en: "Souq Qurain" }, { ar: "أسواق القرين -2", en: "Souq Qurain- 2" }, { ar: "جمعية الصليبية", en: "Sulaibiya CO-OP" },
+            { ar: "جمعية الصليبية -2", en: "Sulaibiya CO-OP- 2" }, { ar: "الصليبخات", en: "Sulebhikat" }, { ar: "الصليبخات -2", en: "Sulebhikat- 2" },
+            { ar: "الصليبية", en: "Suleibiya" }, { ar: "الوفرة", en: "Wafra" }, { ar: "غرب أبو فطيرة", en: "West Abu Fatira" }, { ar: "الزهراء", en: "Zahra" }
         ];
         
-        // ربط كل مرادف (إنجليزي أو عربي بديل) بالبيانات نفسها
         for (const syn of synonyms) {
             const stdData = RESTAURANT_MASTER.get(syn.ar);
             if (stdData) {
-                // إضافة المرادف الإنجليزي
-                if (!RESTAURANT_MASTER.has(syn.en)) {
-                    RESTAURANT_MASTER.set(syn.en, { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
-                }
-                // إضافة صيغ أخرى شائعة
-                const lowerEn = syn.en.toLowerCase();
-                if (!RESTAURANT_MASTER.has(lowerEn)) {
-                    RESTAURANT_MASTER.set(lowerEn, { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
-                }
+                if (!RESTAURANT_MASTER.has(syn.en)) RESTAURANT_MASTER.set(syn.en, { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
+                if (!RESTAURANT_MASTER.has(syn.en.toLowerCase())) RESTAURANT_MASTER.set(syn.en.toLowerCase(), { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
             }
         }
-        
-        // إضافة مرادفات إضافية يدوية لحالات خاصة (مثل "Al Rai" بدون فراغات)
-        RESTAURANT_MASTER.set("alrai", RESTAURANT_MASTER.get("Al Rai"));
-        RESTAURANT_MASTER.set("360mall", RESTAURANT_MASTER.get("360 Mall"));
-        RESTAURANT_MASTER.set("avenues", RESTAURANT_MASTER.get("Avenues"));
-        RESTAURANT_MASTER.set("alkout", RESTAURANT_MASTER.get("AlKout"));
     }
-    
     buildMasterDatabase();
     
-    // دالة لتطبيع ومطابقة اسم المطعم (يدعم الإنجليزي والعربي مع إزالة الكلمات الزائدة)
     function getRestaurantInfo(rawName) {
         if (!rawName) return { displayName: "غير معروف", regionManager: "—", opsManager: "—" };
-        let normalized = rawName.trim();
-        // إزالة كلمة "مطعم" و "فرع" الخفيفة
-        normalized = normalized.replace(/^مطعم\s+/i, '').replace(/^مطعمـ\s*/i, '');
-        normalized = normalized.replace(/\s+/g, ' ').trim();
-        
-        // 1- البحث المباشر
+        let normalized = rawName.trim().replace(/^مطعم\s+/i, '').replace(/\s+/g, ' ').trim();
         if (RESTAURANT_MASTER.has(normalized)) {
             const info = RESTAURANT_MASTER.get(normalized);
             return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
         }
-        
-        // 2- البحث بدون حساسية حالة الأحرف (للإنجليزي)
         const lowerKey = normalized.toLowerCase();
         if (RESTAURANT_MASTER.has(lowerKey)) {
             const info = RESTAURANT_MASTER.get(lowerKey);
             return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
         }
-        
-        // 3- البحث الجزئي: إذا احتوى الاسم على جزء كبير من اسم قياسي
         for (let [key, info] of RESTAURANT_MASTER.entries()) {
-            if (typeof key === 'string' && key.length > 2) {
-                if (normalized.includes(key) || key.includes(normalized) || lowerKey.includes(key.toLowerCase())) {
-                    return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
-                }
+            if (typeof key === 'string' && key.length > 2 && (normalized.includes(key) || key.includes(normalized) || lowerKey.includes(key.toLowerCase()))) {
+                return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
             }
         }
-        
-        // 4- محاولة إزالة الأرقام والرموز من نهاية الاسم (مثل " -2")
-        let simplified = normalized.replace(/[-–]\s*\d+$/, '').trim();
-        if (simplified !== normalized && RESTAURANT_MASTER.has(simplified)) {
-            const info = RESTAURANT_MASTER.get(simplified);
-            return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
-        }
-        
-        // أخيراً إرجاع الاسم الخام مع مدراء غير معروفين
         return { displayName: rawName, regionManager: "غير محدد", opsManager: "غير محدد" };
     }
     
-    // --------------------- باقي الكود الخاص بقراءة الملفات وعرض الجدول -------------------------
-    let allRestaurantsData = [];          // عنصر: { restaurantRaw, restaurantInfo, reportDateRaw, items }
+    // --------------------- قراءة الملفات -------------------------
+    let allRestaurantsData = [];
     let uniqueItemsSet = new Set();
     let currentSelectedItem = "";
     let currentReportData = [];
@@ -368,6 +341,7 @@
     const exportExcelBtn = document.getElementById('exportExcelBtn');
     const exportPdfBtn = document.getElementById('exportPdfBtn');
     const tableBody = document.getElementById('tableBody');
+    const specialNoteContainer = document.getElementById('specialNoteContainer');
     
     function showError(msg) { errorDiv.innerHTML = `⚠️ ${msg}`; errorDiv.style.display = 'block'; setTimeout(() => errorDiv.style.display = 'none', 8000); }
     
@@ -487,12 +461,10 @@
                 res.items.forEach(it => { if(it.itemName) uniqueItemsSet.add(it.itemName); });
             }
         }
-        if (valid === 0) { showError("لم يتم العثور على جداول متوافقة أو بيانات أصناف."); uploadStatus.innerHTML = "❌ فشل القراءة"; return; }
+        if (valid === 0) { showError("لم يتم العثور على جداول متوافقة."); uploadStatus.innerHTML = "❌ فشل القراءة"; return; }
         uploadStatus.innerHTML = `✅ تم تحميل ${valid} ملف | إجمالي الأصناف: ${uniqueItemsSet.size}`;
-        
         itemSearch.disabled = false; generateBtn.disabled = false; exportExcelBtn.disabled = false; exportPdfBtn.disabled = false;
         refreshSearch();
-        document.getElementById('manualPeriodInfo').innerHTML = `📅 الفترة المختارة (وصفية): ${startDateInput.value || "بداية"} → ${endDateInput.value || "نهاية"} - لا تؤثر على البيانات`;
     }
     
     function refreshSearch() {
@@ -504,26 +476,49 @@
         matchSpan.textContent = `${matches.length} صنف مطابق`;
     }
     
+    // دالة لتطبيق زيادة 20% على التوالف والاستخدام وإعادة حساب الرصيد النهائي
+    function applyShawarmaBonusAndRecalcEndQty(itemName, originalItem) {
+        const lowerName = itemName.toLowerCase();
+        if (lowerName.includes("chicken shawarma") || lowerName.includes("شاورما دجاج")) {
+            const newWast = +(originalItem.wastQty * 1.2).toFixed(2);
+            const newUsage = +(originalItem.actUsage * 1.2).toFixed(2);
+            const newEnd = +(originalItem.startQty + originalItem.recdQty + originalItem.tranInQty - originalItem.tranOutQty - newWast - newUsage).toFixed(2);
+            return { wast: newWast, usage: newUsage, endQty: newEnd };
+        }
+        return { wast: originalItem.wastQty, usage: originalItem.actUsage, endQty: originalItem.endQty };
+    }
+    
+    function isShawarmaItem(itemName) {
+        const lower = itemName.toLowerCase();
+        return lower.includes("chicken shawarma") || lower.includes("شاورما دجاج");
+    }
+    
     function generateReportForItem(itemName) {
         if(!itemName) return [];
         const exact = Array.from(uniqueItemsSet).find(i => i.toLowerCase() === itemName.toLowerCase());
-        if(!exact) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">❌ الصنف غير موجود</td></tr>`; return []; }
+        if(!exact) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">❌ الصنف غير موجود</td></tr>`; specialNoteContainer.style.display = 'none'; return []; }
         currentSelectedItem = exact;
         const rows = [];
         for(const rest of allRestaurantsData) {
             const found = rest.items.find(it => it.itemName === exact);
             if(found) {
+                const { wast: newWast, usage: newUsage, endQty: newEnd } = applyShawarmaBonusAndRecalcEndQty(exact, found);
                 rows.push({
                     restaurantDisplay: rest.restaurantDisplay,
                     regionManager: rest.regionManager,
                     opsManager: rest.opsManager,
                     reportDate: rest.reportDateRaw || "غير محدد",
-                    startQty: found.startQty, recdQty: found.recdQty, tranInQty: found.tranInQty,
-                    tranOutQty: found.tranOutQty, wastQty: found.wastQty, actUsage: found.actUsage, endQty: found.endQty
+                    startQty: found.startQty,
+                    recdQty: found.recdQty,
+                    tranInQty: found.tranInQty,
+                    tranOutQty: found.tranOutQty,
+                    wastQty: newWast,
+                    actUsage: newUsage,
+                    endQty: newEnd
                 });
             }
         }
-        if(rows.length === 0) tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">📭 لا توجد بيانات للصنف في الملفات المرفوعة</td></tr>`;
+        if(rows.length === 0) tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">📭 لا توجد بيانات للصنف</td></tr>`;
         else {
             let html = "";
             for(const r of rows) {
@@ -543,6 +538,12 @@
             }
             tableBody.innerHTML = html;
         }
+        // إظهار أو إخفاء الملاحظة الخاصة بالشاورما
+        if (isShawarmaItem(exact)) {
+            specialNoteContainer.style.display = 'block';
+        } else {
+            specialNoteContainer.style.display = 'none';
+        }
         currentReportData = rows;
         return rows;
     }
@@ -550,24 +551,57 @@
     function formatZero(val) { let num = Number(val); if(isNaN(num) || num === 0) return "—"; return num.toFixed(2).replace(/\.00$/, ''); }
     function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
     
+    // تصدير Excel مع الإصلاح الكامل وإضافة الملاحظة
     function exportToExcel() {
-        if(!currentReportData || !currentReportData.length) { alert("⚠️ لا توجد بيانات معروضة."); return; }
-        const fromDate = startDateInput.value || "غير محدد";
-        const toDate = endDateInput.value || "غير محدد";
-        const sheetHeader = ["اسم المطعم", "مدير المنطقة", "مدير التشغيل", "تاريخ التقرير", "رصيد أول", "الكمية المستلمة", "المحول للداخل", "المحول للخارج", "التوالف", "كمية الاستخدام", "رصيد آخر"];
-        const excelRows = [["شركة نايف للأغذية"], ["تقرير تحليل المخزون (COGS)"], [`الصنف: ${currentSelectedItem}`], [`الفترة المحددة: ${fromDate} → ${toDate}`], [], sheetHeader];
-        for(const row of currentReportData) excelRows.push([row.restaurantDisplay, row.regionManager, row.opsManager, row.reportDate, row.startQty, row.recdQty, row.tranInQty, row.tranOutQty, row.wastQty, row.actUsage, row.endQty]);
-        const ws = XLSX.utils.aoa_to_sheet(excelRows);
-        ws['!cols'] = [{wch:28},{wch:18},{wch:18},{wch:18},{wch:15},{wch:18},{wch:16},{wch:16},{wch:12},{wch:18},{wch:14}];
-        ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:10}},{s:{r:1,c:0},e:{r:1,c:10}},{s:{r:2,c:0},e:{r:2,c:10}},{s:{r:3,c:0},e:{r:3,c:10}}];
-        const wb = XLSX.utils.book_new();
-        const safeName = currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_').substring(0, 31);
-        XLSX.utils.book_append_sheet(wb, ws, `تقرير_${safeName}`);
-        XLSX.writeFile(wb, `COGS_${safeName}.xlsx`);
+        if(!currentReportData || currentReportData.length === 0) { 
+            alert("⚠️ لا توجد بيانات معروضة لتصديرها."); 
+            return; 
+        }
+        try {
+            const fromDate = startDateInput.value || "غير محدد";
+            const toDate = endDateInput.value || "غير محدد";
+            const sheetHeader = ["اسم المطعم", "مدير المنطقة", "مدير التشغيل", "تاريخ التقرير", "رصيد أول", "الكمية المستلمة", "المحول للداخل", "المحول للخارج", "التوالف", "كمية الاستخدام", "رصيد آخر"];
+            const excelRows = [
+                ["شركة نايف للأغذية"],
+                ["تقرير تحليل المخزون (COGS)"],
+                [`الصنف: ${currentSelectedItem}`],
+                [`الفترة الوصفية: ${fromDate} → ${toDate}`],
+                [],
+                sheetHeader
+            ];
+            for(const row of currentReportData) {
+                excelRows.push([
+                    row.restaurantDisplay, row.regionManager, row.opsManager, row.reportDate,
+                    row.startQty, row.recdQty, row.tranInQty, row.tranOutQty,
+                    row.wastQty, row.actUsage, row.endQty
+                ]);
+            }
+            // إضافة صف الملاحظة إذا كان الصنف شاورما
+            if (isShawarmaItem(currentSelectedItem)) {
+                excelRows.push([]);
+                excelRows.push(["ملاحظة:", "تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة."]);
+            }
+            const ws = XLSX.utils.aoa_to_sheet(excelRows);
+            ws['!cols'] = [{wch:28},{wch:18},{wch:18},{wch:18},{wch:15},{wch:18},{wch:16},{wch:16},{wch:12},{wch:18},{wch:14}];
+            ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:10}},{s:{r:1,c:0},e:{r:1,c:10}},{s:{r:2,c:0},e:{r:2,c:10}},{s:{r:3,c:0},e:{r:3,c:10}}];
+            const wb = XLSX.utils.book_new();
+            
+            let sheetName = currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_');
+            if(sheetName.length > 31) sheetName = sheetName.substring(0, 31);
+            if(sheetName.trim() === "") sheetName = "تقرير";
+            
+            XLSX.utils.book_append_sheet(wb, ws, sheetName);
+            const fileName = `COGS_${currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_').substring(0, 50)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        } catch(err) { 
+            console.error(err);
+            alert("فشل تصدير Excel: " + err.message); 
+        }
     }
     
+    // تصدير PDF بـ 15 سطراً لكل صفحة (ستظهر الملاحظة لأنها داخل الـ container)
     async function exportToPDF() {
-        if(!currentReportData || !currentReportData.length) { alert("⚠️ لا توجد بيانات معروضة."); return; }
+        if(!currentReportData || currentReportData.length === 0) { alert("⚠️ لا توجد بيانات معروضة."); return; }
         exportPdfBtn.disabled = true; const originalText = exportPdfBtn.innerHTML;
         exportPdfBtn.innerHTML = "⏳ جاري إنشاء PDF...";
         try {
@@ -575,9 +609,11 @@
             const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
             const fromDate = startDateInput.value || "الكل", toDate = endDateInput.value || "الكل";
             let currentIdx = 0, pageNum = 1;
-            const margin = 10, contentWidth = pdf.internal.pageSize.getWidth() - margin*2;
+            const rowsPerPage = 15;
+            const margin = 10;
+            const contentWidth = pdf.internal.pageSize.getWidth() - margin*2;
             while(currentIdx < currentReportData.length) {
-                const chunk = currentReportData.slice(currentIdx, currentIdx+15);
+                const chunk = currentReportData.slice(currentIdx, currentIdx + rowsPerPage);
                 const container = document.createElement('div');
                 container.style.position = 'absolute'; container.style.left = '-9999px'; container.style.top = '0';
                 container.style.width = '1350px'; container.style.backgroundColor = 'white'; container.style.padding = '20px'; container.style.direction = 'rtl';
@@ -588,8 +624,12 @@
                 for(const r of chunk) {
                     tableRows += `<tr><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.restaurantDisplay)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.regionManager)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.opsManager)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.reportDate)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.startQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.recdQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranInQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranOutQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.wastQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.actUsage)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.endQty)}</td></tr>`;
                 }
-                const tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.8rem;">${'<thead><tr style="background:#1976D2;color:#fff;"><th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th><th>التاريخ</th><th>بداية</th><th>مستلم</th><th>داخل</th><th>خارج</th><th>توالف</th><th>استخدام</th><th>نهاية</th></tr></thead>'}<tbody>${tableRows}</tbody></table>`;
-                container.innerHTML = headerHtml + tableHtml;
+                let tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.8rem;">${'<thead><tr style="background:#1976D2;color:#fff;"><th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th><th>التاريخ</th><th>بداية</th><th>مستلم</th><th>داخل</th><th>خارج</th><th>توالف</th><th>استخدام</th><th>نهاية</th></tr></thead>'}<tbody>${tableRows}</tbody></table>`;
+                let noteHtml = "";
+                if (isShawarmaItem(currentSelectedItem)) {
+                    noteHtml = `<div style="background:#fff3cd; border-right:4px solid #ffc107; padding:10px; margin-top:15px; border-radius:8px; font-size:0.8rem; color:#856404;">⚠️ ملاحظة: تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة.</div>`;
+                }
+                container.innerHTML = headerHtml + tableHtml + noteHtml;
                 document.body.appendChild(container);
                 const canvas = await html2canvas(container, { scale: 1.8, useCORS: true, backgroundColor: '#ffffff' });
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -597,19 +637,20 @@
                 if(pageNum > 1) pdf.addPage();
                 pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, imgHeight);
                 document.body.removeChild(container);
-                currentIdx += 10; pageNum++;
+                currentIdx += rowsPerPage; pageNum++;
             }
-            pdf.save(`COGS_${currentSelectedItem}.pdf`);
-        } catch(e) { alert("خطأ PDF: "+e.message); } finally { exportPdfBtn.innerHTML = originalText; exportPdfBtn.disabled = false; }
+            pdf.save(`COGS_${currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_')}.pdf`);
+        } catch(e) { alert("خطأ في PDF: "+e.message); } finally { exportPdfBtn.innerHTML = originalText; exportPdfBtn.disabled = false; }
     }
     
+    // الأحداث
     fileInput.addEventListener('change', (e) => { if(e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
     applyDateBtn.addEventListener('click', () => { 
-        document.getElementById('manualPeriodInfo').innerHTML = `📅 الفترة المختارة (وصفية): ${startDateInput.value || "بداية"} → ${endDateInput.value || "نهاية"} - لا تؤثر على البيانات`;
+        document.getElementById('manualPeriodInfo').innerHTML = `📅 الفترة المختارة (وصفية): ${startDateInput.value || "بداية"} → ${endDateInput.value || "نهاية"}`;
         if(currentSelectedItem) generateReportForItem(currentSelectedItem);
     });
     itemSearch.addEventListener('input', refreshSearch);
-    generateBtn.addEventListener('click', () => { const selected = itemSearch.value.trim(); if(!selected) { tableBody.innerHTML = '<tr class="empty-row"><td colspan="11">⚠️ أدخل اسم الصنف</td></tr>'; return; } generateReportForItem(selected); });
+    generateBtn.addEventListener('click', () => { const selected = itemSearch.value.trim(); if(!selected) { tableBody.innerHTML = '<tr class="empty-row"><td colspan="11">⚠️ أدخل اسم الصنف</td></tr>'; specialNoteContainer.style.display = 'none'; return; } generateReportForItem(selected); });
     exportExcelBtn.addEventListener('click', exportToExcel);
     exportPdfBtn.addEventListener('click', exportToPDF);
     
