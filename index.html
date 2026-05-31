@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>نايف للأغذية - تقرير COGS  </title>
+    <title>نايف للأغذية - تقرير COGS</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -41,7 +41,7 @@
         .btn-primary { background: #b13e3e; color: white; }
         .btn-outline { background: white; border: 1px solid #1e4668; color: #1e4668; }
         .table-wrapper { overflow-x: auto; border-radius: 20px; border: 1px solid #e2e8f0; margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; min-width: 1350px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
         th { background: #1976D2; color: white; padding: 14px 8px; font-size: 0.85rem; }
         th small { display: block; font-size: 0.65rem; color: #bbdefb; margin-top: 4px; }
         td { padding: 12px 8px; border-bottom: 1px solid #e9edf2; text-align: center; font-family: monospace; font-size: 1.1rem; }
@@ -60,7 +60,6 @@
             text-align: right;
             font-weight: 500;
         }
-        /* توقيع متحرك على يسار الشاشة في الأسفل */
         .developer-signature {
             position: fixed;
             bottom: 20px;
@@ -124,12 +123,12 @@
         <div id="errorContainer" class="error-msg"></div>
     </div>
 
-    <!-- الفترة الزمنية يدوية – فقط للتسمية -->
+    <!-- الفترة الزمنية يدوية – إلزامية لـ PDF -->
     <div class="date-filter">
-        <div class="date-group"><label>📅 تاريخ البداية (من)</label><input type="date" id="startDate"></div>
-        <div class="date-group"><label>📅 تاريخ النهاية (إلى)</label><input type="date" id="endDate"></div>
+        <div class="date-group"><label>📅 تاريخ البداية (من) *</label><input type="date" id="startDate"></div>
+        <div class="date-group"><label>📅 تاريخ النهاية (إلى) *</label><input type="date" id="endDate"></div>
         <button id="applyDateFilterBtn" class="btn-date-filter">تحديث الفترة الوصفية</button>
-        <div id="manualPeriodInfo" class="period-info">🗓️ اختر نطاقاً زمنياً (يظهر في التقارير ولا يؤثر على البيانات)</div>
+        <div id="manualPeriodInfo" class="period-info">🗓️ اختر نطاقاً زمنياً (يظهر في التقارير ويُطلب قبل تصدير PDF)</div>
     </div>
 
     <div class="controls">
@@ -155,7 +154,7 @@
                     <th>اسم المطعم<br><small>Restaurant (Arabic)</small></th>
                     <th>مدير المنطقة<br><small>Region Manager</small></th>
                     <th>مدير التشغيل<br><small>Operations Manager</small></th>
-                    <th>تاريخ التقرير<br><small>Date</small></th>
+                    <!-- تم إزالة عمود تاريخ التقرير بناءً على الطلب -->
                     <th>رصيد أول<br><small>Start Qty</small></th>
                     <th>الكمية المستلمة<br><small>Recd Qty</small></th>
                     <th>المحول للداخل<br><small>Transfer In</small></th>
@@ -165,7 +164,7 @@
                     <th>رصيد آخر<br><small>End Qty</small></th>
                 </tr>
             </thead>
-            <tbody id="tableBody"><tr class="empty-row"><td colspan="11">📁 قم برفع الملفات واختر صنفاً للمشاهدة<br>📌 صنف "شاورما دجاج" سيتم زيادة التوالف والاستخدام 20% وإعادة حساب الرصيد النهائي تلقائياً</td></tr>
+            <tbody id="tableBody"><tr class="empty-row"><td colspan="10">📁 قم برفع الملفات واختر صنفاً للمشاهدة<br>📌 صنف "شاورما دجاج" سيتم زيادة التوالف والاستخدام 20% وإعادة حساب الرصيد النهائي تلقائياً</td></tr>
             </tbody>
         </table>
     </div>
@@ -176,7 +175,6 @@
     <footer>شركة نايف للأغذية</footer>
 </div>
 
-<!-- توقيع متحرك خارج الحاوية ليكون ثابتاً -->
 <div class="developer-signature">
     <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card-clean" target="_blank">
         <span class="name">Yasser Elkhateeb</span>
@@ -266,7 +264,6 @@
             RESTAURANT_MASTER.set(item.stdAr, { displayName: item.stdAr, regionManager: item.region, operationsManager: item.ops });
         }
         
-        // المرادفات من ملف الترجمة
         const synonyms = [
             { ar: "مول 360", en: "360 Mall" }, { ar: "جمعية أبو فطيرة", en: "Abu Fatira Co-Op" }, { ar: "أبوحليفة", en: "Abu Halifa" },
             { ar: "الاحمدي الصناعية", en: "Ahmadi Ind" }, { ar: "المطار", en: "Airport" }, { ar: "الري", en: "Al Rai" },
@@ -476,7 +473,6 @@
         matchSpan.textContent = `${matches.length} صنف مطابق`;
     }
     
-    // دالة لتطبيق زيادة 20% على التوالف والاستخدام وإعادة حساب الرصيد النهائي
     function applyShawarmaBonusAndRecalcEndQty(itemName, originalItem) {
         const lowerName = itemName.toLowerCase();
         if (lowerName.includes("chicken shawarma") || lowerName.includes("شاورما دجاج")) {
@@ -496,7 +492,7 @@
     function generateReportForItem(itemName) {
         if(!itemName) return [];
         const exact = Array.from(uniqueItemsSet).find(i => i.toLowerCase() === itemName.toLowerCase());
-        if(!exact) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">❌ الصنف غير موجود</td></tr>`; specialNoteContainer.style.display = 'none'; return []; }
+        if(!exact) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">❌ الصنف غير موجود</td></tr>`; specialNoteContainer.style.display = 'none'; return []; }
         currentSelectedItem = exact;
         const rows = [];
         for(const rest of allRestaurantsData) {
@@ -518,7 +514,7 @@
                 });
             }
         }
-        if(rows.length === 0) tableBody.innerHTML = `<tr class="empty-row"><td colspan="11">📭 لا توجد بيانات للصنف</td></tr>`;
+        if(rows.length === 0) tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">📭 لا توجد بيانات للصنف</td></tr>`;
         else {
             let html = "";
             for(const r of rows) {
@@ -526,7 +522,6 @@
                     <td style="text-align:right;">${escapeHtml(r.restaurantDisplay)}</td>
                     <td>${escapeHtml(r.regionManager)}</td>
                     <td>${escapeHtml(r.opsManager)}</td>
-                    <td>${escapeHtml(r.reportDate)}</td>
                     <td>${formatZero(r.startQty)}</td>
                     <td>${formatZero(r.recdQty)}</td>
                     <td>${formatZero(r.tranInQty)}</td>
@@ -538,7 +533,6 @@
             }
             tableBody.innerHTML = html;
         }
-        // إظهار أو إخفاء الملاحظة الخاصة بالشاورما
         if (isShawarmaItem(exact)) {
             specialNoteContainer.style.display = 'block';
         } else {
@@ -551,7 +545,7 @@
     function formatZero(val) { let num = Number(val); if(isNaN(num) || num === 0) return "—"; return num.toFixed(2).replace(/\.00$/, ''); }
     function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
     
-    // تصدير Excel مع الإصلاح الكامل وإضافة الملاحظة
+    // تصدير Excel مع الاحتفاظ بالتاريخ (لم يعد موجوداً في الجدول لكنه في البيانات)
     function exportToExcel() {
         if(!currentReportData || currentReportData.length === 0) { 
             alert("⚠️ لا توجد بيانات معروضة لتصديرها."); 
@@ -576,7 +570,6 @@
                     row.wastQty, row.actUsage, row.endQty
                 ]);
             }
-            // إضافة صف الملاحظة إذا كان الصنف شاورما
             if (isShawarmaItem(currentSelectedItem)) {
                 excelRows.push([]);
                 excelRows.push(["ملاحظة:", "تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة."]);
@@ -585,11 +578,9 @@
             ws['!cols'] = [{wch:28},{wch:18},{wch:18},{wch:18},{wch:15},{wch:18},{wch:16},{wch:16},{wch:12},{wch:18},{wch:14}];
             ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:10}},{s:{r:1,c:0},e:{r:1,c:10}},{s:{r:2,c:0},e:{r:2,c:10}},{s:{r:3,c:0},e:{r:3,c:10}}];
             const wb = XLSX.utils.book_new();
-            
             let sheetName = currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_');
             if(sheetName.length > 31) sheetName = sheetName.substring(0, 31);
             if(sheetName.trim() === "") sheetName = "تقرير";
-            
             XLSX.utils.book_append_sheet(wb, ws, sheetName);
             const fileName = `COGS_${currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_').substring(0, 50)}.xlsx`;
             XLSX.writeFile(wb, fileName);
@@ -599,15 +590,23 @@
         }
     }
     
-    // تصدير PDF بـ 15 سطراً لكل صفحة (ستظهر الملاحظة لأنها داخل الـ container)
+    // تصدير PDF مع إلزامية إدخال الفترة
     async function exportToPDF() {
         if(!currentReportData || currentReportData.length === 0) { alert("⚠️ لا توجد بيانات معروضة."); return; }
+        
+        // التحقق من إدخال تاريخ البداية والنهاية
+        if (!startDateInput.value || !endDateInput.value) {
+            alert("❌ الرجاء إدخال تاريخ البداية وتاريخ النهاية قبل تصدير تقرير PDF.");
+            startDateInput.focus();
+            return;
+        }
+        
         exportPdfBtn.disabled = true; const originalText = exportPdfBtn.innerHTML;
         exportPdfBtn.innerHTML = "⏳ جاري إنشاء PDF...";
         try {
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-            const fromDate = startDateInput.value || "الكل", toDate = endDateInput.value || "الكل";
+            const fromDate = startDateInput.value, toDate = endDateInput.value;
             let currentIdx = 0, pageNum = 1;
             const rowsPerPage = 15;
             const margin = 10;
@@ -622,9 +621,27 @@
                 const headerHtml = `<div style="text-align:center;"><div>${logoHtml}<div style="font-size:1.6rem;font-weight:bold;color:#d32f2f;">شركة نايف للأغذية</div><div style="font-size:0.9rem;">NAIF FOOD COMPANY</div><div style="background:#f0f6ff;padding:5px 15px;border-radius:30px;margin:10px auto;display:inline-block;"><strong>تقرير COGS</strong> | الصنف: ${escapeHtml(currentSelectedItem)}<br>الفترة: ${fromDate} → ${toDate}</div>${pageNum>1?`<div>صفحة ${pageNum}</div>`:''}</div>`;
                 let tableRows = "";
                 for(const r of chunk) {
-                    tableRows += `<tr><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.restaurantDisplay)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.regionManager)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.opsManager)}</td><td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.reportDate)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.startQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.recdQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranInQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranOutQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.wastQty)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.actUsage)}</td><td style="border:1px solid #ccc;text-align:center;">${formatZero(r.endQty)}</td></tr>`;
+                    tableRows += `<tr>
+                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.restaurantDisplay)}</td>
+                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.regionManager)}</td>
+                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.opsManager)}</td>
+                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.reportDate)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.startQty)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.recdQty)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranInQty)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranOutQty)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.wastQty)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.actUsage)}</td>
+                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.endQty)}</td>
+                    </tr>`;
                 }
-                let tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.8rem;">${'<thead><tr style="background:#1976D2;color:#fff;"><th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th><th>التاريخ</th><th>بداية</th><th>مستلم</th><th>داخل</th><th>خارج</th><th>توالف</th><th>استخدام</th><th>نهاية</th></tr></thead>'}<tbody>${tableRows}</tbody></table>`;
+                let tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                    <thead><tr style="background:#1976D2;color:#fff;">
+                        <th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th><th>تاريخ التقرير</th>
+                        <th>بداية</th><th>مستلم</th><th>داخل</th><th>خارج</th><th>توالف</th><th>استخدام</th><th>نهاية</th>
+                    </tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>`;
                 let noteHtml = "";
                 if (isShawarmaItem(currentSelectedItem)) {
                     noteHtml = `<div style="background:#fff3cd; border-right:4px solid #ffc107; padding:10px; margin-top:15px; border-radius:8px; font-size:0.8rem; color:#856404;">⚠️ ملاحظة: تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة.</div>`;
@@ -650,7 +667,7 @@
         if(currentSelectedItem) generateReportForItem(currentSelectedItem);
     });
     itemSearch.addEventListener('input', refreshSearch);
-    generateBtn.addEventListener('click', () => { const selected = itemSearch.value.trim(); if(!selected) { tableBody.innerHTML = '<tr class="empty-row"><td colspan="11">⚠️ أدخل اسم الصنف</td></tr>'; specialNoteContainer.style.display = 'none'; return; } generateReportForItem(selected); });
+    generateBtn.addEventListener('click', () => { const selected = itemSearch.value.trim(); if(!selected) { tableBody.innerHTML = '<tr class="empty-row"><td colspan="10">⚠️ أدخل اسم الصنف</td></tr>'; specialNoteContainer.style.display = 'none'; return; } generateReportForItem(selected); });
     exportExcelBtn.addEventListener('click', exportToExcel);
     exportPdfBtn.addEventListener('click', exportToPDF);
     
