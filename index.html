@@ -2,676 +2,2018 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>نايف للأغذية - تقرير COGS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام جرد أصناف المطاعم - شركة نايف للأغذية</title>
     <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f0f2f5; padding: 25px 20px; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; position: relative; min-height: 100vh; }
-        .app-container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); overflow: hidden; padding: 0 28px 35px; }
-        .top-bar { background: #d32f2f; margin: 0 -28px 0 -28px; padding: 15px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-        .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 55px; height: 55px; object-fit: cover; border-radius: 18px; border: 2px solid white; }
-        .company-name { font-size: 1.6rem; font-weight: 800; color: white; }
-        .company-name small { font-size: 0.75rem; color: #ffefcf; display: block; }
-        .report-title-badge { background: rgba(255,255,240,0.2); padding: 8px 18px; border-radius: 40px; color: white; }
-        .upload-area { background: #f8fafd; border: 2px dashed #bdd3e8; border-radius: 28px; padding: 20px; text-align: center; margin: 25px 0; }
-        .upload-label { background: #1e4668; color: white; padding: 12px 32px; border-radius: 60px; cursor: pointer; display: inline-block; }
-        .upload-label:hover { background: #0f2f48; }
-        #fileInput { display: none; }
-        .file-stats { margin-top: 16px; font-size: 0.85rem; background: #e9f0f5; display: inline-block; padding: 6px 18px; border-radius: 50px; }
-        .error-msg { color: #c0392b; background: #ffe6e5; padding: 8px 15px; border-radius: 30px; margin-top: 12px; display: none; }
-        .date-filter { display: flex; flex-wrap: wrap; gap: 20px; background: #fef7e0; padding: 18px 20px; border-radius: 32px; margin-bottom: 25px; align-items: flex-end; }
-        .date-group { display: flex; flex-direction: column; gap: 6px; }
-        .date-group label { font-weight: 700; font-size: 0.8rem; color: #2c3e50; }
-        .date-group input { padding: 10px 14px; border-radius: 30px; border: 1px solid #ccd7e4; }
-        .btn-date-filter { background: #2c6e9e; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; }
-        .period-info { font-size: 0.75rem; color: #1e4668; background: #eef2fa; padding: 5px 12px; border-radius: 20px; margin-right: auto; }
-        .controls { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
-        .filter-group { flex: 3; min-width: 260px; }
-        .filter-group label { font-weight: 700; font-size: 0.85rem; }
-        .search-wrapper { display: flex; gap: 10px; align-items: center; }
-        #itemSearchInput { flex: 1; padding: 12px 18px; border-radius: 60px; border: 1px solid #ccd7e4; font-size: 0.95rem; }
-        .match-counter { background: #eef2fa; padding: 5px 14px; border-radius: 40px; font-size: 0.75rem; }
-        .action-buttons { display: flex; gap: 12px; }
-        button { padding: 10px 24px; border-radius: 60px; font-weight: 600; cursor: pointer; border: none; }
-        .btn-primary { background: #b13e3e; color: white; }
-        .btn-outline { background: white; border: 1px solid #1e4668; color: #1e4668; }
-        .table-wrapper { overflow-x: auto; border-radius: 20px; border: 1px solid #e2e8f0; margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-        th { background: #1976D2; color: white; padding: 14px 8px; font-size: 0.85rem; }
-        th small { display: block; font-size: 0.65rem; color: #bbdefb; margin-top: 4px; }
-        td { padding: 12px 8px; border-bottom: 1px solid #e9edf2; text-align: center; font-family: monospace; font-size: 1.1rem; }
-        td:first-child { font-size: 1rem; font-weight: 700; text-align: right; font-family: 'Segoe UI', sans-serif; }
-        td:nth-child(2), td:nth-child(3) { font-family: 'Segoe UI', sans-serif; font-weight: 500; font-size: 0.95rem; }
-        .empty-row td { font-size: 1rem; color: #6c7a89; font-style: italic; padding: 40px; }
-        .special-note {
-            background: #fff3cd;
-            border-right: 4px solid #ffc107;
-            padding: 12px 20px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: #856404;
-            text-align: right;
-            font-weight: 500;
+        :root {
+            --primary: #1E3A8A;
+            --secondary: #3B82F6;
+            --background: #EFF6FF;
+            --text: #1F2937;
+            --card-bg: #FFFFFF;
+            --shadow: rgba(30, 58, 138, 0.1);
+            --accent-red: #DC2626;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --dark-red: #FF0000;
+            --dark-green: #4CC552;
+            --light-red: #FFE5E5;
+            --light-green: #E5FFE5;
+            --table-header-bg-start: #13F1FC;
+            --table-header-bg-end: #0470DC;
+            --royal-blue: #1E3A8A;
         }
-        .developer-signature {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-            transform: scale(1.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .developer-signature:hover {
-            transform: scale(1.2);
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
         }
-        .signature-card-clean {
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #DC2626;
+            color: white;
+            padding: 15px 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            margin-left: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+        }
+
+        .company-name h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .scroll-down-btn, .scroll-top-btn {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .scroll-down-btn:hover, .scroll-top-btn:hover {
+            transform: translateY(3px);
+            background-color: #f0f0f0;
+        }
+
+        .scroll-top-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px var(--shadow);
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background-color: rgba(30, 58, 138, 0.1);
+        }
+
+        .section {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(30, 58, 138, 0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            border: 2px solid #d32f2f;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            text-decoration: none;
-            color: #1e4668;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-upload label {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-block;
             font-weight: bold;
-            transition: background 0.2s;
-            line-height: 1.3;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .file-upload label:hover {
+            background-color: #1e40af;
+        }
+
+        .file-upload .green-label {
+            background-color: var(--accent-green);
+        }
+        .file-upload .green-label:hover {
+            background-color: #059669;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
+            box-shadow: 0 4px 8px var(--shadow);
+            animation: float 3s ease-in-out infinite;
         }
-        .signature-card-clean:hover {
-            background: #fff5f5;
-            border-color: #b13e3e;
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        .signature-card-clean .name {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: #b13e3e;
+
+        .stat-card h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
         }
-        .signature-card-clean .title {
-            font-size: 0.7rem;
-            color: #2c3e50;
+
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
         }
-        footer { font-size: 0.7rem; text-align: center; margin-top: 30px; padding-bottom: 20px; color: #6c86a3; }
-        @media (max-width: 700px) { .app-container { padding: 0 15px 20px; } td { font-size: 0.9rem; } .developer-signature { transform: scale(0.9); } }
+
+        .inventory-table th, 
+        .inventory-table thead th,
+        .category-title {
+            background: linear-gradient(135deg, var(--table-header-bg-start), var(--table-header-bg-end));
+            color: white !important;
+            font-weight: bold;
+            border: 1px solid #0a5a9c;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        }
+        
+        .inventory-table th {
+            padding: 10px 5px;
+        }
+
+        .inventory-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .inventory-table th:nth-child(1) { width: 5%; }
+        .inventory-table th:nth-child(2) { width: 27%; }
+        .inventory-table th:nth-child(3) { width: 8%; }
+        .inventory-table th:nth-child(4) { width: 8%; }
+        .inventory-table th:nth-child(5) { width: 9%; }
+        .inventory-table th:nth-child(6) { width: 10%; }
+        .inventory-table th:nth-child(7) { width: 12%; }
+        .inventory-table th:nth-child(8) { width: 21%; }
+
+        .inventory-table td {
+            border: 1px solid #ddd;
+            padding: 8px 4px;
+            text-align: center;
+            word-break: break-word;
+            vertical-align: middle;
+        }
+
+        .inventory-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .inventory-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .row-difference-negative { background-color: var(--light-red) !important; }
+        .row-difference-positive { background-color: var(--light-green) !important; }
+
+        .actual-count-input {
+            width: 90px;
+            padding: 6px;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            text-align: center;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        .count-cell { font-size: 18px !important; font-weight: bold !important; }
+        .difference-cell { font-size: 18px !important; font-weight: bold !important; }
+        .difference-negative { color: var(--accent-red) !important; }
+        .difference-positive { color: var(--accent-green) !important; }
+        .difference-text { font-size: 12px !important; font-weight: normal !important; margin-right: 5px; }
+
+        .combined-difference-cell {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            vertical-align: middle;
+            transition: all 0.2s;
+        }
+        .combined-difference-negative { background-color: var(--dark-red) !important; color: white !important; }
+        .combined-difference-positive { background-color: var(--dark-green) !important; color: white !important; }
+        .combined-difference-matched { 
+            background-color: var(--royal-blue) !important; 
+            color: white !important;
+            box-shadow: inset 0 0 0 1px #3b82f6;
+        }
+        .combined-difference-no-count { 
+            background-color: #cbd5e1 !important; 
+            color: #1e293b !important;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: #1e40af; }
+        .btn-secondary { background-color: var(--secondary); color: white; }
+        .btn-secondary:hover { background-color: #2563eb; }
+        .btn-green { background-color: var(--accent-green); color: white; }
+        .btn-green:hover { background-color: #059669; }
+        .btn-red { background-color: var(--accent-red); color: white; }
+        .btn-red:hover { background-color: #b91c1c; }
+        .btn-small { padding: 5px 10px; font-size: 12px; }
+
+        .inventory-category { margin-bottom: 20px; }
+        .category-title {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            color: white;
+        }
+
+        .search-filter { margin-bottom: 20px; }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .restaurant-info {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px var(--shadow);
+        }
+
+        .info-row { display: flex; margin-bottom: 10px; align-items: center; }
+        .info-label { font-weight: bold; width: 120px; font-size: 14px; color: var(--primary); }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select {
+            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;
+        }
+
+        .info-row-compact { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .info-item { flex: 1; min-width: 200px; }
+        .info-item .info-label { width: auto; margin-bottom: 5px; display: block; }
+        .info-item .info-value { width: 100%; }
+
+        .restaurant-autocomplete { position: relative; width: 100%; }
+        .restaurant-search-input { width: 100%; padding: 10px; border: 2px solid var(--primary); border-radius: 6px; font-size: 16px; }
+        .restaurant-suggestions {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background-color: #EFF6FF; border: 2px solid var(--primary); border-radius: 4px;
+            max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 12px var(--shadow);
+        }
+        .restaurant-suggestion { padding: 10px; cursor: pointer; border-bottom: 1px solid #ddd; transition: background-color 0.2s; }
+        .restaurant-suggestion:hover { background-color: #DBEAFE; }
+
+        .manager-info { display: flex; gap: 15px; margin-top: 10px; }
+        .manager-box { flex: 1; background-color: #f5f5f5; padding: 8px; border-radius: 4px; text-align: center; border: 1px solid var(--primary); }
+        .manager-label { font-size: 11px; color: #666; }
+        .manager-name { font-weight: bold; margin-top: 3px; font-size: 13px; color: var(--primary); }
+
+        .notification {
+            position: fixed; top: 20px; right: 20px; padding: 15px 20px;
+            background-color: var(--primary); color: white; border-radius: 6px;
+            box-shadow: 0 4px 12px var(--shadow); z-index: 1000; display: none;
+        }
+
+        .group-total { background-color: #DBEAFE; font-weight: bold; }
+
+        .movement-modal, .whatsapp-modal, .restaurant-search-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background-color: white; padding: 20px; border-radius: 8px;
+            width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; border: 2px solid var(--primary);
+        }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .modal-title { font-weight: bold; font-size: 18px; color: var(--primary); }
+        .close-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary); }
+
+        .current-stock { font-weight: bold; font-size: 18px; text-align: center; margin-top: 15px; padding: 10px; background-color: #EFF6FF; border-radius: 4px; border: 1px solid var(--primary); }
+        .item-select { transform: scale(1.5); cursor: pointer; }
+
+        .signature-card {
+            position: fixed; bottom: 20px; left: 20px;
+            background: transparent;
+            color: var(--primary); padding: 7.8px 13px; border-radius: 8.5px;
+            font-weight: 600; z-index: 1000;
+            animation: float 6s ease-in-out infinite; cursor: pointer; border: 2px solid red;
+            text-decoration: none;
+        }
+
+        .signature-card:hover { transform: scale(1.05); }
+        .signature-card .name { font-size: 0.71rem; font-weight: 700; margin-bottom: 3.7px; text-shadow: none; }
+        .signature-card .title { font-size: 0.52rem; opacity: 0.9; font-weight: 500; }
+
+        .file-attachment { margin-top: 15px; padding: 10px; border: 2px dashed var(--secondary); border-radius: 6px; text-align: center; background-color: rgba(59, 130, 246, 0.05); }
+
+        @media (max-width: 768px) {
+            .signature-card { position: relative; bottom: auto; left: auto; margin: 20px auto 0; width: fit-content; animation: none; }
+            .header-content { flex-direction: column; text-align: center; gap: 15px; }
+            .nav-tabs { flex-direction: column; }
+            .stats-cards { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+            .inventory-table { font-size: 10px; }
+            .inventory-table th, .inventory-table td { padding: 4px; }
+            .actual-count-input { width: 60px; font-size: 18px !important; }
+            .info-row-compact { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="top-bar">
-        <div class="logo-area">
-            <img class="logo-img" src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="Naif Logo" onerror="this.src='https://via.placeholder.com/55?text=NAIF'">
-            <div class="company-name">شركة نايف للأغذية <small>NAIF FOOD COMPANY</small></div>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار شركة نايف للأغذية">
+                    <div>
+                        <h1>نظام جرد أصناف المطاعم</h1>
+                        <div class="company-name"><h2>شركة نايف للأغذية</h2></div>
+                    </div>
+                </div>
+                <button class="scroll-down-btn" id="scroll-down-btn" title="الذهاب لأسفل الصفحة">الذهاب لأسفل الصفحة ↓</button>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-target="upload-section">تحميل البيانات</div>
+            <div class="nav-tab" data-target="meat-section">جرد اللحوم</div>
+            <div class="nav-tab" data-target="store-section">جرد أصناف المخازن(تحت التطوير)</div>
+            <div class="nav-tab" data-target="veg-section">جرد الخضروات</div>
+            <div class="nav-tab" data-target="appetizers-section">جرد المقبلات</div>
+            <div class="nav-tab" data-target="misc-section">جرد أصناف أخرى</div>
+            <div class="nav-tab" data-target="settings-section">الإعدادات</div>
         </div>
-        <div class="report-title-badge">📊 تقرير COGS - معالج شاورما دجاج (+20% Waste/Usage)</div>
-    </div>
 
-    <div class="upload-area">
-        <label for="fileInput" class="upload-label">📂 رفع ملفات Excel</label>
-        <input type="file" id="fileInput" multiple accept=".xlsx, .xls, .xlsm" />
-        <div id="uploadStatus" class="file-stats">⏳ لم يتم رفع أي ملفات</div>
-        <div id="errorContainer" class="error-msg"></div>
-    </div>
+        <section id="upload-section" class="section active">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">تحميل بيانات الأصناف من ملف Excel</h2>
+            <div class="file-upload" style="padding: 25px; width: 800px; max-width: 100%; margin: 0 auto;">
+                <div style="display: flex; gap: 20px; align-items: center; justify-content: center; width: 100%; flex-wrap: wrap;">
+                    <div>
+                        <input type="file" id="excel-file" accept=".xlsx, .xls">
+                        <label for="excel-file" style="margin: 0; padding: 12px 25px; font-size: 18px;">اختر ملف Excel (Spot)</label>
+                    </div>
+                    <div>
+                        <input type="file" id="excel-file-spot" accept=".xlsx, .xls">
+                        <label for="excel-file-spot" class="green-label" style="margin: 0; padding: 12px 25px; font-size: 18px;">ملف SPOT (مطاعم 24 ساعة)</label>
+                    </div>
+                    <button class="btn" id="load-default-items" style="background-color: var(--accent-red); padding: 12px 25px; font-size: 18px;">
+                        تحميل الأصناف الأساسية
+                    </button>
+                </div>
+                <p style="margin-top: 15px; color: var(--primary); font-weight: 200; font-size: 12px;">Yasser Elkhateeb</p>
+            </div>
 
-    <!-- الفترة الزمنية يدوية – إلزامية لـ PDF -->
-    <div class="date-filter">
-        <div class="date-group"><label>📅 تاريخ البداية (من) *</label><input type="date" id="startDate"></div>
-        <div class="date-group"><label>📅 تاريخ النهاية (إلى) *</label><input type="date" id="endDate"></div>
-        <button id="applyDateFilterBtn" class="btn-date-filter">تحديث الفترة الوصفية</button>
-        <div id="manualPeriodInfo" class="period-info">🗓️ اختر نطاقاً زمنياً (يظهر في التقارير ويُطلب قبل تصدير PDF)</div>
-    </div>
+            <div class="stats-cards">
+                <div class="stat-card"><h3>إجمالي الأصناف</h3><div class="value" id="total-items">0</div></div>
+                <div class="stat-card"><h3>الأصناف التي تحتاج طلب</h3><div class="value" id="low-stock-items">0</div></div>
+                <div class="stat-card"><h3>الأصناف المختارة للجرد</h3><div class="value" id="selected-items">0</div></div>
+            </div>
 
-    <div class="controls">
-        <div class="filter-group">
-            <label>🔎 بحث ديناميكي عن الصنف:</label>
-            <div class="search-wrapper">
-                <input type="text" id="itemSearchInput" placeholder="مثال: برجر, شاورما دجاج..." autocomplete="off" list="itemDatalist" disabled>
-                <datalist id="itemDatalist"></datalist>
-                <span id="matchCountDisplay" class="match-counter">0 صنف</span>
+            <div class="search-filter">
+                <input type="text" class="search-box" id="search-items" placeholder="ابحث عن صنف...">
+            </div>
+
+            <div class="inventory-table-container">
+                <table class="inventory-table" id="items-table">
+                    <thead>
+                        <tr><th>RM Code</th><th>اسم الصنف</th><th>الوحدة</th><th>الرصيد الحالي</th><th>الوحدة الصغرى</th><th>الرصيد بالصغرى</th><th>اختيار للجرد</th><th>الحركة</th></tr>
+                    </thead>
+                    <tbody id="items-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="meat-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف اللحوم</h2>
+            <div class="restaurant-info">
+                <div class="info-row-compact">
+                    <div class="info-item">
+                        <div class="info-label">اسم المطعم:</div>
+                        <div class="info-value">
+                            <div class="restaurant-autocomplete">
+                                <input type="text" class="restaurant-search-input" id="meat-restaurant-search" placeholder="اكتب اسم المطعم...">
+                                <div class="restaurant-suggestions" id="meat-restaurant-suggestions"></div>
+                            </div>
+                            <input type="hidden" id="meat-restaurant-name">
+                        </div>
+                    </div>
+                    <div class="info-item"><div class="info-label">مسئول المطعم:</div><div class="info-value"><input type="text" id="meat-responsible" placeholder="اسم المسئول"></div></div>
+                    <div class="info-item"><div class="info-label">تاريخ ووقت الجرد:</div><div class="info-value"><input type="datetime-local" id="meat-datetime" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></div></div>
+                </div>
+                <div class="manager-info">
+                    <div class="manager-box"><div class="manager-label">مدير المنطقة</div><div class="manager-name" id="meat-area-manager">-</div></div>
+                    <div class="manager-box"><div class="manager-label">مدير التشغيل</div><div class="manager-name" id="meat-operations-manager">-</div></div>
+                </div>
+            </div>
+            <div id="meat-inventory-container"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="generate-meat-pdf">تصدير إلى PDF</button>
+                <button class="btn btn-primary" id="generate-meat-excel">تصدير إلى Excel</button>
+                <button class="btn btn-secondary" id="send-meat-whatsapp">إرسال إلى واتساب</button>
+            </div>
+        </section>
+
+        <section id="store-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف المخازن</h2>
+            <div class="restaurant-info">
+                <div class="info-row-compact">
+                    <div class="info-item">
+                        <div class="info-label">اسم المطعم:</div>
+                        <div class="info-value">
+                            <div class="restaurant-autocomplete">
+                                <input type="text" class="restaurant-search-input" id="store-restaurant-search" placeholder="اكتب اسم المطعم...">
+                                <div class="restaurant-suggestions" id="store-restaurant-suggestions"></div>
+                            </div>
+                            <input type="hidden" id="store-restaurant-name">
+                        </div>
+                    </div>
+                    <div class="info-item"><div class="info-label">مسئول المطعم:</div><div class="info-value"><input type="text" id="store-responsible" placeholder="اسم المسئول"></div></div>
+                    <div class="info-item"><div class="info-label">تاريخ ووقت الجرد:</div><div class="info-value"><input type="datetime-local" id="store-datetime" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></div></div>
+                </div>
+                <div class="manager-info">
+                    <div class="manager-box"><div class="manager-label">مدير المنطقة</div><div class="manager-name" id="store-area-manager">-</div></div>
+                    <div class="manager-box"><div class="manager-label">مدير التشغيل</div><div class="manager-name" id="store-operations-manager">-</div></div>
+                </div>
+            </div>
+            <div id="store-inventory-container"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="generate-store-pdf">تصدير إلى PDF</button>
+                <button class="btn btn-primary" id="generate-store-excel">تصدير إلى Excel</button>
+                <button class="btn btn-secondary" id="send-store-whatsapp">إرسال إلى واتساب</button>
+            </div>
+        </section>
+
+        <section id="veg-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف الخضروات</h2>
+            <div class="restaurant-info">
+                <div class="info-row-compact">
+                    <div class="info-item">
+                        <div class="info-label">اسم المطعم:</div>
+                        <div class="info-value">
+                            <div class="restaurant-autocomplete">
+                                <input type="text" class="restaurant-search-input" id="veg-restaurant-search" placeholder="اكتب اسم المطعم...">
+                                <div class="restaurant-suggestions" id="veg-restaurant-suggestions"></div>
+                            </div>
+                            <input type="hidden" id="veg-restaurant-name">
+                        </div>
+                    </div>
+                    <div class="info-item"><div class="info-label">مسئول المطعم:</div><div class="info-value"><input type="text" id="veg-responsible" placeholder="اسم المسئول"></div></div>
+                    <div class="info-item"><div class="info-label">تاريخ ووقت الجرد:</div><div class="info-value"><input type="datetime-local" id="veg-datetime" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></div></div>
+                </div>
+                <div class="manager-info">
+                    <div class="manager-box"><div class="manager-label">مدير المنطقة</div><div class="manager-name" id="veg-area-manager">-</div></div>
+                    <div class="manager-box"><div class="manager-label">مدير التشغيل</div><div class="manager-name" id="veg-operations-manager">-</div></div>
+                </div>
+            </div>
+            <div id="veg-inventory-container"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="generate-veg-pdf">تصدير إلى PDF</button>
+                <button class="btn btn-primary" id="generate-veg-excel">تصدير إلى Excel</button>
+                <button class="btn btn-secondary" id="send-veg-whatsapp">إرسال إلى واتساب</button>
+            </div>
+        </section>
+
+        <section id="appetizers-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف المقبلات</h2>
+            <div class="restaurant-info">
+                <div class="info-row-compact">
+                    <div class="info-item">
+                        <div class="info-label">اسم المطعم:</div>
+                        <div class="info-value">
+                            <div class="restaurant-autocomplete">
+                                <input type="text" class="restaurant-search-input" id="appetizers-restaurant-search" placeholder="اكتب اسم المطعم...">
+                                <div class="restaurant-suggestions" id="appetizers-restaurant-suggestions"></div>
+                            </div>
+                            <input type="hidden" id="appetizers-restaurant-name">
+                        </div>
+                    </div>
+                    <div class="info-item"><div class="info-label">مسئول المطعم:</div><div class="info-value"><input type="text" id="appetizers-responsible" placeholder="اسم المسئول"></div></div>
+                    <div class="info-item"><div class="info-label">تاريخ ووقت الجرد:</div><div class="info-value"><input type="datetime-local" id="appetizers-datetime" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></div></div>
+                </div>
+                <div class="manager-info">
+                    <div class="manager-box"><div class="manager-label">مدير المنطقة</div><div class="manager-name" id="appetizers-area-manager">-</div></div>
+                    <div class="manager-box"><div class="manager-label">مدير التشغيل</div><div class="manager-name" id="appetizers-operations-manager">-</div></div>
+                </div>
+            </div>
+            <div id="appetizers-inventory-container"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="generate-appetizers-pdf">تصدير إلى PDF</button>
+                <button class="btn btn-primary" id="generate-appetizers-excel">تصدير إلى Excel</button>
+                <button class="btn btn-secondary" id="send-appetizers-whatsapp">إرسال إلى واتساب</button>
+            </div>
+        </section>
+
+        <section id="misc-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف أخرى متنوعة</h2>
+            <div class="restaurant-info">
+                <div class="info-row-compact">
+                    <div class="info-item">
+                        <div class="info-label">اسم المطعم:</div>
+                        <div class="info-value">
+                            <div class="restaurant-autocomplete">
+                                <input type="text" class="restaurant-search-input" id="misc-restaurant-search" placeholder="اكتب اسم المطعم...">
+                                <div class="restaurant-suggestions" id="misc-restaurant-suggestions"></div>
+                            </div>
+                            <input type="hidden" id="misc-restaurant-name">
+                        </div>
+                    </div>
+                    <div class="info-item"><div class="info-label">مسئول المطعم:</div><div class="info-value"><input type="text" id="misc-responsible" placeholder="اسم المسئول"></div></div>
+                    <div class="info-item"><div class="info-label">تاريخ ووقت الجرد:</div><div class="info-value"><input type="datetime-local" id="misc-datetime" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></div></div>
+                </div>
+                <div class="manager-info">
+                    <div class="manager-box"><div class="manager-label">مدير المنطقة</div><div class="manager-name" id="misc-area-manager">-</div></div>
+                    <div class="manager-box"><div class="manager-label">مدير التشغيل</div><div class="manager-name" id="misc-operations-manager">-</div></div>
+                </div>
+            </div>
+            <div id="misc-inventory-container"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="generate-misc-pdf">تصدير إلى PDF</button>
+                <button class="btn btn-primary" id="generate-misc-excel">تصدير إلى Excel</button>
+                <button class="btn btn-secondary" id="send-misc-whatsapp">إرسال إلى واتساب</button>
+            </div>
+        </section>
+
+        <section id="settings-section" class="section">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">إعدادات النظام</h2>
+            <div class="restaurant-info">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">إدارة المطاعم والمدراء</h3>
+                <div class="info-row">
+                    <div class="info-label">المطاعم:</div>
+                    <div class="info-value">
+                        <button class="btn btn-primary" id="add-restaurant">إضافة مطعم</button>
+                        <button class="btn btn-red" id="delete-restaurant">حذف مطعم</button>
+                    </div>
+                </div>
+            </div>
+            <div class="inventory-table-container">
+                <table class="inventory-table">
+                    <thead><tr><th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th></tr></thead>
+                    <tbody id="restaurants-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="movement-modal" id="movement-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="movement-modal-title">حركة الصنف</div>
+                    <button class="close-modal" id="close-movement-modal">&times;</button>
+                </div>
+                <div id="movement-modal-content"></div>
             </div>
         </div>
-        <div class="action-buttons">
-            <button id="generateReportBtn" class="btn-primary" disabled>📋 عرض التقرير</button>
-            <button id="exportExcelBtn" class="btn-outline" disabled>📎 تصدير Excel</button>
-            <button id="exportPdfBtn" class="btn-outline" disabled>🖨️ تصدير PDF</button>
+
+        <div class="whatsapp-modal" id="whatsapp-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">إرسال إلى واتساب</div>
+                    <button class="close-modal" id="close-whatsapp-modal">&times;</button>
+                </div>
+                <div>
+                    <div class="info-row">
+                        <div class="info-label">رقم الهاتف:</div>
+                        <div class="info-value"><input type="text" id="whatsapp-number" value="+96567011143"></div>
+                    </div>
+                    <div class="file-attachment">
+                        <div style="margin-bottom: 8px; font-weight: bold; color: var(--primary);">إرفاق ملف (اختياري)</div>
+                        <input type="file" id="whatsapp-attachment" style="display: none;" accept=".pdf,.xlsx,.xls,.jpg,.jpeg,.png">
+                        <label for="whatsapp-attachment" class="btn btn-small btn-secondary" style="display: inline-block; margin-bottom: 8px;">اختر ملف</label>
+                        <div id="attachment-name" style="font-size: 12px; color: #666;">لم يتم اختيار ملف</div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 15px;">
+                        <button class="btn btn-primary" id="confirm-whatsapp-send">إرسال</button>
+                        <button class="btn btn-secondary" id="cancel-whatsapp-send">إلغاء</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notification" id="notification">تم حفظ البيانات بنجاح!</div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="scroll-top-btn" id="scroll-top-btn" title="الصعود أعلى الصفحة">الصعود أعلى الصفحة ↑</button>
         </div>
     </div>
 
-    <div id="reportTableContainer" class="table-wrapper">
-        <table id="resultTable">
-            <thead>
-                <tr>
-                    <th>اسم المطعم<br><small>Restaurant (Arabic)</small></th>
-                    <th>مدير المنطقة<br><small>Region Manager</small></th>
-                    <th>مدير التشغيل<br><small>Operations Manager</small></th>
-                    <!-- تم إزالة عمود تاريخ التقرير بناءً على الطلب -->
-                    <th>رصيد أول<br><small>Start Qty</small></th>
-                    <th>الكمية المستلمة<br><small>Recd Qty</small></th>
-                    <th>المحول للداخل<br><small>Transfer In</small></th>
-                    <th>المحول للخارج<br><small>Transfer Out</small></th>
-                    <th>التوالف<br><small>Waste</small></th>
-                    <th>كمية الاستخدام<br><small>Usage Qty</small></th>
-                    <th>رصيد آخر<br><small>End Qty</small></th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"><tr class="empty-row"><td colspan="10">📁 قم برفع الملفات واختر صنفاً للمشاهدة<br>📌 صنف "شاورما دجاج" سيتم زيادة التوالف والاستخدام 20% وإعادة حساب الرصيد النهائي تلقائياً</td></tr>
-            </tbody>
-        </table>
-    </div>
-    <div id="specialNoteContainer" style="display: none;" class="special-note">
-        ⚠️ ملاحظة: تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة.
+    <div id="pdf-template" style="display: none;">
+        <div class="pdf-header" style="text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--primary);">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" alt="شعار شركة نايف للأغذية" style="width: 60px; height: 60px; margin-left: 15px; border-radius: 50%;">
+                <div>
+                    <h1 style="color: var(--primary); margin: 0; font-size: 22px; font-weight: bold;">شركة نايف للأغذية</h1>
+                    <h2 style="color: #333; margin: 5px 0 0 0; font-size: 18px;">نظام جرد أصناف المطاعم</h2>
+                </div>
+            </div>
+        </div>
+        <div id="pdf-restaurant-info" style="margin-bottom: 15px; padding: 10px; background: #EFF6FF; border-radius: 4px; font-size: 16px; border: 1px solid var(--primary);"></div>
+        <div id="pdf-content" style="font-size: 11px;"></div>
+        <div id="pdf-footer" style="margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #666;">
+            <div style="margin-bottom: 5px;">تم إنشاء هذا التقرير بواسطة نظام جرد أصناف المطاعم</div>
+            <div>تاريخ الطباعة: <span id="pdf-print-date"></span></div>
+        </div>
     </div>
 
-    <footer>شركة نايف للأغذية</footer>
-</div>
-
-<div class="developer-signature">
-    <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card-clean" target="_blank">
-        <span class="name">Yasser Elkhateeb</span>
-        <span class="title">مطور البرنامج | 67011143</span>
+    <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card" target="_blank" rel="noopener noreferrer">
+        <div class="name">Yasser Elkhateeb</div>
+        <div class="title">مطور البرنامج 67011143</div>
     </a>
-</div>
 
-<script>
-    // --------------------------------------------------------------
-    // قاعدة بيانات متكاملة (الأسماء والمدراء) مع دعم الإنجليزي والعربي
-    // --------------------------------------------------------------
-    const RESTAURANT_MASTER = new Map();
-    
-    function buildMasterDatabase() {
-        const managersData = [
-            { stdAr: "مول 360", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "جمعية أبو فطيرة", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "أبوحليفة", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "الاحمدي الصناعية", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "المطار", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الري", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "الري -2", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "مجمع الكوت", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "مجمع الأفنيوز", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "الضباعية", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "الدسمة", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "الفحيحيل", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "الفحيحيل -2", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "الفيحاء", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "الفروانية", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "الفنطاس", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "هدية", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "هدية -2", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "حولي بارك", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "جابر الأحمد", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الجابرية تكا", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "الجابرية بنت الديك", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "الجهراء الصناعية", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الجهراء ليالي الشرق", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الجهراء مكة", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "الجهراء الزويخ", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "جليب الشيوخ", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "كبد", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "الخيران أويا", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "الخيران أوتليت", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "خيطان الجديدة", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "الخيول", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "المنقف", region: "عماد", ops: "هاني عبدالله" },
-            { stdAr: "مارينا مول", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "مشرف", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "العارضية الجديدة", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الفروانية الجديدة", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "القادسية", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "القيروان", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "القرين", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "الرقعي", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الرحاب", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "الرقة", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "سعد العبدالله", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "صباح الأحمد", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "صباح السالم", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "صباح السالم العرين", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "صباح السالم العرين -2", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "النافورة", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "السندباد", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "شارع البحرين", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "سيد ياسين", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "سيد ياسين -2", region: "طارق", ops: "هاني عبدالله" },
-            { stdAr: "سلوى", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "الشرق", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "الشرق -2", region: "انور", ops: "هاني عبدالله" },
-            { stdAr: "الشهداء", region: "وليد", ops: "طارق بيومي" },
-            { stdAr: "الشويخ", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "أسواق القرين", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "أسواق القرين -2", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "جمعية الصليبية", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "جمعية الصليبية -2", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "الصليبخات", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الصليبخات -2", region: "ثروت", ops: "طارق بيومي" },
-            { stdAr: "الصليبية", region: "مختار", ops: "طارق بيومي" },
-            { stdAr: "الوفرة", region: "حجازي", ops: "هاني عبدالله" },
-            { stdAr: "غرب أبو فطيرة", region: "مرتضى", ops: "طارق بيومي" },
-            { stdAr: "الزهراء", region: "وليد", ops: "طارق بيومي" }
+    <script>
+        let inventoryDataMain = [];
+        let inventoryDataSpot = [];
+        let inventoryData = [];
+        let selectedItems = [];
+        let currentWhatsappType = '';
+        let whatsappAttachmentFile = null;
+
+        const defaultItems = [
+            { code: "K1035", name: "Chicken Big Fillet  ( بيج فيلية)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1036", name: "Chicken Big Fillet Spicy  ( بيج فيلية فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1008", name: "Chicken Fillet  ( فيليه عادي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1009", name: "Chicken Fillet Spicy  ( فيليه فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1016", name: "Ch.Finger Fillet Spicy  ( اصابع فيليه فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1015", name: "Chicken Finger Fillet  ( اصابع فيليه)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1049", name: "Grilled Chicken Fillet  فيليه مشوي", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1020", name: "Royal Grilled Chicken (دجاج شواية ملكي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1006", name: "Chicken Tikka ( دجاج تكا عادي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1004", name: "Chicken Tikka Brest ( تكا صدور)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1005", name: "Chicken Tikka Thigh  (تكا فخذ)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1017", name: "Grilled Quils (فري مشوي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1011", name: "Rooster Junior  ( فروج نايف)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1014", name: "Bint Al-Deek  ( بنت الديك)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1012", name: "Chicken Fried  ( دجاج فرايد عادي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1013", name: "Chicken Fried Spicy  (دجاج فرايد فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "A1007", name: "Beef Burger Big(برجر لحم كبير)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "A1008", name: "Beef Burger Small(برجر لحم صغير)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "A1004", name: "Chicken Burger Small  ( برجر دجاج صغير)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1070", name: "Fresh Burger Chickens برجر دجاج طازج", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1071", name: "Chicken Small Wings Nor  جناح صغير عادي", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1072", name: "Chicken Small Wings Spicy  جناح صغير فلفل", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1010", name: "Chicken Wings  جناح متبل", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1007", name: "Chicken Drum Stick ( درام ستيك)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1039", name: "Drumstic whole Fried  ( وصلة دجاج عادي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1040", name: "Drumstick whole Fried spicy  ( وصلة دجاج فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1044", name: "Grill Chicken Pc -Multi Taste ( قطع دجاج جرل صغير)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1042", name: "Happy Chicken Pc ( قطع دجاج فرايد صغير عادي)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1043", name: "Happy Chicken Pc-Spicy ( قطع دجاج فرايد صغير فلفل)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1002", name: "Chicken Kabab ( كباب دجاج)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1003", name: "Sish Tawouk ( شيش طاووق)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "K1076", name: "Grilled Chicken Pc / قطع دجاج مشويه", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K120199", name: "Half Boneless Chicken - نصف دجاجة مسحب", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K1055", name: "Grilled charcoal chicken pcs (قطع دجاج على الفحم)", group: "meat", vendorUOM: "KG", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K2035", name: "Fattoush Salad Big  ( سلطة فتوش كبيرة)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2005", name: "Cole Slaw Big  (كول سلو كبير)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2006", name: "Cole Slaw Small  ( كول سلو صغير)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2020", name: "Hummus large ( ماعون حمص كبير)", group: "appetizers", vendorUOM: "كيلو", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "K2009", name: "Laban Naif Small (لبن نايف صغير )", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2008", name: "Rice&Milk Pudding ( أرز بالحليب)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2033", name: "Rocca Salad Big  ( سلطة جرجيركبيرة)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2034", name: "Taboulla Salad Big  ( سلطة تبولة كبيرة)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2036", name: "Vegitable Salad Big  ( سلطة خضراء كبيرة)", group: "appetizers", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "K2022", name: "Mutabbal Large ( ماعون متبل كبير)", group: "appetizers", vendorUOM: "كيلو", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "A1009", name: "Butter Finger (زبدة اصابع)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1010", name: "Butter Portion ( زبدة بورشن)", group: "store", vendorUOM: "كرتون", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "L1041", name: "Cheese Cake Snickers (تشيز كيك سنيكرز)", group: "store", vendorUOM: "قطعة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1016", name: "Cheese Cake Strawberry (تشيز كيك فراولة)", group: "store", vendorUOM: "قطعة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "L1040", name: "Cheese Cake Lotus (تشيز كيك لوتس)", group: "store", vendorUOM: "قطعة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "L1043", name: "Cheese Cake Oreo (تشيز كيك اوريو)", group: "store", vendorUOM: "قطعة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "L1042", name: "Cheese Cake Red Velvet (تشيز كيك ريد فالفيت)", group: "store", vendorUOM: "قطعة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1006", name: "Chicken Nuggets ( ناجيت تمبورا)", group: "store", vendorUOM: "كيلو", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "A1001", name: "French Fries 6×6 LW ( شبس لامب وستون)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "A1011", name: "FRZ Paratha ( شباتي براتا)", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1020", name: "McCain Hashbrown (بطاط هاش براون مثلث)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1003", name: "Mozzarella Stick (اصابع مودزريلا)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1002", name: "Onion Rings ( حلقات بصل)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "A1014", name: "Twister Fries LW (بطاط حلزونية تويستر)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "قطعة", smallestUnitQty: 0 },
+            { code: "B1007", name: "Basmati Rice ( ارزبسمتى)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "كيلو", smallestUnitQty: 0 },
+            { code: "B1002", name: "Cheese slice ( جبنة شرائح)", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "شريحة", smallestUnitQty: 0 },
+            { code: "B1024", name: "Swiss Cheese slices (جبنة سويسرية ابيض شرائح)", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "شريحة", smallestUnitQty: 0 },
+            { code: "A1013", name: "Mozzarella shd cheese (جبنة موزريلا)", group: "store", vendorUOM: "كيس", stockQty: 0, uuom: "جرام", smallestUnitQty: 0 },
+            { code: "B1008", name: "Corn Oil (زيت ذرة)", group: "store", vendorUOM: "زجاجة", stockQty: 0, uuom: "لتر", smallestUnitQty: 0 },
+            { code: "B2054", name: "sweet corn ( ذرة حب )", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "C1005", name: "Aquafina Water 600ml ( مياة أكوافينا صغير)", group: "store", vendorUOM: "زجاجة", stockQty: 0, uuom: "زجاجة", smallestUnitQty: 0 },
+            { code: "C1003", name: "Pepsi 1.25 Ltr ( بيبسى عائلى)", group: "store", vendorUOM: "زجاجة", stockQty: 0, uuom: "زجاجة", smallestUnitQty: 0 },
+            { code: "C1004", name: "Pepsi 2.25 Ltr ( بيبسى عائلى)", group: "store", vendorUOM: "زجاجة", stockQty: 0, uuom: "زجاجة", smallestUnitQty: 0 },
+            { code: "C1001", name: "Pepsi BIB Syrup ( بيبسي ماكينة)", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "لتر", smallestUnitQty: 0 },
+            { code: "C1002", name: "Pepsi Can 250ml (بيبسى علب250 م)", group: "store", vendorUOM: "علبة", stockQty: 0, uuom: "علبة", smallestUnitQty: 0 },
+            { code: "C1006", name: "Shireen Juice (عصيرشيرين)", group: "store", vendorUOM: "زجاجة", stockQty: 0, uuom: "زجاجة", smallestUnitQty: 0 }
         ];
-        
-        for (const item of managersData) {
-            RESTAURANT_MASTER.set(item.stdAr, { displayName: item.stdAr, regionManager: item.region, operationsManager: item.ops });
-        }
-        
-        const synonyms = [
-            { ar: "مول 360", en: "360 Mall" }, { ar: "جمعية أبو فطيرة", en: "Abu Fatira Co-Op" }, { ar: "أبوحليفة", en: "Abu Halifa" },
-            { ar: "الاحمدي الصناعية", en: "Ahmadi Ind" }, { ar: "المطار", en: "Airport" }, { ar: "الري", en: "Al Rai" },
-            { ar: "الري -2", en: "Al Rai- 2" }, { ar: "مجمع الكوت", en: "AlKout" }, { ar: "مجمع الأفنيوز", en: "Avenues" },
-            { ar: "الضباعية", en: "Dabaya" }, { ar: "الدسمة", en: "Dasma" }, { ar: "الفحيحيل", en: "Fahaheel" },
-            { ar: "الفحيحيل -2", en: "Fahaheel- 2" }, { ar: "الفيحاء", en: "Faiha" }, { ar: "الفروانية", en: "Farwaniya" },
-            { ar: "الفنطاس", en: "Fintas" }, { ar: "هدية", en: "Hadiya" }, { ar: "هدية -2", en: "Hadiya- 2" },
-            { ar: "حولي بارك", en: "Hawally Park" }, { ar: "جابر الأحمد", en: "Jaber Al-Ahmed" }, { ar: "الجابرية تكا", en: "Jabriya 1 - Jabriya Tikka" },
-            { ar: "الجابرية بنت الديك", en: "Jabriya 2 - Jabriya BD" }, { ar: "الجهراء الصناعية", en: "Jahra 2 - Jahra Ind" },
-            { ar: "الجهراء ليالي الشرق", en: "Jahra Layaly Elsharq" }, { ar: "الجهراء مكة", en: "Jahra Makkah" }, { ar: "الجهراء الزويخ", en: "Jahra1-Duwaik" },
-            { ar: "جليب الشيوخ", en: "Jleeb Al-Shiyoukh" }, { ar: "كبد", en: "Kabed" }, { ar: "الخيران أويا", en: "Khairan Oia" },
-            { ar: "الخيران أوتليت", en: "Khairan Outlet Mall" }, { ar: "خيطان الجديدة", en: "Khaitan New" }, { ar: "الخيول", en: "Khioul" },
-            { ar: "المنقف", en: "Mangaf" }, { ar: "مارينا مول", en: "Marina Mall" }, { ar: "مشرف", en: "Mishref" },
-            { ar: "العارضية الجديدة", en: "New Ardiya" }, { ar: "الفروانية الجديدة", en: "New Farwaniya" }, { ar: "القادسية", en: "Qadsiya" },
-            { ar: "القيروان", en: "Qairawan" }, { ar: "القرين", en: "Qurain" }, { ar: "الرقعي", en: "Reggai" }, { ar: "الرحاب", en: "Rehab" },
-            { ar: "الرقة", en: "Riqqa" }, { ar: "سعد العبدالله", en: "Saad Al Abdullah" }, { ar: "صباح الأحمد", en: "Sabah al Ahmed" },
-            { ar: "صباح السالم", en: "Sabah Salem" }, { ar: "صباح السالم العرين", en: "Sabah-Salem Alareen" }, { ar: "صباح السالم العرين -2", en: "Sabah-Salem Alareen- 2" },
-            { ar: "النافورة", en: "Salmiya 1 - Nafura" }, { ar: "السندباد", en: "Salmiya 2 - Sindhibad" }, { ar: "شارع البحرين", en: "Salmiya 3 - Bahrain Street" },
-            { ar: "سيد ياسين", en: "Salmiya 4 - Sayed Yasin" }, { ar: "سيد ياسين -2", en: "Salmiya 4 - Sayed Yasin- 2" }, { ar: "سلوى", en: "Salwa" },
-            { ar: "الشرق", en: "Sharq" }, { ar: "الشرق -2", en: "Sharq- 2" }, { ar: "الشهداء", en: "Shuhada" }, { ar: "الشويخ", en: "Shuwaikh" },
-            { ar: "أسواق القرين", en: "Souq Qurain" }, { ar: "أسواق القرين -2", en: "Souq Qurain- 2" }, { ar: "جمعية الصليبية", en: "Sulaibiya CO-OP" },
-            { ar: "جمعية الصليبية -2", en: "Sulaibiya CO-OP- 2" }, { ar: "الصليبخات", en: "Sulebhikat" }, { ar: "الصليبخات -2", en: "Sulebhikat- 2" },
-            { ar: "الصليبية", en: "Suleibiya" }, { ar: "الوفرة", en: "Wafra" }, { ar: "غرب أبو فطيرة", en: "West Abu Fatira" }, { ar: "الزهراء", en: "Zahra" }
+
+        const restaurants = [
+            { name: "اسواق القرين", areaManager: "مرتضى", operationsManager: "طارق بيومي" },
+            { name: "الجابرية بنت الديك", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "الجابرية تكا و فرايد", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "الجهراء - ليالي الشرق", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "الجهراء - مجمع مكة", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "الجهراء الزويخ", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "الجهراء الصناعية", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "الخيران أوتليت", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "الخيران أويا", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "الخيول", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "الدسمة وبنيد القار", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "الرحاب", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "الرقة", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "الرقعي", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "الري", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "السندباد", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "الشرق", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "الشويخ واره", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "الصليبية", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "الضباعية", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "العارضية الحرفية", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "الفحاحيل", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "الفروانية", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "الفروانية فرع 2", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "الفنطاس", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "الفيحاء", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "القادسية", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "المطار", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "المنقف", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "النافورة", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "أبوحليفة", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "جمعية الزهراء التعاونية", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "جمعية الشهداء", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "جمعية الصليبية", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "جمعية العدان والقصور", areaManager: "مرتضى", operationsManager: "طارق بيومي" },
+            { name: "جمعية القيروان", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "جمعية الوفرة", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "جمعية أبو فطيرة", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "جمعية مدينة جابر الأحمد", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "حولي الترفيهي", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "خيطان العصيمي", areaManager: "مرتضى", operationsManager: "طارق بيومي" },
+            { name: "سلوى", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "سوق الجليب", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "سيد ياسين", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "شارع البحرين", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "شرق الاحمدي", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "صباح السالم", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "صباح السالم - العرين", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "غرب أبو فطيرة الحرفية", areaManager: "مرتضى", operationsManager: "طارق بيومي" },
+            { name: "كبد", areaManager: "مختار", operationsManager: "طارق بيومي" },
+            { name: "مارينا مول - عالم المارينا", areaManager: "طارق", operationsManager: "هاني عبدالله" },
+            { name: "مجمع الافنيوز", areaManager: "مرتضى", operationsManager: "طارق بيومي" },
+            { name: "مجمع الكوت", areaManager: "عماد", operationsManager: "هاني عبدالله" },
+            { name: "مدينة سعد العبد الله", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "مدينة صباح الاحمد", areaManager: "حجازي", operationsManager: "هاني عبدالله" },
+            { name: "مشرف", areaManager: "انور", operationsManager: "هاني عبدالله" },
+            { name: "مول 360", areaManager: "وليد", operationsManager: "طارق بيومي" },
+            { name: "نادي الصليبخات", areaManager: "ثروت", operationsManager: "طارق بيومي" },
+            { name: "هدية", areaManager: "حجازي", operationsManager: "هاني عبدالله" }
         ];
-        
-        for (const syn of synonyms) {
-            const stdData = RESTAURANT_MASTER.get(syn.ar);
-            if (stdData) {
-                if (!RESTAURANT_MASTER.has(syn.en)) RESTAURANT_MASTER.set(syn.en, { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
-                if (!RESTAURANT_MASTER.has(syn.en.toLowerCase())) RESTAURANT_MASTER.set(syn.en.toLowerCase(), { displayName: syn.ar, regionManager: stdData.regionManager, operationsManager: stdData.operationsManager });
+
+        const unitConversionMap = {
+            "KILO": 1000, "KILO GRAM": 1000, "KG": 1000, "كجم": 1000, "كيلو": 1000,
+            "1/2 KILO": 500, "500 GM": 500, "500 G": 500, "500 جرام": 500, "نصف كيلو": 500,
+            "GRM": 1, "GM": 1, "G": 1, "جرام": 1, "ML": 1, "مليلتر": 1,
+            "LTR": 1000, "L": 1000, "لتر": 1000, "GALLON": 3785.41, "GAL": 3785.41, "جالون": 3785.41,
+            "PCS": 1, "PC": 1, "قطعة": 1, "حبة": 1, "ROLL": 1, "رول": 1, "BAG": 1, "كيس": 1,
+            "TIN": 1, "علبة": 1, "BOTTLE": 1, "زجاجة": 1, "CARTON": 1, "كرتون": 1,
+            "PACKET": 1, "رزمة": 1, "DOZEN": 12, "دزنة": 12, "LBS": 453.592, "رطل": 453.592
+        };
+
+        function formatDateTimeEn(dateTimeValue) {
+            if (!dateTimeValue) return 'غير محدد';
+            const date = new Date(dateTimeValue);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
+        function getItemGroup(item) {
+            if (item.group && item.group.includes('MEAT')) return 'meat';
+            else if (item.group && (item.group.includes('VEG') || item.group.includes('SALAD'))) return 'vegetables';
+            else if (item.group && item.group.includes('APPETIZERS')) return 'appetizers';
+            else if (item.group && item.group === 'store') return 'store';
+            else if (item.name && (item.name.includes('لحم') || item.name.includes('دجاج') || item.name.includes('برجر') || item.name.includes('فيليه') || item.name.includes('شاورما') || item.name.includes('كباب') || item.name.includes('تيكا') || item.name.includes('فرايد'))) return 'meat';
+            else if (item.name && (item.name.includes('خض') || item.name.includes('خيار') || item.name.includes('طماطم') || item.name.includes('بصل') || item.name.includes('جزر') || item.name.includes('فلفل') || item.name.includes('بقدونس') || item.name.includes('ليمون') || item.name.includes('برتقال') || item.name.includes('خس'))) return 'vegetables';
+            else if (item.name && (item.name.includes('حمص') || item.name.includes('متبل') || item.name.includes('فتوش') || item.name.includes('تبولة') || item.name.includes('سلطة') || item.name.includes('جرجير') || item.name.includes('كول سلو') || item.name.includes('لبن') || item.name.includes('لبنة') || item.name.includes('بيض') || item.name.includes('أرز') || item.name.includes('بوري') || item.name.includes('صوص') || item.name.includes('صلصة') || item.name.includes('مايونيز') || item.name.includes('كاتشب') || item.name.includes('بهارات') || item.name.includes('ملح') || item.name.includes('سكر') || item.name.includes('زيت'))) return 'appetizers';
+            return 'other';
+        }
+
+        function convertToSmallestUnit(quantity, vendorUOM, uuom, itemCode = '') {
+            // معالجة خاصة لـ K1003 (شيش طاووق) بناءً على طلب المستخدم
+            if (itemCode === 'K1003') {
+                return Math.round(quantity * 60 * 100) / 100;
             }
-        }
-    }
-    buildMasterDatabase();
-    
-    function getRestaurantInfo(rawName) {
-        if (!rawName) return { displayName: "غير معروف", regionManager: "—", opsManager: "—" };
-        let normalized = rawName.trim().replace(/^مطعم\s+/i, '').replace(/\s+/g, ' ').trim();
-        if (RESTAURANT_MASTER.has(normalized)) {
-            const info = RESTAURANT_MASTER.get(normalized);
-            return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
-        }
-        const lowerKey = normalized.toLowerCase();
-        if (RESTAURANT_MASTER.has(lowerKey)) {
-            const info = RESTAURANT_MASTER.get(lowerKey);
-            return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
-        }
-        for (let [key, info] of RESTAURANT_MASTER.entries()) {
-            if (typeof key === 'string' && key.length > 2 && (normalized.includes(key) || key.includes(normalized) || lowerKey.includes(key.toLowerCase()))) {
-                return { displayName: info.displayName, regionManager: info.regionManager, opsManager: info.operationsManager };
+            // معالجة خاصة لـ K1002 (كباب دجاج) - بدون تغيير عن الأصل
+            if (itemCode === 'K1002') {
+                return Math.round(quantity * 2 * 100) / 100;
             }
-        }
-        return { displayName: rawName, regionManager: "غير محدد", opsManager: "غير محدد" };
-    }
-    
-    // --------------------- قراءة الملفات -------------------------
-    let allRestaurantsData = [];
-    let uniqueItemsSet = new Set();
-    let currentSelectedItem = "";
-    let currentReportData = [];
-    
-    const fileInput = document.getElementById('fileInput');
-    const uploadStatus = document.getElementById('uploadStatus');
-    const errorDiv = document.getElementById('errorContainer');
-    const startDateInput = document.getElementById('startDate');
-    const endDateInput = document.getElementById('endDate');
-    const applyDateBtn = document.getElementById('applyDateFilterBtn');
-    const itemSearch = document.getElementById('itemSearchInput');
-    const itemDatalist = document.getElementById('itemDatalist');
-    const matchSpan = document.getElementById('matchCountDisplay');
-    const generateBtn = document.getElementById('generateReportBtn');
-    const exportExcelBtn = document.getElementById('exportExcelBtn');
-    const exportPdfBtn = document.getElementById('exportPdfBtn');
-    const tableBody = document.getElementById('tableBody');
-    const specialNoteContainer = document.getElementById('specialNoteContainer');
-    
-    function showError(msg) { errorDiv.innerHTML = `⚠️ ${msg}`; errorDiv.style.display = 'block'; setTimeout(() => errorDiv.style.display = 'none', 8000); }
-    
-    function getRestaurantNameFromSheet(worksheet) {
-        try {
-            const cell = worksheet['B14'];
-            if(cell && cell.v) return String(cell.v).trim();
-            const fallback = worksheet['B6'];
-            if(fallback && fallback.v) return String(fallback.v).trim();
-        } catch(e) {}
-        return "مطعم غير معروف";
-    }
-    
-    function extractRawDateString(worksheet) {
-        try {
-            const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1:Z100');
-            for(let row = range.s.r; row <= range.e.r; row++) {
-                for(let col = range.s.c; col <= range.e.c; col++) {
-                    const addr = XLSX.utils.encode_cell({r:row, c:col});
-                    const cell = worksheet[addr];
-                    if(cell && cell.v && typeof cell.v === 'string') {
-                        if(cell.v.includes("From") && cell.v.includes("to")) {
-                            const match = cell.v.match(/(\d{1,2}-[A-Za-z]{3}-\d{4})/g);
-                            if(match && match.length) return match[0];
-                        } else {
-                            const dateMatch = cell.v.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4})/);
-                            if(dateMatch) return dateMatch[0];
+            if (!vendorUOM || !quantity) return Math.round(quantity);
+            if (itemCode === 'A1001') return Math.round(quantity * 10 * 100) / 100;
+            if (itemCode === 'A1013') return Math.round(quantity * 2 * 100) / 100;
+            if (itemCode === 'C1005') return Math.round(quantity * 24 * 100) / 100;
+            if (itemCode === 'C1003' || itemCode === 'C1004') return Math.round(quantity * 6 * 100) / 100;
+            if (itemCode === 'G1050') return Math.round(quantity * 10 * 100) / 100;
+            
+            const kgItems = ['K1070', 'K1044', 'K1042', 'K1043', 'K1001', 'K2017', 'A1001', 'A1014', 'B1007'];
+            if (kgItems.includes(itemCode) && uuom && (uuom.includes('كيلو') || uuom.includes('KG') || uuom.includes('كجم'))) {
+                return Math.round(quantity * 100) / 100;
+            }
+            if (itemCode === 'G1026') return Math.round(quantity * 24 * 100) / 100;
+            
+            let multiplier = 1;
+            const complexPatterns = [
+                /\((\d+(\.\d+)?)\s*(KGS|KG|KILO|كجم|كيلو)/i,
+                /\((\d+(\.\d+)?)\s*(G|GM|GRM|GRAM|جرام)/i,
+                /\((\d+(\.\d+)?)\s*(LTR|L|LITRE|لتر)/i,
+                /\((\d+(\.\d+)?)\s*(ML|مليلتر)/i,
+                /\((\d+(\.\d+)?)\s*(PCS|PC|PIECES|قطعة|حبة)/i
+            ];
+            for (const pattern of complexPatterns) {
+                const match = vendorUOM.match(pattern);
+                if (match) {
+                    const value = parseFloat(match[1]);
+                    const unit = match[3].toUpperCase();
+                    if (unit.includes('KGS') || unit.includes('KG') || unit.includes('KILO') || unit.includes('كجم') || unit.includes('كيلو')) { multiplier = value * 1000; break; }
+                    else if (unit.includes('G') || unit.includes('GM') || unit.includes('GRAM') || unit.includes('جرام')) { multiplier = value; break; }
+                    else if (unit.includes('LTR') || unit.includes('L') || unit.includes('LITRE') || unit.includes('لتر')) { multiplier = value * 1000; break; }
+                    else if (unit.includes('ML') || unit.includes('مليلتر')) { multiplier = value; break; }
+                    else if (unit.includes('PCS') || unit.includes('PC') || unit.includes('PIECES') || unit.includes('قطعة') || unit.includes('حبة')) { multiplier = value; break; }
+                }
+            }
+            if (multiplier === 1) {
+                if (vendorUOM.includes('×') || vendorUOM.includes('*')) {
+                    const parts = vendorUOM.split(/[×*]/);
+                    let totalMultiplier = 1;
+                    for (const part of parts) {
+                        const numMatch = part.match(/(\d+(\.\d+)?)/);
+                        if (numMatch) totalMultiplier *= parseFloat(numMatch[1]);
+                    }
+                    multiplier = totalMultiplier;
+                    if (vendorUOM.toUpperCase().includes('KG') || vendorUOM.includes('كجم')) multiplier *= 1000;
+                    else if (vendorUOM.toUpperCase().includes('LTR') || vendorUOM.includes('لتر')) multiplier *= 1000;
+                } else {
+                    for (const [unit, conv] of Object.entries(unitConversionMap)) {
+                        if (vendorUOM.toUpperCase().includes(unit)) {
+                            multiplier = conv;
+                            const numMatch = vendorUOM.match(/(\d+(\.\d+)?)/);
+                            if (numMatch) multiplier *= parseFloat(numMatch[1]);
+                            break;
                         }
                     }
                 }
             }
-            const a1 = worksheet['A1'];
-            if(a1 && a1.v) { let m = String(a1.v).match(/(\d{1,2}\/\d{1,2}\/\d{4})/); if(m) return m[0]; }
-        } catch(e) {}
-        return "تاريخ غير محدد";
-    }
-    
-    function parseItemsFromSheet(worksheet) {
-        const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-        if(!sheetData || sheetData.length < 2) return [];
-        let headerIdx = -1, headerRow = null;
-        for(let i=0; i<sheetData.length; i++) {
-            const row = sheetData[i];
-            if(row) {
-                let rowStr = row.map(c => String(c).toLowerCase().replace(/\s+/g, '')).join("");
-                if(rowStr.includes("startqty") || rowStr.includes("رصيدأول") || rowStr.includes("rmname")) {
-                    headerIdx = i; headerRow = row; break;
+            if (multiplier === 1) {
+                const numMatch = vendorUOM.match(/(\d+(\.\d+)?)/);
+                if (numMatch) {
+                    multiplier = parseFloat(numMatch[1]);
+                    if (vendorUOM.toUpperCase().includes('KILO') || vendorUOM.toUpperCase().includes('KG') || vendorUOM.includes('كجم') || vendorUOM.includes('كيلو')) multiplier *= 1000;
+                    else if (vendorUOM.toUpperCase().includes('LTR') || vendorUOM.includes('لتر')) multiplier *= 1000;
                 }
             }
+            return Math.round((quantity * multiplier) * 100) / 100;
         }
-        if(headerIdx === -1) return [];
-        let colMap = { item:-1, start:-1, recd:-1, tranIn:-1, tranOut:-1, wast:-1, act:-1, end:-1 };
-        for(let c=0; c<headerRow.length; c++) {
-            let v = headerRow[c] ? String(headerRow[c]).toLowerCase().replace(/[\s\.\-\_]/g, '') : "";
-            if(v.includes("rmname") || v.includes("اسم") || v.includes("صنف")) colMap.item = c;
-            else if(v.includes("startqty") || v.includes("رصيدأول")) colMap.start = c;
-            else if(v.includes("recd") || v.includes("مستلم") || v.includes("وارد")) colMap.recd = c;
-            else if(v.includes("tranin") || v.includes("محولللداخل")) colMap.tranIn = c;
-            else if(v.includes("tranout") || v.includes("محولللخارج")) colMap.tranOut = c;
-            else if(v.includes("wast") || v.includes("توالف")) colMap.wast = c;
-            else if(v.includes("usageqty") || v.includes("استخدام")) colMap.act = c;
-            else if(v.includes("endqty") || v.includes("رصيدآخر")) colMap.end = c;
+
+        function combineInventoryData() {
+            const combinedMap = new Map();
+            inventoryDataMain.forEach(item => combinedMap.set(item.code, { ...item }));
+            inventoryDataSpot.forEach(item => {
+                if (combinedMap.has(item.code)) {
+                    const existing = combinedMap.get(item.code);
+                    existing.stockQty = (existing.stockQty || 0) + (item.stockQty || 0);
+                    existing.smallestUnitQty = (existing.smallestUnitQty || 0) + (item.smallestUnitQty || 0);
+                    existing.startQty = (existing.startQty || 0) + (item.startQty || 0);
+                    existing.receivedQty = (existing.receivedQty || 0) + (item.receivedQty || 0);
+                    existing.transferInQty = (existing.transferInQty || 0) + (item.transferInQty || 0);
+                    existing.transferOutQty = (existing.transferOutQty || 0) + (item.transferOutQty || 0);
+                    existing.wastageQty = (existing.wastageQty || 0) + (item.wastageQty || 0);
+                    existing.usageQty = (existing.usageQty || 0) + (item.usageQty || 0);
+                    existing.notConOrders = (existing.notConOrders || 0) + (item.notConOrders || 0);
+                    existing.selected = existing.selected || item.selected || false;
+                } else {
+                    combinedMap.set(item.code, { ...item });
+                }
+            });
+            inventoryData = Array.from(combinedMap.values());
+            selectedItems = inventoryData.filter(item => item.selected);
+            updateInventoryTable();
+            updateStats();
+            refreshActiveInventory();
         }
-        const items = [];
-        for(let r=headerIdx+1; r<sheetData.length; r++) {
-            const row = sheetData[r];
-            if(!row || row.every(cell => !cell || String(cell).trim() === "")) break;
-            let itemName = (colMap.item !== -1 && row[colMap.item]) ? String(row[colMap.item]).trim() : "";
-            if(!itemName) continue;
-            const getNum = (idx) => { if(idx===-1) return 0; let val = row[idx]; if(val===undefined) return 0; let num = parseFloat(String(val).replace(/[^0-9.-]/g, '')); return isNaN(num)?0:num; };
-            items.push({ itemName, startQty: getNum(colMap.start), recdQty: getNum(colMap.recd), tranInQty: getNum(colMap.tranIn), tranOutQty: getNum(colMap.tranOut), wastQty: getNum(colMap.wast), actUsage: getNum(colMap.act), endQty: getNum(colMap.end) });
-        }
-        return items;
-    }
-    
-    async function processFile(file) {
-        return new Promise((resolve) => {
+
+        document.getElementById('excel-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    if(!sheet) { resolve(null); return; }
-                    const rawRestName = getRestaurantNameFromSheet(sheet);
-                    const restaurantInfo = getRestaurantInfo(rawRestName);
-                    const rawDate = extractRawDateString(sheet);
-                    const items = parseItemsFromSheet(sheet);
-                    resolve({ restaurantRaw: rawRestName, restaurantInfo, reportDateRaw: rawDate, items });
-                } catch(err) { resolve(null); }
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                inventoryDataMain = processExcelData(jsonData);
+                if (inventoryDataSpot.length > 0) combineInventoryData();
+                else { inventoryData = [...inventoryDataMain]; updateAfterLoad(); }
+                showNotification('تم تحميل الملف الأساسي بنجاح!');
             };
-            reader.onerror = () => resolve(null);
             reader.readAsArrayBuffer(file);
         });
-    }
-    
-    async function handleFiles(files) {
-        if(!files.length) return;
-        uploadStatus.innerHTML = "⏳ جاري تحليل الملفات...";
-        allRestaurantsData = [];
-        uniqueItemsSet.clear();
-        errorDiv.style.display = 'none';
-        const promises = Array.from(files).map(f => processFile(f));
-        const results = await Promise.all(promises);
-        let valid = 0;
-        for(const res of results) {
-            if(res && res.items.length) {
-                valid++;
-                allRestaurantsData.push({
-                    restaurantRaw: res.restaurantRaw,
-                    restaurantDisplay: res.restaurantInfo.displayName,
-                    regionManager: res.restaurantInfo.regionManager,
-                    opsManager: res.restaurantInfo.opsManager,
-                    reportDateRaw: res.reportDateRaw,
-                    items: res.items
+
+        document.getElementById('excel-file-spot').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                inventoryDataSpot = processExcelData(jsonData);
+                if (inventoryDataMain.length > 0) combineInventoryData();
+                else { inventoryData = [...inventoryDataSpot]; updateAfterLoad(); }
+                showNotification('تم تحميل ملف SPOT بنجاح!');
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        function processExcelData(jsonData) {
+            return jsonData.map(item => {
+                const code = item['RM Code'] || '';
+                let stockQty = item.StockQty || 0;
+                const vendorUOM = item.VendorUOM || '';
+                let uuom = item.UUom || '';
+                const kgItems = ['K1070', 'K1044', 'K1042', 'K1043', 'K1001', 'K2017', 'A1001', 'A1014', 'B1007'];
+                let smallestUnitQty = convertToSmallestUnit(stockQty, vendorUOM, uuom, code);
+                if (kgItems.includes(code)) { uuom = 'كيلو'; smallestUnitQty = stockQty; }
+                const group = getItemGroup({ group: item.Group, name: item.RMName });
+                return {
+                    code, name: item.RMName || '', vendorUOM, stockQty, uuom, smallestUnitQty,
+                    startQty: convertToSmallestUnit(item['Start Qty'] || 0, vendorUOM, uuom, code),
+                    receivedQty: convertToSmallestUnit(item['Received Qty'] || 0, vendorUOM, uuom, code),
+                    transferInQty: convertToSmallestUnit(item['Transfer In Qty'] || 0, vendorUOM, uuom, code),
+                    transferOutQty: convertToSmallestUnit(item['Transfer Out Qty'] || 0, vendorUOM, uuom, code),
+                    wastageQty: convertToSmallestUnit(item['Wastage Qty'] || 0, vendorUOM, uuom, code),
+                    usageQty: convertToSmallestUnit(item['Usage Qty'] || 0, vendorUOM, uuom, code),
+                    notConOrders: convertToSmallestUnit(item['Not Con. Orders'] || 0, vendorUOM, uuom, code),
+                    group, selected: false, actualCount: 0, difference: 0
+                };
+            });
+        }
+
+        function updateAfterLoad() {
+            selectedItems = inventoryData.filter(item => item.selected);
+            updateInventoryTable();
+            updateStats();
+            refreshActiveInventory();
+        }
+
+        document.getElementById('load-default-items').addEventListener('click', function() {
+            defaultItems.forEach(defaultItem => {
+                const idx = inventoryData.findIndex(item => item.code === defaultItem.code);
+                if (idx === -1) {
+                    let smallest = defaultItem.smallestUnitQty;
+                    const kgItems = ['K1070', 'K1044', 'K1042', 'K1043', 'K1001', 'K2017', 'A1001', 'A1014', 'B1007'];
+                    if (kgItems.includes(defaultItem.code)) smallest = defaultItem.stockQty;
+                    else if (defaultItem.code === 'G1026') smallest = defaultItem.stockQty * 24;
+                    else smallest = convertToSmallestUnit(defaultItem.stockQty, defaultItem.vendorUOM, defaultItem.uuom, defaultItem.code);
+                    inventoryData.push({ ...defaultItem, smallestUnitQty: smallest, startQty: 0, receivedQty: 0, transferInQty: 0, transferOutQty: 0, wastageQty: 0, usageQty: 0, notConOrders: 0, selected: true, actualCount: 0, difference: 0 });
+                } else {
+                    inventoryData[idx].selected = true;
+                    inventoryData[idx].group = defaultItem.group;
+                }
+            });
+            updateAfterLoad();
+            showNotification('تم تحميل الأصناف الأساسية بنجاح!');
+        });
+
+        function updateInventoryTable() {
+            const tableBody = document.getElementById('items-table-body');
+            tableBody.innerHTML = '';
+            const searchTerm = document.getElementById('search-items').value.toLowerCase();
+            let filteredData = inventoryData;
+            if (searchTerm) filteredData = inventoryData.filter(item => (item.name && item.name.toLowerCase().includes(searchTerm)) || (item.code && item.code.toLowerCase().includes(searchTerm)));
+            filteredData.forEach((item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.code || ''}</td><td>${item.name || ''}</td><td>${item.vendorUOM || ''}</td><td>${item.stockQty || 0}</td><td>${item.uuom || ''}</td><td>${item.smallestUnitQty || 0}</td><td><input type="checkbox" class="item-select" data-code="${item.code}" ${item.selected ? 'checked' : ''}></td><td><button class="btn btn-small btn-secondary show-movement" data-code="${item.code}">عرض الحركة</button></td>`;
+                tableBody.appendChild(row);
+            });
+            document.querySelectorAll('.item-select').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const code = this.getAttribute('data-code');
+                    const item = inventoryData.find(i => i.code === code);
+                    if (item) {
+                        item.selected = this.checked;
+                        if (this.checked && !selectedItems.find(i => i.code === code)) selectedItems.push(item);
+                        else if (!this.checked) selectedItems = selectedItems.filter(i => i.code !== code);
+                        updateStats();
+                        refreshActiveInventory();
+                    }
                 });
-                res.items.forEach(it => { if(it.itemName) uniqueItemsSet.add(it.itemName); });
+            });
+            document.querySelectorAll('.show-movement').forEach(btn => {
+                btn.addEventListener('click', function() { showMovementModal(this.getAttribute('data-code')); });
+            });
+        }
+
+        function refreshActiveInventory() {
+            if (document.getElementById('meat-section').classList.contains('active')) updateMeatInventory();
+            else if (document.getElementById('store-section').classList.contains('active')) updateStoreInventory();
+            else if (document.getElementById('veg-section').classList.contains('active')) updateVegInventory();
+            else if (document.getElementById('appetizers-section').classList.contains('active')) updateAppetizersInventory();
+            else if (document.getElementById('misc-section').classList.contains('active')) updateMiscInventory();
+        }
+
+        function updateStats() {
+            document.getElementById('total-items').textContent = inventoryData.length;
+            document.getElementById('low-stock-items').textContent = inventoryData.filter(item => item.stockQty < 5).length;
+            document.getElementById('selected-items').textContent = selectedItems.length;
+        }
+        document.getElementById('search-items').addEventListener('input', updateInventoryTable);
+
+        function showMovementModal(code) {
+            const item = inventoryData.find(i => i.code === code);
+            if (!item) return;
+            const content = document.getElementById('movement-modal-content');
+            document.getElementById('movement-modal-title').textContent = `حركة الصنف: ${item.name}`;
+            const currentStock = item.startQty + item.receivedQty + item.transferInQty - item.transferOutQty - item.wastageQty - item.usageQty - item.notConOrders;
+            content.innerHTML = `<table class="inventory-table"><thead><tr><th>البداية</th><th>المستلم</th><th>التحويل الداخل</th><th>التحويل الخارج</th><th>الهالك</th><th>الاستخدام</th><th>الطلبات غير المكتملة</th></tr></thead><tbody><tr><td>${item.startQty}</td><td>${item.receivedQty}</td><td>${item.transferInQty}</td><td>${item.transferOutQty}</td><td>${item.wastageQty}</td><td>${item.usageQty}</td><td>${item.notConOrders}</td></tr></tbody></table><div class="current-stock">الرصيد الحالي: ${currentStock} ${item.uuom}</div><p style="margin-top: 10px; text-align: center; font-size: 12px;">جميع الأرقام بالوحدة الصغرى: ${item.uuom}</p>`;
+            document.getElementById('movement-modal').style.display = 'flex';
+        }
+
+        // دالة لتجميع الأصناف المتشابهة (مع دمج K1042 و K1043 فقط)
+        function findSimilarItems(items) {
+            const similarGroups = {};
+            items.forEach(item => {
+                let baseName = item.name.replace(/\(.*?\)/g, '').trim();
+                
+                // تجميع خاص لـ K1042 و K1043 فقط (Happy Chicken Pc)
+                if (item.code === 'K1042' || item.code === 'K1043') {
+                    baseName = "Happy Chicken Pc Group";
+                }
+                else if (baseName.includes("Chicken Big Fillet")) baseName = "Chicken Big Fillet";
+                else if (baseName.includes("Chicken Fillet") && !baseName.includes("Finger") && !baseName.includes("Grilled")) baseName = "Chicken Fillet";
+                else if (baseName.includes("Chicken Finger Fillet") || baseName.includes("Ch.Finger Fillet")) baseName = "Chicken Finger Fillet";
+                else if (baseName.includes("Chicken Tikka")) baseName = "Chicken Tikka";
+                else if (baseName.includes("Chicken Fried")) baseName = "Chicken Fried";
+                else if (baseName.includes("Chicken Small Wings")) baseName = "Chicken Small Wings";
+                else if (baseName.includes("Chicken Wings")) baseName = "Chicken Wings";
+                else if (baseName.includes("Drumstick whole Fried")) baseName = "Drumstick whole Fried";
+                else if (baseName.includes("وصلة دجاج")) baseName = "وصلة دجاج";
+                else if (baseName.includes("Chicken Burger") && !baseName.includes("Fresh")) baseName = "Chicken Burger";
+                else if (baseName.includes("Beef Burger Big")) baseName = "Beef Burger Big";
+                else if (baseName.includes("Beef Burger Small")) baseName = "Beef Burger Small";
+                else if (baseName.includes("Fresh Burger Chickens")) baseName = "Fresh Burger Chickens";
+                if (baseName.includes("Rooster Junior") || baseName.includes("Bint Al-Deek") || item.name.includes("فروج نايف") || item.name.includes("بنت الديك")) baseName = "فروج/بنت الديك";
+                if (baseName.includes("Grilled Chicken Fillet") || (baseName.includes("Chicken Fillet") && !baseName.includes("Finger") && !baseName.includes("Big")) || item.name.includes("فيليه مشوي") || item.name.includes("فيليه عادي") || item.name.includes("فيليه فلفل")) { if (!baseName.includes("Finger") && !baseName.includes("Big")) baseName = "فيليه دجاج"; }
+                
+                if (!similarGroups[baseName]) similarGroups[baseName] = [];
+                similarGroups[baseName].push(item);
+            });
+            const filteredGroups = {};
+            for (const group in similarGroups) {
+                if (similarGroups[group].length > 1) filteredGroups[group] = similarGroups[group];
+            }
+            return filteredGroups;
+        }
+
+        function updateGroupTotal(groupKey, items) {
+            const total = items.reduce((sum, item) => sum + (item.difference || 0), 0);
+            const totalCell = document.querySelector(`.group-total-cell[data-group="${groupKey}"]`);
+            if (totalCell) {
+                const totalText = total < 0 ? 'عجز' : total > 0 ? 'زيادة' : '';
+                totalCell.innerHTML = `${Math.round(total)} ${totalText ? `<span class="difference-text" style="color: ${total < 0 ? 'var(--accent-red)' : total > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${totalText})</span>` : ''}`;
+                totalCell.className = `group-total-cell ${total < 0 ? 'difference-negative' : total > 0 ? 'difference-positive' : ''}`;
             }
         }
-        if (valid === 0) { showError("لم يتم العثور على جداول متوافقة."); uploadStatus.innerHTML = "❌ فشل القراءة"; return; }
-        uploadStatus.innerHTML = `✅ تم تحميل ${valid} ملف | إجمالي الأصناف: ${uniqueItemsSet.size}`;
-        itemSearch.disabled = false; generateBtn.disabled = false; exportExcelBtn.disabled = false; exportPdfBtn.disabled = false;
-        refreshSearch();
-    }
-    
-    function refreshSearch() {
-        const term = itemSearch.value.trim().toLowerCase();
-        let itemsList = Array.from(uniqueItemsSet);
-        const matches = term === "" ? itemsList : itemsList.filter(i => i.toLowerCase().includes(term));
-        itemDatalist.innerHTML = "";
-        matches.slice(0,100).forEach(v => { let opt = document.createElement('option'); opt.value = v; itemDatalist.appendChild(opt); });
-        matchSpan.textContent = `${matches.length} صنف مطابق`;
-    }
-    
-    function applyShawarmaBonusAndRecalcEndQty(itemName, originalItem) {
-        const lowerName = itemName.toLowerCase();
-        if (lowerName.includes("chicken shawarma") || lowerName.includes("شاورما دجاج")) {
-            const newWast = +(originalItem.wastQty * 1.2).toFixed(2);
-            const newUsage = +(originalItem.actUsage * 1.2).toFixed(2);
-            const newEnd = +(originalItem.startQty + originalItem.recdQty + originalItem.tranInQty - originalItem.tranOutQty - newWast - newUsage).toFixed(2);
-            return { wast: newWast, usage: newUsage, endQty: newEnd };
+
+        function getCombinedCellTextAndClass(similarItems, combinedDifference) {
+            const hasAnyActualCount = similarItems.some(item => {
+                let val = item.actualCount;
+                return val !== undefined && val !== null && val !== 0 && val !== '';
+            });
+            if (!hasAnyActualCount) {
+                return { text: 'لم يتم جرد الصنف', statusClass: 'combined-difference-no-count' };
+            }
+            if (combinedDifference === 0) {
+                return { text: 'الجرد مطابق', statusClass: 'combined-difference-matched' };
+            }
+            if (combinedDifference < 0) {
+                return { text: 'عجز', statusClass: 'combined-difference-negative' };
+            } else {
+                return { text: 'زيادة', statusClass: 'combined-difference-positive' };
+            }
         }
-        return { wast: originalItem.wastQty, usage: originalItem.actUsage, endQty: originalItem.endQty };
-    }
-    
-    function isShawarmaItem(itemName) {
-        const lower = itemName.toLowerCase();
-        return lower.includes("chicken shawarma") || lower.includes("شاورما دجاج");
-    }
-    
-    function generateReportForItem(itemName) {
-        if(!itemName) return [];
-        const exact = Array.from(uniqueItemsSet).find(i => i.toLowerCase() === itemName.toLowerCase());
-        if(!exact) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">❌ الصنف غير موجود</td></tr>`; specialNoteContainer.style.display = 'none'; return []; }
-        currentSelectedItem = exact;
-        const rows = [];
-        for(const rest of allRestaurantsData) {
-            const found = rest.items.find(it => it.itemName === exact);
-            if(found) {
-                const { wast: newWast, usage: newUsage, endQty: newEnd } = applyShawarmaBonusAndRecalcEndQty(exact, found);
-                rows.push({
-                    restaurantDisplay: rest.restaurantDisplay,
-                    regionManager: rest.regionManager,
-                    opsManager: rest.opsManager,
-                    reportDate: rest.reportDateRaw || "غير محدد",
-                    startQty: found.startQty,
-                    recdQty: found.recdQty,
-                    tranInQty: found.tranInQty,
-                    tranOutQty: found.tranOutQty,
-                    wastQty: newWast,
-                    actUsage: newUsage,
-                    endQty: newEnd
+
+        function updateCombinedDifferenceCell(similarItems) {
+            const combinedDifference = similarItems.reduce((sum, item) => sum + (item.difference || 0), 0);
+            const { text, statusClass } = getCombinedCellTextAndClass(similarItems, combinedDifference);
+            const combinedCell = document.querySelector(`.combined-difference-cell[data-similar-group="${similarItems.map(i => i.code).join(',')}"]`);
+            if (combinedCell) {
+                combinedCell.className = `combined-difference-cell ${statusClass}`;
+                combinedCell.innerHTML = `${combinedDifference}<br><span style="font-size: 14px;">(${text})</span>`;
+            }
+        }
+
+        function updateSingleCombinedCell(item, combinedCell) {
+            const diff = item.difference || 0;
+            const hasActual = (item.actualCount !== undefined && item.actualCount !== null && item.actualCount !== 0 && item.actualCount !== '');
+            let text = '';
+            let statusClass = '';
+            if (!hasActual) {
+                text = 'لم يتم جرد الصنف';
+                statusClass = 'combined-difference-no-count';
+            } else if (diff === 0) {
+                text = 'الجرد مطابق';
+                statusClass = 'combined-difference-matched';
+            } else if (diff < 0) {
+                text = 'عجز';
+                statusClass = 'combined-difference-negative';
+            } else {
+                text = 'زيادة';
+                statusClass = 'combined-difference-positive';
+            }
+            combinedCell.className = `combined-difference-cell ${statusClass}`;
+            combinedCell.innerHTML = `${diff}<br><span style="font-size: 14px;">(${text})</span>`;
+        }
+
+        function applyRowColoring(row, diff) {
+            row.classList.remove('row-difference-negative', 'row-difference-positive');
+            if (diff < 0) row.classList.add('row-difference-negative');
+            else if (diff > 0) row.classList.add('row-difference-positive');
+        }
+
+        function renderGroupedItems(container, groupedItems, similarGroups) {
+            for (const group in groupedItems) {
+                const categoryDiv = document.createElement('div'); categoryDiv.className = 'inventory-category';
+                const titleDiv = document.createElement('div'); titleDiv.className = 'category-title'; titleDiv.textContent = group; categoryDiv.appendChild(titleDiv);
+                const table = document.createElement('table'); table.className = 'inventory-table';
+                const thead = document.createElement('thead');
+                thead.innerHTML = `<tr><th>م</th><th>اسم الصنف</th><th>الشد</th><th>الجرد من البرنامج</th><th class="count-cell">الجرد بالوحدة الصغرى</th><th>الجرد الفعلي</th><th class="difference-cell">العجز/الزيادة</th><th>الفروقات المجمعة</th></tr>`;
+                table.appendChild(thead);
+                const tbody = document.createElement('tbody');
+                let rowIndex = 0;
+                let processedItems = new Set();
+                
+                groupedItems[group].forEach((item) => {
+                    if (processedItems.has(item.code)) return;
+                    let similarItems = [];
+                    let isPartOfSimilarGroup = false;
+                    for (const baseName in similarGroups) {
+                        const groupItems = similarGroups[baseName];
+                        if (groupItems.find(i => i.code === item.code) && groupItems.length > 1) { similarItems = groupItems; isPartOfSimilarGroup = true; break; }
+                    }
+                    if (isPartOfSimilarGroup && similarItems.length > 0) {
+                        similarItems.forEach((similarItem, similarIndex) => {
+                            if (processedItems.has(similarItem.code)) return;
+                            const row = document.createElement('tr');
+                            const diff = similarItem.difference || 0;
+                            const diffClass = diff < 0 ? 'difference-negative' : diff > 0 ? 'difference-positive' : '';
+                            const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                            row.innerHTML = `<td>${rowIndex + 1}</td><td>${similarItem.name}</td><td>${similarItem.vendorUOM}</td><td>${similarItem.stockQty}</td><td class="count-cell">${similarItem.smallestUnitQty}</td><td><input type="number" class="actual-count-input" data-code="${similarItem.code}" value="${similarItem.actualCount || ''}" placeholder="0"></td><td class="difference-cell ${diffClass}" data-code="${similarItem.code}" style="font-size: 18px; font-weight: bold;">${diff} ${diffText ? `<span class="difference-text" style="color: ${diff < 0 ? 'var(--accent-red)' : diff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${diffText})</span>` : ''}</td>`;
+                            applyRowColoring(row, diff);
+                            if (similarIndex === 0) {
+                                const combinedDiff = similarItems.reduce((s, i) => s + (i.difference || 0), 0);
+                                const { text, statusClass } = getCombinedCellTextAndClass(similarItems, combinedDiff);
+                                const combinedCell = document.createElement('td');
+                                combinedCell.className = `combined-difference-cell ${statusClass}`;
+                                combinedCell.rowSpan = similarItems.length;
+                                combinedCell.innerHTML = `${combinedDiff}<br><span style="font-size: 14px;">(${text})</span>`;
+                                combinedCell.setAttribute('data-similar-group', similarItems.map(i => i.code).join(','));
+                                row.appendChild(combinedCell);
+                            }
+                            tbody.appendChild(row);
+                            processedItems.add(similarItem.code);
+                            rowIndex++;
+                            const input = row.querySelector('.actual-count-input');
+                            input.addEventListener('input', (function(sItem, sItems, r) { return function() {
+                                const actual = parseFloat(this.value) || 0;
+                                // حساب الفرق بنفس طريقة الملف الأصلي: الفرق المباشر بين العدد المدخل والرصيد بالوحدة الصغرى
+                                const newDiff = actual - sItem.smallestUnitQty;
+                                const newDiffText = newDiff < 0 ? 'عجز' : newDiff > 0 ? 'زيادة' : '';
+                                const diffCell = document.querySelector(`.difference-cell[data-code="${sItem.code}"]`);
+                                diffCell.innerHTML = `${Math.round(newDiff)} ${newDiffText ? `<span class="difference-text" style="color: ${newDiff < 0 ? 'var(--accent-red)' : newDiff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${newDiffText})</span>` : ''}`;
+                                diffCell.className = `difference-cell ${newDiff < 0 ? 'difference-negative' : newDiff > 0 ? 'difference-positive' : ''}`;
+                                sItem.actualCount = actual;
+                                sItem.difference = Math.round(newDiff);
+                                applyRowColoring(r, newDiff);
+                                updateCombinedDifferenceCell(sItems);
+                                updateGroupTotal(group, groupedItems[group]);
+                            }; })(similarItem, similarItems, row));
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        const diff = item.difference || 0;
+                        const diffClass = diff < 0 ? 'difference-negative' : diff > 0 ? 'difference-positive' : '';
+                        const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                        row.innerHTML = `<td>${rowIndex + 1}</td><td>${item.name}</td><td>${item.vendorUOM}</td><td>${item.stockQty}<td><td class="count-cell">${item.smallestUnitQty}</td><td><input type="number" class="actual-count-input" data-code="${item.code}" value="${item.actualCount || ''}" placeholder="0"></td><td class="difference-cell ${diffClass}" data-code="${item.code}" style="font-size: 18px; font-weight: bold;">${diff} ${diffText ? `<span class="difference-text" style="color: ${diff < 0 ? 'var(--accent-red)' : diff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${diffText})</span>` : ''}</td><td class="combined-difference-cell" data-code="${item.code}"></td>`;
+                        applyRowColoring(row, diff);
+                        tbody.appendChild(row);
+                        processedItems.add(item.code);
+                        rowIndex++;
+                        const input = row.querySelector('.actual-count-input');
+                        const combinedCell = row.querySelector('.combined-difference-cell');
+                        updateSingleCombinedCell(item, combinedCell);
+                        input.addEventListener('input', (function(it, rw, combCell) { return function() {
+                            const actual = parseFloat(this.value) || 0;
+                            const newDiff = actual - it.smallestUnitQty;
+                            const newDiffText = newDiff < 0 ? 'عجز' : newDiff > 0 ? 'زيادة' : '';
+                            const diffCell = document.querySelector(`.difference-cell[data-code="${it.code}"]`);
+                            diffCell.innerHTML = `${Math.round(newDiff)} ${newDiffText ? `<span class="difference-text" style="color: ${newDiff < 0 ? 'var(--accent-red)' : newDiff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${newDiffText})</span>` : ''}`;
+                            diffCell.className = `difference-cell ${newDiff < 0 ? 'difference-negative' : newDiff > 0 ? 'difference-positive' : ''}`;
+                            it.actualCount = actual;
+                            it.difference = Math.round(newDiff);
+                            applyRowColoring(rw, newDiff);
+                            updateSingleCombinedCell(it, combCell);
+                            updateGroupTotal(group, groupedItems[group]);
+                        }; })(item, row, combinedCell));
+                    }
                 });
+                table.appendChild(tbody);
+                const totalRow = document.createElement('tr'); totalRow.className = 'group-total';
+                const groupTotalValue = groupedItems[group].reduce((s, i) => s + (i.difference || 0), 0);
+                const groupTotalClass = groupTotalValue < 0 ? 'difference-negative' : groupTotalValue > 0 ? 'difference-positive' : '';
+                const groupTotalText = groupTotalValue < 0 ? 'عجز' : groupTotalValue > 0 ? 'زيادة' : '';
+                totalRow.innerHTML = `<td colspan="7">إجمالي ${group}</td><td class="group-total-cell ${groupTotalClass}" data-group="${group}" style="font-size: 18px; font-weight: bold;">${groupTotalValue} ${groupTotalText ? `<span class="difference-text" style="color: ${groupTotalClass.includes('negative') ? 'var(--accent-red)' : 'var(--accent-green)'};">(${groupTotalText})</span>` : ''}</td>`;
+                table.appendChild(totalRow);
+                categoryDiv.appendChild(table);
+                container.appendChild(categoryDiv);
             }
         }
-        if(rows.length === 0) tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">📭 لا توجد بيانات للصنف</td></tr>`;
-        else {
-            let html = "";
-            for(const r of rows) {
-                html += `<tr>
-                    <td style="text-align:right;">${escapeHtml(r.restaurantDisplay)}</td>
-                    <td>${escapeHtml(r.regionManager)}</td>
-                    <td>${escapeHtml(r.opsManager)}</td>
-                    <td>${formatZero(r.startQty)}</td>
-                    <td>${formatZero(r.recdQty)}</td>
-                    <td>${formatZero(r.tranInQty)}</td>
-                    <td>${formatZero(r.tranOutQty)}</td>
-                    <td>${formatZero(r.wastQty)}</td>
-                    <td>${formatZero(r.actUsage)}</td>
-                    <td>${formatZero(r.endQty)}</td>
-                </tr>`;
+
+        function updateMeatInventory() {
+            const container = document.getElementById('meat-inventory-container');
+            container.innerHTML = '';
+            let meatItems = selectedItems.filter(item => item.group === 'meat');
+            if (meatItems.length === 0) { container.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--primary); font-weight: bold;">لم يتم اختيار أي أصناف لحوم للجرد</p>'; return; }
+            const similarGroups = findSimilarItems(meatItems);
+            meatItems.sort((a, b) => a.name.localeCompare(b.name));
+            const groupedItems = {};
+            
+            meatItems.forEach(item => {
+                let subGroup = 'أخرى';
+                // تجميع K1042, K1043, K1044 في مجموعة واحدة "قطع دجاج صغير"
+                if (item.code === 'K1042' || item.code === 'K1043' || item.code === 'K1044') {
+                    subGroup = 'قطع دجاج صغير';
+                }
+                else if (item.code === 'K1002' || item.code === 'K1003') {
+                    subGroup = 'أسياخ دجاج';
+                }
+                else if (item.name.includes('Big Fillet')) subGroup = 'بيج فيليه';
+                else if (item.name.includes('Finger Fillet')) subGroup = 'أصابع فيليه';
+                else if (item.name.includes('Grilled Chicken Fillet') || (item.name.includes('Chicken Fillet') && !item.name.includes('Finger') && !item.name.includes('Big'))) subGroup = 'فيليه دجاج';
+                else if (item.name.includes('Tikka')) subGroup = 'تيكا';
+                else if (item.name.includes('Fried')) subGroup = 'فرايد';
+                else if (item.name.includes('Burger') && !item.name.includes('Fresh')) subGroup = 'برجر';
+                else if (item.name.includes('Fresh Burger Chickens')) subGroup = 'برجر طازج';
+                else if (item.name.includes('Wings')) subGroup = 'جناح';
+                else if (item.name.includes('Drumstick') || item.name.includes('وصلة دجاج')) subGroup = 'درام ستيك/وصلة';
+                else if (item.name.includes('Quils') || item.name.includes('فري')) subGroup = 'فري';
+                else if (item.name.includes('Rooster') || item.name.includes('فروج') || item.name.includes('Bint Al-Deek') || item.name.includes('بنت الديك')) subGroup = 'فروج/بنت الديك';
+                else if (item.name.includes('Royal')) subGroup = 'ملكي';
+                
+                if (!groupedItems[subGroup]) groupedItems[subGroup] = [];
+                groupedItems[subGroup].push(item);
+            });
+            
+            // ترتيب المجموعات: نفس الترتيب الأصلي مع إضافة المجموعتين الجديدتين في النهاية
+            const orderedGroups = {};
+            const orderOriginal = ['بيج فيليه', 'أصابع فيليه', 'فيليه دجاج', 'تيكا', 'فرايد', 'برجر', 'برجر طازج', 'جناح', 'درام ستيك/وصلة', 'فري', 'فروج/بنت الديك', 'ملكي', 'أخرى'];
+            const newGroups = ['قطع دجاج صغير', 'أسياخ دجاج'];
+            const fullOrder = [...orderOriginal, ...newGroups];
+            
+            for (const key of fullOrder) {
+                if (groupedItems[key]) {
+                    orderedGroups[key] = groupedItems[key];
+                }
             }
-            tableBody.innerHTML = html;
-        }
-        if (isShawarmaItem(exact)) {
-            specialNoteContainer.style.display = 'block';
-        } else {
-            specialNoteContainer.style.display = 'none';
-        }
-        currentReportData = rows;
-        return rows;
-    }
-    
-    function formatZero(val) { let num = Number(val); if(isNaN(num) || num === 0) return "—"; return num.toFixed(2).replace(/\.00$/, ''); }
-    function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
-    
-    // تصدير Excel مع الاحتفاظ بالتاريخ (لم يعد موجوداً في الجدول لكنه في البيانات)
-    function exportToExcel() {
-        if(!currentReportData || currentReportData.length === 0) { 
-            alert("⚠️ لا توجد بيانات معروضة لتصديرها."); 
-            return; 
-        }
-        try {
-            const fromDate = startDateInput.value || "غير محدد";
-            const toDate = endDateInput.value || "غير محدد";
-            const sheetHeader = ["اسم المطعم", "مدير المنطقة", "مدير التشغيل", "تاريخ التقرير", "رصيد أول", "الكمية المستلمة", "المحول للداخل", "المحول للخارج", "التوالف", "كمية الاستخدام", "رصيد آخر"];
-            const excelRows = [
-                ["شركة نايف للأغذية"],
-                ["تقرير تحليل المخزون (COGS)"],
-                [`الصنف: ${currentSelectedItem}`],
-                [`الفترة الوصفية: ${fromDate} → ${toDate}`],
-                [],
-                sheetHeader
-            ];
-            for(const row of currentReportData) {
-                excelRows.push([
-                    row.restaurantDisplay, row.regionManager, row.opsManager, row.reportDate,
-                    row.startQty, row.recdQty, row.tranInQty, row.tranOutQty,
-                    row.wastQty, row.actUsage, row.endQty
-                ]);
+            for (const key in groupedItems) {
+                if (!orderedGroups[key]) orderedGroups[key] = groupedItems[key];
             }
-            if (isShawarmaItem(currentSelectedItem)) {
-                excelRows.push([]);
-                excelRows.push(["ملاحظة:", "تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة."]);
+            
+            renderGroupedItems(container, orderedGroups, similarGroups);
+        }
+
+        function updateStoreInventory() {
+            const container = document.getElementById('store-inventory-container');
+            container.innerHTML = '';
+            let storeItems = selectedItems.filter(item => item.group === 'store');
+            if (storeItems.length === 0) { container.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--primary); font-weight: bold;">لم يتم اختيار أي أصناف مخازن للجرد</p>'; return; }
+            const similarGroups = findSimilarItems(storeItems);
+            storeItems.sort((a, b) => a.name.localeCompare(b.name));
+            const groupedItems = {
+                'زبدة ومعجنات': [],
+                'تشيز كيك': [],
+                'بطاطس ومقبلات': [],
+                'أرز وجبن': [],
+                'زيوت وذرة': [],
+                'مشروبات': []
+            };
+            storeItems.forEach(item => {
+                const name = item.name;
+                if (name.includes('Butter') || name.includes('Paratha')) groupedItems['زبدة ومعجنات'].push(item);
+                else if (name.includes('Cheese Cake')) groupedItems['تشيز كيك'].push(item);
+                else if (name.includes('French Fries') || name.includes('Hashbrown') || name.includes('Twister') || name.includes('Onion Rings') || name.includes('Mozzarella Stick') || name.includes('Chicken Nuggets')) groupedItems['بطاطس ومقبلات'].push(item);
+                else if (name.includes('Rice') || name.includes('Cheese slice') || name.includes('Swiss Cheese') || name.includes('Mozzarella shd')) groupedItems['أرز وجبن'].push(item);
+                else if (name.includes('Corn Oil') || name.includes('sweet corn')) groupedItems['زيوت وذرة'].push(item);
+                else if (name.includes('Water') || name.includes('Pepsi') || name.includes('Shireen Juice')) groupedItems['مشروبات'].push(item);
+                else groupedItems['مشروبات'].push(item);
+            });
+            const finalGroups = {};
+            for (const [cat, items] of Object.entries(groupedItems)) {
+                if (items.length > 0) finalGroups[cat] = items;
             }
-            const ws = XLSX.utils.aoa_to_sheet(excelRows);
-            ws['!cols'] = [{wch:28},{wch:18},{wch:18},{wch:18},{wch:15},{wch:18},{wch:16},{wch:16},{wch:12},{wch:18},{wch:14}];
-            ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:10}},{s:{r:1,c:0},e:{r:1,c:10}},{s:{r:2,c:0},e:{r:2,c:10}},{s:{r:3,c:0},e:{r:3,c:10}}];
+            renderGroupedItems(container, finalGroups, similarGroups);
+        }
+
+        function updateVegInventory() {
+            const container = document.getElementById('veg-inventory-container');
+            container.innerHTML = '';
+            let vegItems = selectedItems.filter(item => item.group === 'vegetables');
+            if (vegItems.length === 0) { container.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--primary); font-weight: bold;">لم يتم اختيار أي أصناف خضروات للجرد</p>'; return; }
+            const similarGroups = findSimilarItems(vegItems);
+            vegItems.sort((a, b) => a.name.localeCompare(b.name));
+            const groupedItems = { 'الخضروات': vegItems };
+            renderGroupedItems(container, groupedItems, similarGroups);
+        }
+
+        function updateAppetizersInventory() {
+            const container = document.getElementById('appetizers-inventory-container');
+            container.innerHTML = '';
+            let appetizerItems = selectedItems.filter(item => item.group === 'appetizers');
+            if (appetizerItems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--primary); font-weight: bold;">لم يتم اختيار أي أصناف مقبلات للجرد</p>';
+                return;
+            }
+
+            const subGroups = {
+                'السلطات': [],
+                'الكول سلو': [],
+                'الحمص والمتبل': [],
+                'الألبان والحلويات': [],
+                'أخرى': []
+            };
+
+            appetizerItems.forEach(item => {
+                const name = item.name;
+                if (name.includes('سلطة') || name.includes('فتوش') || name.includes('تبولة') || name.includes('جرجير') || name.includes('خضراء')) {
+                    subGroups['السلطات'].push(item);
+                } else if (name.includes('كول سلو') || name.includes('Cole Slaw')) {
+                    subGroups['الكول سلو'].push(item);
+                } else if (name.includes('حمص') || name.includes('متبل') || name.includes('Hummus') || name.includes('Mutabbal')) {
+                    subGroups['الحمص والمتبل'].push(item);
+                } else if (name.includes('لبن') || name.includes('أرز بالحليب') || name.includes('Rice&Milk') || name.includes('Laban')) {
+                    subGroups['الألبان والحلويات'].push(item);
+                } else {
+                    subGroups['أخرى'].push(item);
+                }
+            });
+
+            const finalGroups = {};
+            for (const [groupName, items] of Object.entries(subGroups)) {
+                if (items.length > 0) {
+                    items.sort((a, b) => a.name.localeCompare(b.name));
+                    finalGroups[groupName] = items;
+                }
+            }
+
+            const orderedGroups = {};
+            const order = ['السلطات', 'الكول سلو', 'الحمص والمتبل', 'الألبان والحلويات', 'أخرى'];
+            for (const key of order) {
+                if (finalGroups[key]) {
+                    orderedGroups[key] = finalGroups[key];
+                }
+            }
+
+            const similarGroups = findSimilarItems(appetizerItems);
+            renderGroupedItems(container, orderedGroups, similarGroups);
+        }
+
+        function updateMiscInventory() {
+            const container = document.getElementById('misc-inventory-container');
+            container.innerHTML = '';
+            let miscItems = selectedItems.filter(item => item.group === 'other');
+            if (miscItems.length === 0) { container.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--primary); font-weight: bold;">لم يتم اختيار أي أصناف أخرى للجرد</p>'; return; }
+            const similarGroups = findSimilarItems(miscItems);
+            miscItems.sort((a, b) => a.name.localeCompare(b.name));
+            const groupedItems = { 'أصناف متنوعة': miscItems };
+            renderGroupedItems(container, groupedItems, similarGroups);
+        }
+
+        function focusRestaurantInput() {
+            let activeSection = document.querySelector('.section.active');
+            if (!activeSection) return;
+            let restaurantInput = null;
+            if (activeSection.id === 'meat-section') restaurantInput = document.getElementById('meat-restaurant-search');
+            else if (activeSection.id === 'store-section') restaurantInput = document.getElementById('store-restaurant-search');
+            else if (activeSection.id === 'veg-section') restaurantInput = document.getElementById('veg-restaurant-search');
+            else if (activeSection.id === 'appetizers-section') restaurantInput = document.getElementById('appetizers-restaurant-search');
+            else if (activeSection.id === 'misc-section') restaurantInput = document.getElementById('misc-restaurant-search');
+            if (restaurantInput) { restaurantInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); restaurantInput.focus(); }
+        }
+
+        async function generatePDF(sectionType) {
+            let restaurantInput = '';
+            if (sectionType === 'meat') restaurantInput = document.getElementById('meat-restaurant-search').value;
+            else if (sectionType === 'store') restaurantInput = document.getElementById('store-restaurant-search').value;
+            else if (sectionType === 'veg') restaurantInput = document.getElementById('veg-restaurant-search').value;
+            else if (sectionType === 'appetizers') restaurantInput = document.getElementById('appetizers-restaurant-search').value;
+            else if (sectionType === 'misc') restaurantInput = document.getElementById('misc-restaurant-search').value;
+            if (!restaurantInput.trim()) { alert('الرجاء إدخال اسم المطعم قبل تصدير PDF'); focusRestaurantInput(); return; }
+            try {
+                let items = [], restaurantName = restaurantInput, responsibleName = '', areaManager = '', operationsManager = '', title = '', dateTimeValue = '';
+                if (sectionType === 'meat') { items = selectedItems.filter(item => item.group === 'meat'); responsibleName = document.getElementById('meat-responsible').value; areaManager = document.getElementById('meat-area-manager').textContent; operationsManager = document.getElementById('meat-operations-manager').textContent; dateTimeValue = document.getElementById('meat-datetime').value; title = 'جرد أصناف اللحوم'; }
+                else if (sectionType === 'store') { items = selectedItems.filter(item => item.group === 'store'); responsibleName = document.getElementById('store-responsible').value; areaManager = document.getElementById('store-area-manager').textContent; operationsManager = document.getElementById('store-operations-manager').textContent; dateTimeValue = document.getElementById('store-datetime').value; title = 'جرد أصناف المخازن'; }
+                else if (sectionType === 'veg') { items = selectedItems.filter(item => item.group === 'vegetables'); responsibleName = document.getElementById('veg-responsible').value; areaManager = document.getElementById('veg-area-manager').textContent; operationsManager = document.getElementById('veg-operations-manager').textContent; dateTimeValue = document.getElementById('veg-datetime').value; title = 'جرد أصناف الخضروات'; }
+                else if (sectionType === 'appetizers') { items = selectedItems.filter(item => item.group === 'appetizers'); responsibleName = document.getElementById('appetizers-responsible').value; areaManager = document.getElementById('appetizers-area-manager').textContent; operationsManager = document.getElementById('appetizers-operations-manager').textContent; dateTimeValue = document.getElementById('appetizers-datetime').value; title = 'جرد أصناف المقبلات'; }
+                else { items = selectedItems.filter(item => item.group === 'other'); responsibleName = document.getElementById('misc-responsible').value; areaManager = document.getElementById('misc-area-manager').textContent; operationsManager = document.getElementById('misc-operations-manager').textContent; dateTimeValue = document.getElementById('misc-datetime').value; title = 'جرد أصناف أخرى'; }
+                if (items.length === 0) { showNotification('لا توجد بيانات'); return; }
+                const formattedDateTime = formatDateTimeEn(dateTimeValue);
+                const template = document.getElementById('pdf-template');
+                const clone = template.cloneNode(true);
+                clone.id = 'pdf-clone-' + Date.now();
+                clone.style.display = 'block';
+                clone.style.position = 'absolute';
+                clone.style.left = '0';
+                clone.style.top = '0';
+                clone.style.zIndex = '10000';
+                clone.style.background = 'white';
+                clone.style.width = '794px';
+                clone.style.margin = '0';
+                document.body.appendChild(clone);
+                
+                const restaurantInfoDiv = clone.querySelector('#pdf-restaurant-info');
+                restaurantInfoDiv.innerHTML = `<div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><div><strong>المطعم:</strong> ${restaurantName || 'غير محدد'}</div><div><strong>مسئول المطعم:</strong> ${responsibleName || 'غير محدد'}</div></div><div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><div><strong>مدير المنطقة:</strong> ${areaManager}</div><div><strong>مدير التشغيل:</strong> ${operationsManager}</div></div><div style="display: flex; justify-content: center;"><div><strong>تاريخ ووقت الجرد:</strong> ${formattedDateTime}</div></div>`;
+                const pdfHeader = clone.querySelector('.pdf-header');
+                const existingTitle = pdfHeader.querySelector('h2');
+                if (existingTitle) existingTitle.textContent = title;
+                const pdfContent = clone.querySelector('#pdf-content');
+                let contentHTML = '';
+                let totalDifference = 0;
+                let processedItems = new Set();
+                const hasCombinedColumn = true;
+                contentHTML += `<table style="width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 5px; table-layout: fixed;"><thead><tr style="background: #EFF6FF;">`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 5%; font-size: 9px; font-weight: bold;">م</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: right; width: 27%; font-size: 9px; font-weight: bold;">اسم الصنف</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 8%; font-size: 9px; font-weight: bold;">الشد</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 8%; font-size: 9px; font-weight: bold;">جرد البرنامج</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 9%; font-size: 9px; font-weight: bold;">جرد الوحدة الصغرى</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 10%; font-size: 9px; font-weight: bold;">الجرد الفعلي</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 12%; font-size: 9px; font-weight: bold;">العجز/الزيادة</th>`;
+                contentHTML += `<th style="border: 1px solid #ddd; padding: 2px; text-align: center; width: 21%; font-size: 9px; font-weight: bold;">الفروقات المجمعة</th>`;
+                contentHTML += `</tr></thead><tbody>`;
+                
+                let rowIndex = 0;
+                let similarGroups = findSimilarItems(items);
+                
+                for (const item of items) {
+                    if (processedItems.has(item.code)) continue;
+                    let similarItems = [];
+                    for (const groupName in similarGroups) {
+                        const grp = similarGroups[groupName];
+                        if (grp.find(i => i.code === item.code)) { similarItems = grp; break; }
+                    }
+                    if (similarItems.length > 1) {
+                        for (let si = 0; si < similarItems.length; si++) {
+                            const sim = similarItems[si];
+                            if (processedItems.has(sim.code)) continue;
+                            const diff = sim.difference || 0;
+                            const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                            const lightBg = diff < 0 ? '#FFE5E5' : diff > 0 ? '#E5FFE5' : 'transparent';
+                            contentHTML += `<tr style="height:18px;">`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${rowIndex+1}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:right; font-size:9px; vertical-align:middle; background-color:${lightBg};">${sim.name}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${sim.vendorUOM}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${sim.stockQty}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; font-weight:bold; vertical-align:middle; background-color:${lightBg};">${sim.smallestUnitQty}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9.9px; font-weight:bold; vertical-align:middle; background-color:${lightBg};">${sim.actualCount || 0}</td>`;
+                            contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; font-weight:bold; color:${diff<0?'red':diff>0?'green':'#333'}; vertical-align:middle; background-color:${lightBg};"><span style="display:block; margin-bottom:1px;">${diff}</span><span style="display:block; font-size:8px; opacity:0.9;">${diffText||''}</span></td>`;
+                            if (si === 0) {
+                                const combinedDiff = similarItems.reduce((s, i) => s + (i.difference || 0), 0);
+                                const hasActual = similarItems.some(i => i.actualCount && i.actualCount !== 0);
+                                let cText = '';
+                                if (!hasActual) cText = 'لم يتم جرد الصنف';
+                                else if (combinedDiff === 0) cText = 'الجرد مطابق';
+                                else cText = combinedDiff < 0 ? 'عجز' : 'زيادة';
+                                const darkBg = (!hasActual) ? '#cbd5e1' : (combinedDiff < 0 ? '#FF0000' : (combinedDiff > 0 ? '#4CC552' : '#1E3A8A'));
+                                const textColor = (combinedDiff !== 0 && hasActual) ? 'white' : (combinedDiff === 0 && hasActual) ? 'white' : '#1e293b';
+                                contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:12px; font-weight:900; vertical-align:middle; background-color:${darkBg}; color:${textColor};" rowspan="${similarItems.length}">`;
+                                contentHTML += `<span style="display:block; margin-bottom:1px;">${combinedDiff}</span>`;
+                                contentHTML += `<span style="display:block; font-size:10px; opacity:0.9;">${cText}</span></td>`;
+                            }
+                            contentHTML += `</tr>`;
+                            processedItems.add(sim.code);
+                            totalDifference += diff;
+                            rowIndex++;
+                        }
+                    } else {
+                        const diff = item.difference || 0;
+                        const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                        const lightBg = diff < 0 ? '#FFE5E5' : diff > 0 ? '#E5FFE5' : 'transparent';
+                        contentHTML += `<tr style="height:18px;">`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${rowIndex+1}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:right; font-size:9px; vertical-align:middle; background-color:${lightBg};">${item.name}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${item.vendorUOM}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; vertical-align:middle; background-color:${lightBg};">${item.stockQty}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; font-weight:bold; vertical-align:middle; background-color:${lightBg};">${item.smallestUnitQty}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9.9px; font-weight:bold; vertical-align:middle; background-color:${lightBg};">${item.actualCount || 0}</td>`;
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:9px; font-weight:bold; color:${diff<0?'red':diff>0?'green':'#333'}; vertical-align:middle; background-color:${lightBg};"><span style="display:block; margin-bottom:1px;">${diff}</span><span style="display:block; font-size:8px; opacity:0.9;">${diffText||''}</span></td>`;
+                        const hasActual = (item.actualCount && item.actualCount !== 0);
+                        let cText = '';
+                        if (!hasActual) cText = 'لم يتم جرد الصنف';
+                        else if (diff === 0) cText = 'الجرد مطابق';
+                        else cText = diff < 0 ? 'عجز' : 'زيادة';
+                        const darkBg = (!hasActual) ? '#cbd5e1' : (diff < 0 ? '#FF0000' : (diff > 0 ? '#4CC552' : '#1E3A8A'));
+                        const textColor = (diff !== 0 && hasActual) ? 'white' : (diff === 0 && hasActual) ? 'white' : '#1e293b';
+                        contentHTML += `<td style="border:1px solid #ddd; padding:1px; text-align:center; font-size:10px; font-weight:900; background-color:${darkBg}; color:${textColor}; vertical-align:middle;">`;
+                        contentHTML += `<span style="display:block; margin-bottom:1px;">${diff}</span>`;
+                        contentHTML += `<span style="display:block; font-size:10px; opacity:0.9;">${cText}</span></td>`;
+                        contentHTML += `</tr>`;
+                        processedItems.add(item.code);
+                        totalDifference += diff;
+                        rowIndex++;
+                    }
+                }
+                contentHTML += `</tbody></table>`;
+                contentHTML += `<div style="margin-top:10px; padding:8px; background:#EFF6FF; border-radius:4px; text-align:center; font-weight:bold; border:1px solid var(--primary);">`;
+                contentHTML += `<div style="font-size:10px;">الإجمالي الكلي: <span style="color:${totalDifference<0?'red':totalDifference>0?'green':'var(--primary)'}; font-size:12px; font-weight:bold;">${totalDifference} ${totalDifference<0?'(عجز)':totalDifference>0?'(زيادة)':''}</span></div>`;
+                contentHTML += `<div style="font-size:9px; margin-top:3px; color:#666;">(عدد الأصناف: ${items.length} صنف)</div></div>`;
+                pdfContent.innerHTML = contentHTML;
+                
+                const now = new Date();
+                clone.querySelector('#pdf-print-date').textContent = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+                await new Promise(resolve => setTimeout(resolve, 300));
+                try {
+                    const canvas = await html2canvas(clone, { scale: 2, useCORS: true, logging: false, backgroundColor: '#FFFFFF', windowWidth: clone.scrollWidth, windowHeight: clone.scrollHeight });
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                    const width = imgWidth * ratio;
+                    const height = imgHeight * ratio;
+                    pdf.addImage(imgData, 'JPEG', (pdfWidth - width) / 2, 0, width, height);
+                    const fileName = `جرد_${sectionType === 'meat' ? 'اللحوم' : sectionType === 'store' ? 'المخازن' : sectionType === 'veg' ? 'الخضروات' : sectionType === 'appetizers' ? 'المقبلات' : 'أخرى'}_${restaurantName.replace(/[^\w\u0600-\u06FF\s]/g, '')}.pdf`;
+                    pdf.save(fileName);
+                    showNotification('تم إنشاء PDF بنجاح');
+                } catch (error) { console.error(error); showNotification('حدث خطأ أثناء إنشاء PDF'); }
+                finally { if (clone && clone.parentNode) clone.parentNode.removeChild(clone); }
+            } catch (error) { console.error(error); showNotification('خطأ في PDF'); }
+        }
+
+        function generateExcel(sectionType) {
+            let restaurantName = '';
+            let responsibleName = '';
+            let areaManager = '';
+            let operationsManager = '';
+            let dateTimeValue = '';
+            let items = [];
+            let sectionTitle = '';
+
+            if (sectionType === 'meat') {
+                restaurantName = document.getElementById('meat-restaurant-search').value;
+                responsibleName = document.getElementById('meat-responsible').value;
+                areaManager = document.getElementById('meat-area-manager').textContent;
+                operationsManager = document.getElementById('meat-operations-manager').textContent;
+                dateTimeValue = document.getElementById('meat-datetime').value;
+                items = selectedItems.filter(item => item.group === 'meat');
+                sectionTitle = 'جرد أصناف اللحوم';
+            } else if (sectionType === 'store') {
+                restaurantName = document.getElementById('store-restaurant-search').value;
+                responsibleName = document.getElementById('store-responsible').value;
+                areaManager = document.getElementById('store-area-manager').textContent;
+                operationsManager = document.getElementById('store-operations-manager').textContent;
+                dateTimeValue = document.getElementById('store-datetime').value;
+                items = selectedItems.filter(item => item.group === 'store');
+                sectionTitle = 'جرد أصناف المخازن';
+            } else if (sectionType === 'veg') {
+                restaurantName = document.getElementById('veg-restaurant-search').value;
+                responsibleName = document.getElementById('veg-responsible').value;
+                areaManager = document.getElementById('veg-area-manager').textContent;
+                operationsManager = document.getElementById('veg-operations-manager').textContent;
+                dateTimeValue = document.getElementById('veg-datetime').value;
+                items = selectedItems.filter(item => item.group === 'vegetables');
+                sectionTitle = 'جرد أصناف الخضروات';
+            } else if (sectionType === 'appetizers') {
+                restaurantName = document.getElementById('appetizers-restaurant-search').value;
+                responsibleName = document.getElementById('appetizers-responsible').value;
+                areaManager = document.getElementById('appetizers-area-manager').textContent;
+                operationsManager = document.getElementById('appetizers-operations-manager').textContent;
+                dateTimeValue = document.getElementById('appetizers-datetime').value;
+                items = selectedItems.filter(item => item.group === 'appetizers');
+                sectionTitle = 'جرد أصناف المقبلات';
+            } else if (sectionType === 'misc') {
+                restaurantName = document.getElementById('misc-restaurant-search').value;
+                responsibleName = document.getElementById('misc-responsible').value;
+                areaManager = document.getElementById('misc-area-manager').textContent;
+                operationsManager = document.getElementById('misc-operations-manager').textContent;
+                dateTimeValue = document.getElementById('misc-datetime').value;
+                items = selectedItems.filter(item => item.group === 'other');
+                sectionTitle = 'جرد أصناف أخرى';
+            }
+
+            if (!restaurantName.trim()) {
+                alert('الرجاء إدخال اسم المطعم قبل تصدير Excel');
+                focusRestaurantInput();
+                return;
+            }
+            if (items.length === 0) {
+                showNotification('لا توجد أصناف محددة للجرد في هذا القسم');
+                return;
+            }
+
+            const formattedDateTime = formatDateTimeEn(dateTimeValue);
+            let excelRows = [];
+
+            excelRows.push(['شركة نايف للأغذية', '', '', '', '', '', '', '']);
+            excelRows.push([sectionTitle, '', '', '', '', '', '', '']);
+            excelRows.push([]);
+            excelRows.push(['المطعم:', restaurantName, 'مسئول المطعم:', responsibleName, '', '', '', '']);
+            excelRows.push(['مدير المنطقة:', areaManager, 'مدير التشغيل:', operationsManager, '', '', '', '']);
+            excelRows.push(['تاريخ ووقت الجرد:', formattedDateTime, '', '', '', '', '', '']);
+            excelRows.push([]);
+            excelRows.push(['م', 'اسم الصنف', 'الشد', 'الجرد من البرنامج', 'الجرد بالوحدة الصغرى', 'الجرد الفعلي', 'العجز/الزيادة', 'الفروقات المجمعة']);
+            
+            let totalDifference = 0;
+            let processedItems = new Set();
+            let similarGroups = findSimilarItems(items);
+
+            let rowIndex = 1;
+            for (const item of items) {
+                if (processedItems.has(item.code)) continue;
+                let similarItems = [];
+                for (const groupName in similarGroups) {
+                    const grp = similarGroups[groupName];
+                    if (grp.find(i => i.code === item.code)) { similarItems = grp; break; }
+                }
+                if (similarItems.length > 1) {
+                    for (let si = 0; si < similarItems.length; si++) {
+                        const sim = similarItems[si];
+                        if (processedItems.has(sim.code)) continue;
+                        const diff = sim.difference || 0;
+                        const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                        const combinedRow = [];
+                        combinedRow.push(rowIndex, sim.name, sim.vendorUOM, sim.stockQty, sim.smallestUnitQty, sim.actualCount || 0, `${diff} ${diffText}`);
+                        if (si === 0) {
+                            const combinedDiff = similarItems.reduce((s, i) => s + (i.difference || 0), 0);
+                            const hasActual = similarItems.some(i => i.actualCount && i.actualCount !== 0);
+                            let cText = '';
+                            if (!hasActual) cText = 'لم يتم جرد الصنف';
+                            else if (combinedDiff === 0) cText = 'الجرد مطابق';
+                            else cText = combinedDiff < 0 ? 'عجز' : 'زيادة';
+                            combinedRow.push(`${combinedDiff} (${cText})`);
+                        } else {
+                            combinedRow.push('');
+                        }
+                        excelRows.push(combinedRow);
+                        processedItems.add(sim.code);
+                        totalDifference += diff;
+                        rowIndex++;
+                    }
+                } else {
+                    const diff = item.difference || 0;
+                    const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
+                    const hasActual = (item.actualCount && item.actualCount !== 0);
+                    let cText = '';
+                    if (!hasActual) cText = 'لم يتم جرد الصنف';
+                    else if (diff === 0) cText = 'الجرد مطابق';
+                    else cText = diff < 0 ? 'عجز' : 'زيادة';
+                    excelRows.push([rowIndex, item.name, item.vendorUOM, item.stockQty, item.smallestUnitQty, item.actualCount || 0, `${diff} ${diffText}`, `${diff} (${cText})`]);
+                    processedItems.add(item.code);
+                    totalDifference += diff;
+                    rowIndex++;
+                }
+            }
+            excelRows.push([]);
+            excelRows.push(['الإجمالي الكلي:', '', '', '', '', '', `${totalDifference} ${totalDifference<0?'(عجز)':totalDifference>0?'(زيادة)':''}`, '']);
+            excelRows.push([`عدد الأصناف: ${items.length}`, '', '', '', '', '', '', '']);
+            
+            const wsData = excelRows;
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            ws['!cols'] = [{wch:5},{wch:35},{wch:10},{wch:12},{wch:15},{wch:12},{wch:15},{wch:18}];
             const wb = XLSX.utils.book_new();
-            let sheetName = currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_');
-            if(sheetName.length > 31) sheetName = sheetName.substring(0, 31);
-            if(sheetName.trim() === "") sheetName = "تقرير";
-            XLSX.utils.book_append_sheet(wb, ws, sheetName);
-            const fileName = `COGS_${currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_').substring(0, 50)}.xlsx`;
+            XLSX.utils.book_append_sheet(wb, ws, sectionTitle);
+            const fileName = `جرد_${sectionType === 'meat' ? 'اللحوم' : sectionType === 'store' ? 'المخازن' : sectionType === 'veg' ? 'الخضروات' : sectionType === 'appetizers' ? 'المقبلات' : 'أخرى'}_${restaurantName.replace(/[^\w\u0600-\u06FF\s]/g, '')}.xlsx`;
             XLSX.writeFile(wb, fileName);
-        } catch(err) { 
-            console.error(err);
-            alert("فشل تصدير Excel: " + err.message); 
+            showNotification('تم تصدير Excel بنجاح');
         }
-    }
-    
-    // تصدير PDF مع إلزامية إدخال الفترة
-    async function exportToPDF() {
-        if(!currentReportData || currentReportData.length === 0) { alert("⚠️ لا توجد بيانات معروضة."); return; }
-        
-        // التحقق من إدخال تاريخ البداية والنهاية
-        if (!startDateInput.value || !endDateInput.value) {
-            alert("❌ الرجاء إدخال تاريخ البداية وتاريخ النهاية قبل تصدير تقرير PDF.");
-            startDateInput.focus();
-            return;
+
+        function sendWhatsapp(type) {
+            let restaurantInput = '';
+            if (type === 'meat') restaurantInput = document.getElementById('meat-restaurant-search').value;
+            else if (type === 'store') restaurantInput = document.getElementById('store-restaurant-search').value;
+            else if (type === 'veg') restaurantInput = document.getElementById('veg-restaurant-search').value;
+            else if (type === 'appetizers') restaurantInput = document.getElementById('appetizers-restaurant-search').value;
+            else if (type === 'misc') restaurantInput = document.getElementById('misc-restaurant-search').value;
+            if (!restaurantInput.trim()) { alert('الرجاء إدخال اسم المطعم قبل الإرسال إلى واتساب'); focusRestaurantInput(); return; }
+            currentWhatsappType = type;
+            document.getElementById('whatsapp-modal').style.display = 'flex';
+            whatsappAttachmentFile = null;
+            document.getElementById('attachment-name').textContent = 'لم يتم اختيار ملف';
         }
-        
-        exportPdfBtn.disabled = true; const originalText = exportPdfBtn.innerHTML;
-        exportPdfBtn.innerHTML = "⏳ جاري إنشاء PDF...";
-        try {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-            const fromDate = startDateInput.value, toDate = endDateInput.value;
-            let currentIdx = 0, pageNum = 1;
-            const rowsPerPage = 15;
-            const margin = 10;
-            const contentWidth = pdf.internal.pageSize.getWidth() - margin*2;
-            while(currentIdx < currentReportData.length) {
-                const chunk = currentReportData.slice(currentIdx, currentIdx + rowsPerPage);
-                const container = document.createElement('div');
-                container.style.position = 'absolute'; container.style.left = '-9999px'; container.style.top = '0';
-                container.style.width = '1350px'; container.style.backgroundColor = 'white'; container.style.padding = '20px'; container.style.direction = 'rtl';
-                container.style.fontFamily = "'Segoe UI', Tahoma, Arial";
-                let logoHtml = pageNum === 1 ? `<img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" style="width: 55px; border-radius: 12px;"><br>` : "";
-                const headerHtml = `<div style="text-align:center;"><div>${logoHtml}<div style="font-size:1.6rem;font-weight:bold;color:#d32f2f;">شركة نايف للأغذية</div><div style="font-size:0.9rem;">NAIF FOOD COMPANY</div><div style="background:#f0f6ff;padding:5px 15px;border-radius:30px;margin:10px auto;display:inline-block;"><strong>تقرير COGS</strong> | الصنف: ${escapeHtml(currentSelectedItem)}<br>الفترة: ${fromDate} → ${toDate}</div>${pageNum>1?`<div>صفحة ${pageNum}</div>`:''}</div>`;
-                let tableRows = "";
-                for(const r of chunk) {
-                    tableRows += `<tr>
-                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.restaurantDisplay)}</td>
-                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.regionManager)}</td>
-                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.opsManager)}</td>
-                        <td style="border:1px solid #ccc;padding:8px;">${escapeHtml(r.reportDate)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.startQty)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.recdQty)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranInQty)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.tranOutQty)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.wastQty)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.actUsage)}</td>
-                        <td style="border:1px solid #ccc;text-align:center;">${formatZero(r.endQty)}</td>
-                    </tr>`;
-                }
-                let tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-                    <thead><tr style="background:#1976D2;color:#fff;">
-                        <th>المطعم</th><th>مدير المنطقة</th><th>مدير التشغيل</th><th>تاريخ التقرير</th>
-                        <th>بداية</th><th>مستلم</th><th>داخل</th><th>خارج</th><th>توالف</th><th>استخدام</th><th>نهاية</th>
-                    </tr></thead>
-                    <tbody>${tableRows}</tbody>
-                </table>`;
-                let noteHtml = "";
-                if (isShawarmaItem(currentSelectedItem)) {
-                    noteHtml = `<div style="background:#fff3cd; border-right:4px solid #ffc107; padding:10px; margin-top:15px; border-radius:8px; font-size:0.8rem; color:#856404;">⚠️ ملاحظة: تم إضافة نسبة 20% على كميات التوالف وكمية الاستخدام لصنف الشاورما (شاورما دجاج) بناءً على طلب الإدارة.</div>`;
-                }
-                container.innerHTML = headerHtml + tableHtml + noteHtml;
-                document.body.appendChild(container);
-                const canvas = await html2canvas(container, { scale: 1.8, useCORS: true, backgroundColor: '#ffffff' });
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                const imgHeight = (canvas.height * contentWidth) / canvas.width;
-                if(pageNum > 1) pdf.addPage();
-                pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, imgHeight);
-                document.body.removeChild(container);
-                currentIdx += rowsPerPage; pageNum++;
+
+        document.getElementById('generate-meat-pdf').addEventListener('click', () => generatePDF('meat'));
+        document.getElementById('generate-store-pdf').addEventListener('click', () => generatePDF('store'));
+        document.getElementById('generate-veg-pdf').addEventListener('click', () => generatePDF('veg'));
+        document.getElementById('generate-appetizers-pdf').addEventListener('click', () => generatePDF('appetizers'));
+        document.getElementById('generate-misc-pdf').addEventListener('click', () => generatePDF('misc'));
+        document.getElementById('generate-meat-excel').addEventListener('click', () => generateExcel('meat'));
+        document.getElementById('generate-store-excel').addEventListener('click', () => generateExcel('store'));
+        document.getElementById('generate-veg-excel').addEventListener('click', () => generateExcel('veg'));
+        document.getElementById('generate-appetizers-excel').addEventListener('click', () => generateExcel('appetizers'));
+        document.getElementById('generate-misc-excel').addEventListener('click', () => generateExcel('misc'));
+        document.getElementById('send-meat-whatsapp').addEventListener('click', () => sendWhatsapp('meat'));
+        document.getElementById('send-store-whatsapp').addEventListener('click', () => sendWhatsapp('store'));
+        document.getElementById('send-veg-whatsapp').addEventListener('click', () => sendWhatsapp('veg'));
+        document.getElementById('send-appetizers-whatsapp').addEventListener('click', () => sendWhatsapp('appetizers'));
+        document.getElementById('send-misc-whatsapp').addEventListener('click', () => sendWhatsapp('misc'));
+        document.getElementById('cancel-whatsapp-send').addEventListener('click', () => document.getElementById('whatsapp-modal').style.display = 'none');
+        document.getElementById('close-whatsapp-modal').addEventListener('click', () => document.getElementById('whatsapp-modal').style.display = 'none');
+        document.getElementById('close-movement-modal').addEventListener('click', () => document.getElementById('movement-modal').style.display = 'none');
+
+        document.getElementById('confirm-whatsapp-send').addEventListener('click', () => {
+            const phone = document.getElementById('whatsapp-number').value.trim();
+            if (!phone) {
+                showNotification('الرجاء إدخال رقم الهاتف');
+                return;
             }
-            pdf.save(`COGS_${currentSelectedItem.replace(/[\\/*:?"<>|[\]]/g, '_')}.pdf`);
-        } catch(e) { alert("خطأ في PDF: "+e.message); } finally { exportPdfBtn.innerHTML = originalText; exportPdfBtn.disabled = false; }
-    }
-    
-    // الأحداث
-    fileInput.addEventListener('change', (e) => { if(e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
-    applyDateBtn.addEventListener('click', () => { 
-        document.getElementById('manualPeriodInfo').innerHTML = `📅 الفترة المختارة (وصفية): ${startDateInput.value || "بداية"} → ${endDateInput.value || "نهاية"}`;
-        if(currentSelectedItem) generateReportForItem(currentSelectedItem);
-    });
-    itemSearch.addEventListener('input', refreshSearch);
-    generateBtn.addEventListener('click', () => { const selected = itemSearch.value.trim(); if(!selected) { tableBody.innerHTML = '<tr class="empty-row"><td colspan="10">⚠️ أدخل اسم الصنف</td></tr>'; specialNoteContainer.style.display = 'none'; return; } generateReportForItem(selected); });
-    exportExcelBtn.addEventListener('click', exportToExcel);
-    exportPdfBtn.addEventListener('click', exportToPDF);
-    
-    itemSearch.disabled = true; generateBtn.disabled = true; exportExcelBtn.disabled = true; exportPdfBtn.disabled = true;
-</script>
+
+            let activeSection = document.querySelector('.section.active');
+            let sectionType = '';
+            let items = [];
+            let restaurantName = '';
+            let responsibleName = '';
+            let dateTimeValue = '';
+
+            if (activeSection.id === 'meat-section') {
+                sectionType = 'اللحوم';
+                items = selectedItems.filter(item => item.group === 'meat');
+                restaurantName = document.getElementById('meat-restaurant-search').value;
+                responsibleName = document.getElementById('meat-responsible').value;
+                dateTimeValue = document.getElementById('meat-datetime').value;
+            } else if (activeSection.id === 'store-section') {
+                sectionType = 'المخازن';
+                items = selectedItems.filter(item => item.group === 'store');
+                restaurantName = document.getElementById('store-restaurant-search').value;
+                responsibleName = document.getElementById('store-responsible').value;
+                dateTimeValue = document.getElementById('store-datetime').value;
+            } else if (activeSection.id === 'veg-section') {
+                sectionType = 'الخضروات';
+                items = selectedItems.filter(item => item.group === 'vegetables');
+                restaurantName = document.getElementById('veg-restaurant-search').value;
+                responsibleName = document.getElementById('veg-responsible').value;
+                dateTimeValue = document.getElementById('veg-datetime').value;
+            } else if (activeSection.id === 'appetizers-section') {
+                sectionType = 'المقبلات';
+                items = selectedItems.filter(item => item.group === 'appetizers');
+                restaurantName = document.getElementById('appetizers-restaurant-search').value;
+                responsibleName = document.getElementById('appetizers-responsible').value;
+                dateTimeValue = document.getElementById('appetizers-datetime').value;
+            } else if (activeSection.id === 'misc-section') {
+                sectionType = 'أخرى';
+                items = selectedItems.filter(item => item.group === 'other');
+                restaurantName = document.getElementById('misc-restaurant-search').value;
+                responsibleName = document.getElementById('misc-responsible').value;
+                dateTimeValue = document.getElementById('misc-datetime').value;
+            } else {
+                showNotification('الرجاء فتح قسم الجرد المطلوب أولاً');
+                return;
+            }
+
+            if (items.length === 0) {
+                showNotification('لا توجد أصناف محددة للجرد في هذا القسم');
+                return;
+            }
+
+            let totalDiff = items.reduce((sum, item) => sum + (item.difference || 0), 0);
+            let diffText = totalDiff === 0 ? 'مطابق' : (totalDiff < 0 ? `عجز ${Math.abs(totalDiff)}` : `زيادة ${totalDiff}`);
+
+            const formattedDate = formatDateTimeEn(dateTimeValue);
+
+            let message = `📊 *تقرير جرد ${sectionType}* 📊\n\n`;
+            message += `🏢 المطعم: ${restaurantName || 'غير محدد'}\n`;
+            message += `👤 المسؤول: ${responsibleName || 'غير محدد'}\n`;
+            message += `📅 التاريخ: ${formattedDate}\n`;
+            message += `📦 عدد الأصناف: ${items.length}\n`;
+            message += `⚖️ إجمالي الفروقات: ${diffText}\n\n`;
+            message += `🔹 تم إنشاء هذا التقرير بواسطة نظام جرد شركة نايف للأغذية.\n`;
+            message += `📎 يمكنك إرفاق ملف PDF الخاص بالتقرير (من زر تصدير PDF) بشكل منفصل.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+            document.getElementById('whatsapp-modal').style.display = 'none';
+            showNotification('تم فتح واتساب بنجاح');
+        });
+        
+        document.getElementById('scroll-down-btn').addEventListener('click', function() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+
+        document.getElementById('scroll-top-btn').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function showNotification(msg) {
+            const notif = document.getElementById('notification');
+            notif.textContent = msg;
+            notif.style.display = 'block';
+            setTimeout(() => notif.style.display = 'none', 3000);
+        }
+
+        function setDefaultDateTime() {
+            const now = new Date();
+            const defaultValue = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            document.getElementById('meat-datetime').value = defaultValue;
+            document.getElementById('store-datetime').value = defaultValue;
+            document.getElementById('veg-datetime').value = defaultValue;
+            document.getElementById('appetizers-datetime').value = defaultValue;
+            document.getElementById('misc-datetime').value = defaultValue;
+        }
+
+        function updateRestaurantsTable() {
+            const tableBody = document.getElementById('restaurants-table-body');
+            tableBody.innerHTML = '';
+            restaurants.forEach(r => { const row = document.createElement('tr'); row.innerHTML = `<td>${r.name}</td><td>${r.areaManager}</td><td>${r.operationsManager}</td>`; tableBody.appendChild(row); });
+        }
+        document.getElementById('add-restaurant').addEventListener('click', () => { const name = prompt('أدخل اسم المطعم الجديد:'); if(name){ const am=prompt('مدير المنطقة:'); const om=prompt('مدير التشغيل:'); if(am&&om){ restaurants.push({name, areaManager:am, operationsManager:om}); updateRestaurantsTable(); showNotification('تمت الإضافة'); } } });
+        document.getElementById('delete-restaurant').addEventListener('click', () => { const name = prompt('أدخل اسم المطعم للحذف:'); const idx = restaurants.findIndex(r=>r.name===name); if(idx!==-1){ restaurants.splice(idx,1); updateRestaurantsTable(); showNotification('تم الحذف'); } else showNotification('غير موجود'); });
+
+        function setupRestaurantAutocomplete(inputId, suggestionsId, managerIds) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionsId);
+            input.addEventListener('input', function() {
+                const query = this.value.trim();
+                suggestions.innerHTML = '';
+                if (query.length === 0) { suggestions.style.display = 'none'; return; }
+                const filtered = restaurants.filter(r => r.name.includes(query));
+                if (filtered.length === 0) { suggestions.style.display = 'none'; return; }
+                filtered.forEach(rest => {
+                    const div = document.createElement('div'); div.className = 'restaurant-suggestion'; div.textContent = rest.name;
+                    div.addEventListener('click', () => {
+                        input.value = rest.name;
+                        document.getElementById(managerIds.restaurantName).value = rest.name;
+                        if (managerIds.areaManager) document.getElementById(managerIds.areaManager).textContent = rest.areaManager;
+                        if (managerIds.operationsManager) document.getElementById(managerIds.operationsManager).textContent = rest.operationsManager;
+                        suggestions.style.display = 'none';
+                    });
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = 'block';
+            });
+            document.addEventListener('click', function(e) { if (!input.contains(e.target) && !suggestions.contains(e.target)) suggestions.style.display = 'none'; });
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                    const targetId = this.getAttribute('data-target');
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) targetSection.classList.add('active');
+                    if (targetId === 'meat-section') updateMeatInventory();
+                    else if (targetId === 'store-section') updateStoreInventory();
+                    else if (targetId === 'veg-section') updateVegInventory();
+                    else if (targetId === 'appetizers-section') updateAppetizersInventory();
+                    else if (targetId === 'misc-section') updateMiscInventory();
+                });
+            });
+            setDefaultDateTime();
+            updateStats();
+            updateRestaurantsTable();
+            setupRestaurantAutocomplete('meat-restaurant-search', 'meat-restaurant-suggestions', { restaurantName: 'meat-restaurant-name', areaManager: 'meat-area-manager', operationsManager: 'meat-operations-manager' });
+            setupRestaurantAutocomplete('store-restaurant-search', 'store-restaurant-suggestions', { restaurantName: 'store-restaurant-name', areaManager: 'store-area-manager', operationsManager: 'store-operations-manager' });
+            setupRestaurantAutocomplete('veg-restaurant-search', 'veg-restaurant-suggestions', { restaurantName: 'veg-restaurant-name', areaManager: 'veg-area-manager', operationsManager: 'veg-operations-manager' });
+            setupRestaurantAutocomplete('appetizers-restaurant-search', 'appetizers-restaurant-suggestions', { restaurantName: 'appetizers-restaurant-name', areaManager: 'appetizers-area-manager', operationsManager: 'appetizers-operations-manager' });
+            setupRestaurantAutocomplete('misc-restaurant-search', 'misc-restaurant-suggestions', { restaurantName: 'misc-restaurant-name', areaManager: 'misc-area-manager', operationsManager: 'misc-operations-manager' });
+        });
+    </script>
 </body>
 </html>
