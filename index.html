@@ -542,6 +542,7 @@
             </div>
         </section>
 
+        <!-- قسم جرد أصناف المخازن الجديد -->
         <section id="store-section" class="section">
             <h2 style="color: var(--primary); margin-bottom: 20px;">جرد أصناف المخازن</h2>
             <div class="restaurant-info">
@@ -923,14 +924,8 @@
         }
 
         function convertToSmallestUnit(quantity, vendorUOM, uuom, itemCode = '') {
-            // معالجة خاصة لـ K1003 (شيش طاووق) بناءً على طلب المستخدم
-            if (itemCode === 'K1003') {
-                return Math.round(quantity * 60 * 100) / 100;
-            }
-            // معالجة خاصة لـ K1002 (كباب دجاج) - بدون تغيير عن الأصل
-            if (itemCode === 'K1002') {
-                return Math.round(quantity * 2 * 100) / 100;
-            }
+            if (itemCode === 'K1003') return Math.round(quantity * 60 * 100) / 100; // خاص لشيش طاووق
+            if (itemCode === 'K1002') return Math.round(quantity * 2 * 100) / 100;
             if (!vendorUOM || !quantity) return Math.round(quantity);
             if (itemCode === 'A1001') return Math.round(quantity * 10 * 100) / 100;
             if (itemCode === 'A1013') return Math.round(quantity * 2 * 100) / 100;
@@ -1162,13 +1157,12 @@
             document.getElementById('movement-modal').style.display = 'flex';
         }
 
-        // دالة لتجميع الأصناف المتشابهة (مع دمج K1042 و K1043 فقط)
+        // تجميع الأصناف المتشابهة (مع دمج K1042 و K1043 فقط)
         function findSimilarItems(items) {
             const similarGroups = {};
             items.forEach(item => {
                 let baseName = item.name.replace(/\(.*?\)/g, '').trim();
-                
-                // تجميع خاص لـ K1042 و K1043 فقط (Happy Chicken Pc)
+                // تجميع خاص لـ K1042 و K1043 فقط
                 if (item.code === 'K1042' || item.code === 'K1043') {
                     baseName = "Happy Chicken Pc Group";
                 }
@@ -1187,7 +1181,6 @@
                 else if (baseName.includes("Fresh Burger Chickens")) baseName = "Fresh Burger Chickens";
                 if (baseName.includes("Rooster Junior") || baseName.includes("Bint Al-Deek") || item.name.includes("فروج نايف") || item.name.includes("بنت الديك")) baseName = "فروج/بنت الديك";
                 if (baseName.includes("Grilled Chicken Fillet") || (baseName.includes("Chicken Fillet") && !baseName.includes("Finger") && !baseName.includes("Big")) || item.name.includes("فيليه مشوي") || item.name.includes("فيليه عادي") || item.name.includes("فيليه فلفل")) { if (!baseName.includes("Finger") && !baseName.includes("Big")) baseName = "فيليه دجاج"; }
-                
                 if (!similarGroups[baseName]) similarGroups[baseName] = [];
                 similarGroups[baseName].push(item);
             });
@@ -1309,7 +1302,7 @@
                             const input = row.querySelector('.actual-count-input');
                             input.addEventListener('input', (function(sItem, sItems, r) { return function() {
                                 const actual = parseFloat(this.value) || 0;
-                                // حساب الفرق بنفس طريقة الملف الأصلي: الفرق المباشر بين العدد المدخل والرصيد بالوحدة الصغرى
+                                // يتم حساب الفرق مباشرة كما في الكود الأصلي (بدون تحويل للوحدة الصغرى)
                                 const newDiff = actual - sItem.smallestUnitQty;
                                 const newDiffText = newDiff < 0 ? 'عجز' : newDiff > 0 ? 'زيادة' : '';
                                 const diffCell = document.querySelector(`.difference-cell[data-code="${sItem.code}"]`);
@@ -1327,7 +1320,7 @@
                         const diff = item.difference || 0;
                         const diffClass = diff < 0 ? 'difference-negative' : diff > 0 ? 'difference-positive' : '';
                         const diffText = diff < 0 ? 'عجز' : diff > 0 ? 'زيادة' : '';
-                        row.innerHTML = `<td>${rowIndex + 1}</td><td>${item.name}</td><td>${item.vendorUOM}</td><td>${item.stockQty}<td><td class="count-cell">${item.smallestUnitQty}</td><td><input type="number" class="actual-count-input" data-code="${item.code}" value="${item.actualCount || ''}" placeholder="0"></td><td class="difference-cell ${diffClass}" data-code="${item.code}" style="font-size: 18px; font-weight: bold;">${diff} ${diffText ? `<span class="difference-text" style="color: ${diff < 0 ? 'var(--accent-red)' : diff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${diffText})</span>` : ''}</td><td class="combined-difference-cell" data-code="${item.code}"></td>`;
+                        row.innerHTML = `<td>${rowIndex + 1}</td><td>${item.name}</td><td>${item.vendorUOM}</td><td>${item.stockQty}</td><td class="count-cell">${item.smallestUnitQty}</td><td><input type="number" class="actual-count-input" data-code="${item.code}" value="${item.actualCount || ''}" placeholder="0"></td><td class="difference-cell ${diffClass}" data-code="${item.code}" style="font-size: 18px; font-weight: bold;">${diff} ${diffText ? `<span class="difference-text" style="color: ${diff < 0 ? 'var(--accent-red)' : diff > 0 ? 'var(--accent-green)' : 'var(--primary)'};">(${diffText})</span>` : ''}</td><td class="combined-difference-cell" data-code="${item.code}"></td>`;
                         applyRowColoring(row, diff);
                         tbody.appendChild(row);
                         processedItems.add(item.code);
@@ -1373,7 +1366,7 @@
             
             meatItems.forEach(item => {
                 let subGroup = 'أخرى';
-                // تجميع K1042, K1043, K1044 في مجموعة واحدة "قطع دجاج صغير"
+                // تجميع K1042, K1043, K1044 في مجموعة واحدة
                 if (item.code === 'K1042' || item.code === 'K1043' || item.code === 'K1044') {
                     subGroup = 'قطع دجاج صغير';
                 }
@@ -1392,17 +1385,15 @@
                 else if (item.name.includes('Quils') || item.name.includes('فري')) subGroup = 'فري';
                 else if (item.name.includes('Rooster') || item.name.includes('فروج') || item.name.includes('Bint Al-Deek') || item.name.includes('بنت الديك')) subGroup = 'فروج/بنت الديك';
                 else if (item.name.includes('Royal')) subGroup = 'ملكي';
-                
                 if (!groupedItems[subGroup]) groupedItems[subGroup] = [];
                 groupedItems[subGroup].push(item);
             });
             
-            // ترتيب المجموعات: نفس الترتيب الأصلي مع إضافة المجموعتين الجديدتين في النهاية
+            // ترتيب المجموعات كما في الملف الأصلي (مع إضافة المجموعتين الجديدتين في النهاية)
             const orderedGroups = {};
             const orderOriginal = ['بيج فيليه', 'أصابع فيليه', 'فيليه دجاج', 'تيكا', 'فرايد', 'برجر', 'برجر طازج', 'جناح', 'درام ستيك/وصلة', 'فري', 'فروج/بنت الديك', 'ملكي', 'أخرى'];
             const newGroups = ['قطع دجاج صغير', 'أسياخ دجاج'];
             const fullOrder = [...orderOriginal, ...newGroups];
-            
             for (const key of fullOrder) {
                 if (groupedItems[key]) {
                     orderedGroups[key] = groupedItems[key];
