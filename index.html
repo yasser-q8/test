@@ -407,9 +407,10 @@ function handleFileUpload(e) {
                         if(dateColIdx === -1) dateColIdx = j;
                     }
                 }
-                if(siteColIdx !== -1 && inCol !== -1 && outCol !== -1) break;
+                if(siteColIdx !== -1 && inColIdx !== -1 && outColIdx !== -1) break;
             }
 
+            // تصحيح تعيين القيم الافتراضية باستخدام المتغيرات الصحيحة
             if(siteColIdx === -1) siteColIdx = 4;
             if(inColIdx === -1) inColIdx = 14;
             if(outColIdx === -1) outColIdx = 17;
@@ -427,7 +428,6 @@ function handleFileUpload(e) {
 }
 
 function processDataAndReports() {
-    // تخزين الحركات لكل اسم مطعم ورد في الملف بدقة مطابقة تامة (Exact Match)
     const countsIn = {};
     const countsOut = {};
     const monthlyData = {};
@@ -496,7 +496,6 @@ function processDataAndReports() {
             const siteClean = rest.siteName.toLowerCase().trim();
             const restClean = rest.restAr.toLowerCase().trim();
 
-            // مطابقة تامة مع Site Name أو الاسم العربي بدقة منعاً لأي دمج خطأ
             if(kClean === siteClean || kClean === restClean) {
                 matchedIn += countsIn[k] || 0;
                 matchedOut += countsOut[k] || 0;
