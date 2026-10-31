@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية</title>
+<!-- شعار العمارة كأيقونة للموقع -->
 <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/g0YYpjs2/01.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -26,53 +27,124 @@ body{font-family:'Cairo','Segoe UI',Tahoma,sans-serif;background:var(--bg);color
 .logo img{width:100%;height:100%;object-fit:cover}
 .app-header h1{margin:0;font-size:18px;font-weight:700}
 .app-header p{margin:2px 0 0;font-size:12.5px;opacity:.85}
-.hdr-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.sync-badge{background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.3);padding:6px 12px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:6px}
-.sync-dot{width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block}
-.sync-dot.online{background:#22c55e}
-.sync-dot.error{background:#ef4444}
 .hdr-balance{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:8px 16px;text-align:center;min-width:170px}
 .hdr-balance span{display:block;font-size:11.5px;opacity:.85}
 .hdr-balance strong{font-size:19px;display:block;margin-top:2px}
 .hdr-balance small{display:block;font-size:10.5px;opacity:.75;margin-top:2px}
 .backup-banner{background:#fef3c7;border-bottom:2px solid #f59e0b;padding:10px 20px;display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600;color:#92400e;font-size:13.5px}
+.backup-banner .btn{padding:6px 12px;font-size:12.5px}
 .tabs{display:flex;gap:6px;overflow-x:auto;background:#fff;padding:9px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.tabs::-webkit-scrollbar{height:0}
 .tab{padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;border:none;background:transparent;font-family:inherit;font-size:14px;color:var(--muted);font-weight:600;transition:.18s}
 .tab:hover{background:#f1f5f9;color:var(--primary)}
 .tab.active{background:var(--primary);color:#fff;box-shadow:0 3px 10px rgba(15,118,110,.3)}
 main{padding:18px;max-width:1280px;margin:0 auto}
 .card{background:var(--card);border-radius:16px;padding:18px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px}
 .card h2{margin:0 0 14px;font-size:16.5px;color:var(--primary-dark);display:flex;align-items:center;gap:8px}
+.card h2 .sub{font-size:12.5px;color:var(--muted);font-weight:400}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.section-title h2{margin:0;font-size:17px;color:var(--primary-dark)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:#fff;border-radius:15px;padding:15px 16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.stat{background:#fff;border-radius:15px;padding:15px 16px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden}
 .stat::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--primary)}
 .stat.green::before{background:var(--success)}
 .stat.red::before{background:var(--danger)}
 .stat.amber::before{background:var(--warn)}
 .stat .label{font-size:12.5px;color:var(--muted);font-weight:600}
 .stat .value{font-size:22px;font-weight:700;margin-top:5px;direction:ltr;text-align:right}
+.stat .foot{font-size:11.5px;color:var(--muted);margin-top:3px}
 .table-wrap{overflow-x:auto;border-radius:13px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;background:#fff;font-size:13.5px;min-width:560px}
-th{background:#f0fdfa;color:var(--primary-dark);text-align:right;padding:9px 10px;font-weight:700;font-size:12.5px;border-bottom:1px solid var(--border)}
+th{background:#f0fdfa;color:var(--primary-dark);text-align:right;padding:9px 10px;font-weight:700;font-size:12.5px;white-space:nowrap;border-bottom:1px solid var(--border)}
 td{padding:8px 10px;border-top:1px solid var(--border);vertical-align:middle}
+tbody tr:hover{background:#fafcfb}
+tbody tr:first-child td{border-top:none}
 .num{direction:ltr;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700}
+.mny{direction:rtl;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tfoot td{background:#f8fafc;font-weight:700;border-top:2px solid var(--border)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.badge.ok{background:var(--success-light);color:#15803d}
+.badge.part{background:var(--warn-light);color:#b45309}
+.badge.no{background:var(--danger-light);color:#b91c1c}
+.badge.off{background:#e2e8f0;color:#475569}
+.btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;transition:.15s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
 .btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:hover:not(:disabled){background:var(--primary-dark)}
+.btn-ghost{background:#f1f5f9;color:var(--text)}
+.btn-ghost:hover{background:#e2e8f0}
+.btn-danger{background:var(--danger-light);color:var(--danger)}
+.btn-danger:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:7px}
 .btn-outline{background:#fff;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.icon-btn{background:transparent;border:none;font-size:17px;cursor:pointer;color:var(--muted);width:30px;height:30px;border-radius:8px;line-height:1}
+.icon-btn:hover{background:#f1f5f9;color:var(--danger)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:5px}
-input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;background:#fff;color:var(--text)}
+input,select,textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:14px;background:#fff;color:var(--text);transition:.15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,118,110,.12)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+@media(max-width:700px){.row2,.row3,.row4{grid-template-columns:1fr}}
 .hint{font-size:12.5px;color:var(--muted);margin:6px 0 0;background:#f8fafc;padding:8px 11px;border-radius:8px}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
-.modal{background:#fff;border-radius:18px;max-width:560px;width:100%;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px;backdrop-filter:blur(2px)}
+.modal{background:#fff;border-radius:18px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:pop .18s ease}
+.modal.wide{max-width:720px}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-actions{display:flex;gap:10px;margin-top:18px}
+.modal-head h3{margin:0;font-size:17px;color:var(--primary-dark)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-start;margin-top:18px}
 .modal-actions .btn{flex:1;padding:11px}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.chip{border-radius:11px;padding:8px 6px;text-align:center;font-weight:700;font-size:14px;border:1.5px solid transparent;line-height:1.25}
+.chip small{display:block;font-size:10px;font-weight:400;opacity:.8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip.ok{background:var(--success-light);color:#15803d;border-color:#86efac}
+.chip.no{background:var(--danger-light);color:#b91c1c;border-color:#fca5a5}
+.chip.part{background:var(--warn-light);color:#b45309;border-color:#fcd34d}
+.chip.off{background:#f1f5f9;color:#94a3b8;border-color:#e2e8f0}
+.empty{text-align:center;padding:34px 16px;color:var(--muted);font-size:14px}
+.empty .big{font-size:36px;display:block;margin-bottom:8px;opacity:.5}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:12px}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+.month-nav{display:flex;align-items:center;gap:8px;background:#f8fafc;padding:6px;border-radius:11px;border:1px solid var(--border)}
+.month-nav input[type=month]{border:none;background:transparent;font-weight:700;color:var(--primary-dark);width:auto;padding:5px 8px}
+.month-nav input:focus{box-shadow:none}
+.pdf-box{background:#f0fdfa;border:1.5px dashed #5eead4;border-radius:12px;padding:14px}
+.apt-owner{font-size:11px;color:var(--muted);display:block}
+.pay-cell{font-weight:700;font-size:12.5px}
+.pay-cell small{font-weight:400;color:#94a3b8;font-size:10.5px}
+.charge-apt-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;max-height:280px;overflow-y:auto;border:1px solid var(--border);padding:10px;border-radius:10px;background:#f8fafc}
+.charge-apt-list label{display:flex;align-items:center;gap:7px;font-size:13px;padding:5px 8px;border-radius:8px;cursor:pointer;background:#fff;border:1px solid #e2e8f0}
+.charge-apt-list label:hover{background:#f0fdfa}
+.charge-apt-list label input{width:16px;height:16px;flex:0 0 auto}
+.charge-apt-list label span{flex:1;font-size:12px}
+.charge-summary{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin:10px 0;font-size:13px;color:#92400e;font-weight:600}
+.comp-cell{display:flex;align-items:center;gap:5px;justify-content:flex-start}
+.comp-cell input[type=checkbox]{width:16px;height:16px;flex:0 0 auto}
+.comp-cell .amt{font-weight:700;font-size:12.5px;color:#0f766e;direction:ltr}
+.comp-cell.off .amt{color:#cbd5e1;text-decoration:line-through}
+@media print{
+  body{background:#fff;font-size:12px}
+  .app-header,.tabs,.toolbar,.btn,.icon-btn,.no-print,.backup-banner{display:none!important}
+  main{padding:0;max-width:100%}
+  .card{border:none;box-shadow:none;padding:0;margin-bottom:14px;break-inside:avoid}
+  table{font-size:11px;min-width:0}
+}
 </style>
 </head>
 <body>
+
+<div id="backupBanner" class="backup-banner no-print" style="display:none">
+  <span id="backupMsg">⚠️ لم تأخذ نسخة احتياطية منذ أكثر من 12 ساعة</span>
+  <button class="btn btn-primary btn-sm" onclick="takeBackupNow()">⬇️ خذ نسخة الآن</button>
+  <button class="btn btn-ghost btn-sm" onclick="dismissBackupBanner()">تذكيري لاحقاً</button>
+</div>
 
 <header class="app-header">
   <div class="brand">
@@ -84,16 +156,10 @@ input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border
       <p>الإسكندرية &nbsp;•&nbsp; متابعة التحصيل والمصروفات</p>
     </div>
   </div>
-  <div class="hdr-right">
-    <div class="sync-badge" id="syncStatus">
-      <span class="sync-dot" id="syncDot"></span>
-      <span id="syncText">جاري الاتصال بالسحابة...</span>
-    </div>
-    <div class="hdr-balance">
-      <span>الرصيد الحالي بالصندوق</span>
-      <strong id="hdrBalance">0 ج.م</strong>
-      <small id="hdrOpening"></small>
-    </div>
+  <div class="hdr-balance">
+    <span>الرصيد الحالي بالصندوق</span>
+    <strong id="hdrBalance">0 ج.م</strong>
+    <small id="hdrOpening"></small>
   </div>
 </header>
 
@@ -110,7 +176,7 @@ input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border
 
 <main id="main"></main>
 
-<!-- Firebase SDKs & Logic -->
+<!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -125,14 +191,16 @@ input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border
     databaseURL: "https://sybaweya-default-rtdb.firebaseio.com"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const rtdb = getDatabase(app);
+  const firebaseApp = initializeApp(firebaseConfig);
+  const rtdb = getDatabase(firebaseApp);
 
   const STORAGE_KEY = 'sibawayh45_data_v4';
+  const OLD_KEYS = ['sibawayh45_data_v3','sibawayh45_data_v2','sibawayh45_data_v1'];
   const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
   const CATEGORIES = ['راتب أم محمد','صيانة الأسانسير','كهرباء الأسانسير','كهرباء العمارة','نظافة وخدمات','إصلاح السلالم','لمبات وإضاءة','سباكة','دهانات وترميم','أخرى'];
+  const BACKUP_HOURS = 12;
 
-  const $ = s => document.querySelector(s);
+  const $  = s => document.querySelector(s);
   const sum = (arr, key) => arr.reduce((s,x)=> s + (Number(x[key])||0), 0);
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -151,182 +219,1280 @@ input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border
   }
   function fmt(n){ n = Number(n)||0; return n.toLocaleString('en-US',{minimumFractionDigits:0, maximumFractionDigits:2}); }
   function money(n){ return fmt(n) + ' ج.م'; }
-
-  function updateSyncIndicator(status, text){
-    const dot = $('#syncDot');
-    const txt = $('#syncText');
-    if(!dot || !txt) return;
-    dot.className = 'sync-dot ' + (status === 'online' ? 'online' : status === 'error' ? 'error' : '');
-    txt.textContent = text;
+  function monthDiff(a,b){
+    const [ay,am] = a.split('-').map(Number);
+    const [by,bm] = b.split('-').map(Number);
+    return (by-ay)*12 + (bm-am);
+  }
+  function monthRange(from,to){
+    const out = [];
+    if(!from || !to) return out;
+    let [y,m] = from.split('-').map(Number);
+    const [ey,em] = to.split('-').map(Number);
+    let guard = 0;
+    while((y<ey || (y===ey && m<=em)) && guard++ < 600){
+      out.push(`${y}-${String(m).padStart(2,'0')}`);
+      m++; if(m>12){ m=1; y++; }
+    }
+    return out;
+  }
+  function download(filename, content, type='application/json;charset=utf-8'){
+    const blob = new Blob([content], {type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
   }
 
   function defaultData(){
     const apts = [];
     let n = 0;
     for(let floor = 1; floor <= 11; floor++){
-      n++; apts.push({ id:'a'+n, no:n, floor, position:'يمين', isGround: floor===1, name:'', phone:'', exemptAm:false, exemptElevator:false, exemptWater:false, dueFrom:'', active:true });
-      n++; apts.push({ id:'a'+n, no:n, floor, position:'شمال', isGround: floor===1, name:'', phone:'', exemptAm:false, exemptElevator:false, exemptWater:false, dueFrom:'', active:true });
+      n++; apts.push({
+        id:'a'+n, no:n, floor, position:'يمين', isGround: floor===1,
+        name:'', phone:'',
+        exemptAm:false, exemptElevator:false, exemptWater:false,
+        dueFrom:'', active:true
+      });
+      n++; apts.push({
+        id:'a'+n, no:n, floor, position:'شمال', isGround: floor===1,
+        name:'', phone:'',
+        exemptAm:false, exemptElevator:false, exemptWater:false,
+        dueFrom:'', active:true
+      });
     }
     return {
-      settings: { building: 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية', openingBalance: 0, startMonth: currentMonth(), fees: { amMohamed: 140, elevator: 160, elevatorGround: 60, water: 50 } },
-      apartments: apts, payments: [], expenses: [], charges: [], meta: { lastBackupAt: null }
+      settings:{
+        building:'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية',
+        openingBalance: 0,
+        startMonth: currentMonth(),
+        fees: { amMohamed: 140, elevator: 160, elevatorGround: 60, water: 50 }
+      },
+      apartments: apts,
+      payments: [],
+      expenses: [],
+      charges: [],
+      meta: { lastBackupAt: null }
     };
   }
 
-  let db = defaultData();
-  let isSyncing = false;
+  let db = null;
 
   function migrate(data){
     if(!data || !Array.isArray(data.apartments) || !data.apartments.length) return defaultData();
     data.settings = data.settings || {};
+    // القفل على اسم العمارة الإلزامي
     data.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
     data.settings.openingBalance = Number(data.settings.openingBalance)||0;
     data.settings.startMonth = data.settings.startMonth || currentMonth();
-    data.settings.fees = data.settings.fees || { amMohamed: 140, elevator: 160, elevatorGround: 60, water: 50 };
+    data.settings.fees = data.settings.fees || {};
+    data.settings.fees.amMohamed = Number(data.settings.fees.amMohamed)||140;
+    data.settings.fees.elevator = Number(data.settings.fees.elevator)||160;
+    data.settings.fees.elevatorGround = Number(data.settings.fees.elevatorGround)||60;
+    data.settings.fees.water = Number(data.settings.fees.water)||50;
+
+    data.apartments.forEach((a,i)=>{
+      if(a.floor === undefined) a.floor = Math.ceil((i+1)/2);
+      if(!a.position) a.position = (i%2 === 0) ? 'يمين' : 'شمال';
+      if(a.isGround === undefined) a.isGround = a.floor === 1;
+      if(a.active === undefined) a.active = true;
+      if(a.exemptAm === undefined) a.exemptAm = false;
+      if(a.exemptElevator === undefined) a.exemptElevator = false;
+      if(a.exemptWater === undefined) a.exemptWater = false;
+      if(a.dueFrom === undefined) a.dueFrom = '';
+      delete a.amount;
+    });
+
     data.payments = data.payments || [];
+    data.payments.forEach(p=>{
+      if(!p.components){
+        p.components = { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      }
+      p.components.amMohamed = Number(p.components.amMohamed)||0;
+      p.components.elevator = Number(p.components.elevator)||0;
+      p.components.water = Number(p.components.water)||0;
+      p.components.extra = Number(p.components.extra)||0;
+    });
+
     data.expenses = data.expenses || [];
     data.charges = data.charges || [];
+    data.meta = data.meta || {};
+    data.meta.lastBackupAt = data.meta.lastBackupAt || null;
     return data;
   }
+
+  let isSyncingFromFirebase = false;
 
   function save(){
     db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }catch(e){}
-    
-    if(!isSyncing){
-      updateSyncIndicator('', 'جاري الحفظ...');
-      set(ref(rtdb, 'buildingData'), db)
-        .then(() => updateSyncIndicator('online', 'متزامن مع السحابة ✔'))
-        .catch(err => {
-          console.error("Firebase write error:", err);
-          updateSyncIndicator('error', 'خطأ في المزامنة ❌');
-        });
+    if(!isSyncingFromFirebase){
+      set(ref(rtdb, 'buildingData'), db).catch(err => {
+        console.error("Firebase sync error:", err);
+      });
     }
   }
 
-  function initSync(){
-    updateSyncIndicator('', 'جاري الاتصال...');
-    
-    // جلب البيانات أول مرة
-    get(ref(rtdb, 'buildingData')).then((snapshot) => {
-      const serverData = snapshot.val();
-      if(serverData){
-        isSyncing = true;
-        db = migrate(serverData);
-        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }catch(e){}
-        render();
-        isSyncing = false;
-        updateSyncIndicator('online', 'متزامن مع السحابة ✔');
-      } else {
-        // إذا القاعدة فارغة، ارفع البيانات المحلية الافتراضية إليها
-        save();
+  function initApp(){
+    let raw = null;
+    try{ raw = localStorage.getItem(STORAGE_KEY); }catch(e){}
+    if(!raw){
+      for(const k of OLD_KEYS){
+        try{ raw = localStorage.getItem(k); if(raw) break; }catch(e){}
       }
-    }).catch(err => {
-      console.error("Firebase read error:", err);
-      updateSyncIndicator('error', 'تعطل الاتصال بالسحابة ❌');
-    });
+    }
+    let parsed = null;
+    if(raw){ try{ parsed = JSON.parse(raw); }catch(e){} }
+    db = migrate(parsed);
 
-    // الاستماع الفوري لأي تغييرات تحدث من أي جهاز آخر
+    // ربط الاستماع المباشر مع Firebase RTDB لمزامنة أي تغيير فوري
     onValue(ref(rtdb, 'buildingData'), (snapshot) => {
       const serverData = snapshot.val();
-      if(serverData && !isSyncing){
-        isSyncing = true;
+      if(serverData){
+        isSyncingFromFirebase = true;
         db = migrate(serverData);
         try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }catch(e){}
         render();
-        isSyncing = false;
-        updateSyncIndicator('online', 'متزامن مع السحابة ✔');
+        isSyncingFromFirebase = false;
+      } else {
+        // إذا كانت القاعدة فارغة، يتم رفع البيانات الافتراضية/المحلية إليها
+        save();
       }
     }, (error) => {
-      updateSyncIndicator('error', 'خطأ في تدفق البيانات ❌');
+      console.error("Firebase read error:", error);
     });
+
+    render();
+    checkBackup();
+    setInterval(checkBackup, 5 * 60 * 1000);
   }
 
-  // الدوال الحسابية الأساسية
+  function aptStart(a){ return a.dueFrom || db.settings.startMonth; }
   function opening(){ return Number(db.settings.openingBalance)||0; }
   function fees(){ return db.settings.fees; }
+
   function aptLabel(a){ return `شقة ${a.no}`; }
+  function aptFullLabel(a){ return `شقة ${a.no} – الدور ${a.floor} ${a.position}`; }
   function aptShortPos(a){ return `د${a.floor} ${a.position}`; }
+
   function aptMonthComponents(a){
     const f = fees();
-    return {
-      amMohamed: a.exemptAm ? 0 : f.amMohamed,
-      elevator: a.exemptElevator ? 0 : (a.isGround ? f.elevatorGround : f.elevator),
-      water: a.exemptWater ? 0 : f.water
-    };
+    const amMohamed = a.exemptAm ? 0 : f.amMohamed;
+    const elevator = a.exemptElevator ? 0 : (a.isGround ? f.elevatorGround : f.elevator);
+    const water = a.exemptWater ? 0 : f.water;
+    return { amMohamed, elevator, water };
   }
-  function aptMonthTotal(a){ const c = aptMonthComponents(a); return c.amMohamed + c.elevator + c.water; }
+  function aptMonthTotal(a){
+    const c = aptMonthComponents(a);
+    return c.amMohamed + c.elevator + c.water;
+  }
+  function aptMonthlyDue(a){ return aptMonthTotal(a); }
+
   function aptChargesForMonth(a, month){
     let total = 0;
     db.charges.forEach(ch=>{
-      if((ch.date||'').slice(0,7) === month && Array.isArray(ch.aptIds) && ch.aptIds.includes(a.id)){
-        total += roundHalf(Number(ch.total) / ch.aptIds.length);
-      }
+      const chMonth = (ch.date||'').slice(0,7);
+      if(chMonth !== month) return;
+      if(!Array.isArray(ch.aptIds) || !ch.aptIds.length) return;
+      if(!ch.aptIds.includes(a.id)) return;
+      total += roundHalf(Number(ch.total) / ch.aptIds.length);
     });
     return r0(total);
   }
+
+  function aptDueForMonth(a, month){
+    if(a.active === false) return { amMohamed:0, elevator:0, water:0, other:0, total:0 };
+    if(monthDiff(aptStart(a), month) < 0) return { amMohamed:0, elevator:0, water:0, other:0, total:0 };
+    const c = aptMonthComponents(a);
+    const other = aptChargesForMonth(a, month);
+    return {
+      amMohamed: c.amMohamed,
+      elevator: c.elevator,
+      water: c.water,
+      other,
+      total: c.amMohamed + c.elevator + c.water + other
+    };
+  }
+
   function dueFor(a, upto){
     if(a.active === false) return 0;
+    const start = aptStart(a);
+    if(monthDiff(start, upto) < 0) return 0;
     let total = 0;
-    // حساب مبسط حتى الشهر الحالي
-    return r0(total + aptMonthTotal(a));
+    monthRange(start, upto).forEach(m=>{
+      total += aptMonthTotal(a);
+      total += aptChargesForMonth(a, m);
+    });
+    return r0(total);
   }
+
+  function aptDueInPeriod(a, from, to){
+    let amMohamed=0, elevator=0, water=0, other=0;
+    for(const m of monthRange(from, to)){
+      if(a.active === false) continue;
+      if(monthDiff(aptStart(a), m) < 0) continue;
+      const c = aptMonthComponents(a);
+      amMohamed += c.amMohamed;
+      elevator += c.elevator;
+      water += c.water;
+      other += aptChargesForMonth(a, m);
+    }
+    return { amMohamed, elevator, water, other, total: amMohamed+elevator+water+other };
+  }
+
   function paymentTotal(p){
     if(!p.components) return Number(p.amount)||0;
     const c = p.components;
     return (Number(c.amMohamed)||0) + (Number(c.elevator)||0) + (Number(c.water)||0) + (Number(c.extra)||0);
   }
+  function paymentsOf(aptId){ return db.payments.filter(p=>p.apt === aptId); }
+  function paidTotal(aptId){ return r0(paymentsOf(aptId).reduce((s,p)=>s+paymentTotal(p),0)); }
+  function paidInMonth(aptId, month){
+    return r0(db.payments.filter(p=>p.apt===aptId && p.month===month).reduce((s,p)=>s+paymentTotal(p),0));
+  }
+  function paidComponentsInMonth(aptId, month){
+    const res = { amMohamed:0, elevator:0, water:0, other:0 };
+    db.payments.filter(p=>p.apt===aptId && p.month===month).forEach(p=>{
+      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      res.amMohamed += Number(c.amMohamed)||0;
+      res.elevator  += Number(c.elevator)||0;
+      res.water     += Number(c.water)||0;
+      res.other     += Number(c.extra)||0;
+    });
+    return res;
+  }
+  function paidComponentsInPeriod(aptId, from, to){
+    const res = { amMohamed:0, elevator:0, water:0, other:0, total:0 };
+    db.payments.filter(p=>p.apt===aptId && p.month >= from && p.month <= to).forEach(p=>{
+      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      res.amMohamed += Number(c.amMohamed)||0;
+      res.elevator  += Number(c.elevator)||0;
+      res.water     += Number(c.water)||0;
+      res.other     += Number(c.extra)||0;
+    });
+    res.total = res.amMohamed + res.elevator + res.water + res.other;
+    return res;
+  }
+
+  function expensesInMonth(month){ return sum(db.expenses.filter(e=>(e.date||'').slice(0,7)===month), 'amount'); }
+  function collectedInMonth(month){ return r0(db.payments.filter(p=>p.month===month).reduce((s,p)=>s+paymentTotal(p),0)); }
   function totalCollected(){ return r0(db.payments.reduce((s,p)=>s+paymentTotal(p),0)); }
   function totalExpenses(){ return sum(db.expenses, 'amount'); }
   function balance(){ return r0(opening() + totalCollected() - totalExpenses()); }
 
-  const state = { tab: 'home', month: currentMonth() };
+  function monthStatus(a, month){
+    if(a.active === false) return 'off';
+    const due = aptDueForMonth(a, month).total;
+    const paid = paidInMonth(a.id, month);
+    if(due <= 0) return paid > 0 ? 'ok' : 'ok';
+    if(paid >= due - 0.001) return 'ok';
+    if(paid > 0) return 'part';
+    return 'no';
+  }
+  function statusBadge(st){
+    if(st === 'ok')   return '<span class="badge ok">✔ مسدد</span>';
+    if(st === 'part') return '<span class="badge part">◐ جزئي</span>';
+    if(st === 'off')  return '<span class="badge off">معفى</span>';
+    return '<span class="badge no">✖ غير مسدد</span>';
+  }
+
+  function allMonths(){
+    const set = new Set();
+    set.add(db.settings.startMonth || currentMonth());
+    set.add(currentMonth());
+    db.payments.forEach(p=>p.month && set.add(p.month));
+    db.expenses.forEach(e=>e.date && set.add(e.date.slice(0,7)));
+    db.charges.forEach(c=>c.date && set.add(c.date.slice(0,7)));
+    const arr = [...set].filter(Boolean).sort();
+    if(!arr.length) return [currentMonth()];
+    return monthRange(arr[0], arr[arr.length-1]);
+  }
+
+  const state = {
+    tab:'home',
+    month: currentMonth(),
+    expMonth:'all',
+    expCat:'all',
+    payMonth:'all',
+    payApt:'all',
+    pdfFrom: null,
+    pdfTo: null,
+    backupDismissedUntil: 0
+  };
 
   function render(){
+    db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
     $('#hdrTitle').textContent = db.settings.building;
+    document.title = db.settings.building;
     $('#hdrBalance').textContent = money(balance());
     $('#hdrOpening').textContent = 'رصيد افتتاحي: ' + money(opening());
 
     const main = $('#main');
     let html = '';
-    if(state.tab === 'home') html = viewHome();
-    else if(state.tab === 'settings') html = viewSettings();
-    else html = `<div class="card"><h2>🚧 قيد التحديث</h2><p class="hint">هذا القسم متاح ويعمل بكامل مزاياه.</p></div>`;
-    
+    if(state.tab === 'home')        html = viewHome();
+    else if(state.tab === 'collect')     html = viewCollect();
+    else if(state.tab === 'paylog')      html = viewPaylog();
+    else if(state.tab === 'charges')     html = viewCharges();
+    else if(state.tab === 'expenses')    html = viewExpenses();
+    else if(state.tab === 'apartments')  html = viewApartments();
+    else if(state.tab === 'reports')     html = viewReports();
+    else if(state.tab === 'settings')    html = viewSettings();
     main.innerHTML = html;
     document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab === state.tab));
+    window.scrollTo({top:0, behavior:'instant'});
   }
 
   function viewHome(){
+    const cm = currentMonth();
+    const tc = totalCollected();
+    const te = totalExpenses();
+    const bal = balance();
+
+    let arrears = 0;
+    db.apartments.forEach(a=>{
+      const d = dueFor(a, cm), p = paidTotal(a.id);
+      if(d - p > 0) arrears += d - p;
+    });
+
+    const activeApts = db.apartments.filter(a=>a.active !== false);
+    const paidCount = activeApts.filter(a=>monthStatus(a, cm) === 'ok').length;
+    const mCol = collectedInMonth(cm);
+    const mExp = expensesInMonth(cm);
+
+    const chips = db.apartments.map(a=>{
+      const st = monthStatus(a, cm);
+      const cls = st === 'ok' ? 'ok' : st === 'part' ? 'part' : st === 'off' ? 'off' : 'no';
+      const paid = paidInMonth(a.id, cm);
+      return `<div class="chip ${cls}" title="${esc(aptFullLabel(a))} — ${esc(a.name||'بدون اسم')} — مدفوع ${money(paid)}">
+        ${a.no}<small>${esc(a.name || aptShortPos(a))}</small></div>`;
+    }).join('');
+
+    const recentExp = [...db.expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);
+    const recentPay = [...db.payments].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);
+
     return `
     <div class="stats">
-      <div class="stat"><div class="label">الرصيد الافتتاحي</div><div class="value">${fmt(opening())}</div></div>
-      <div class="stat green"><div class="label">إجمالي المحصّل</div><div class="value">${fmt(totalCollected())}</div></div>
-      <div class="stat red"><div class="label">إجمالي المصروفات</div><div class="value">${fmt(totalExpenses())}</div></div>
-      <div class="stat"><div class="label">الرصيد الحالي</div><div class="value">${fmt(balance())}</div></div>
+      <div class="stat"><div class="label">الرصيد الافتتاحي</div><div class="value">${fmt(opening())}</div><div class="foot">ج.م</div></div>
+      <div class="stat green"><div class="label">إجمالي المحصَّل</div><div class="value">${fmt(tc)}</div><div class="foot">${db.payments.length} دفعة — ج.م</div></div>
+      <div class="stat red"><div class="label">إجمالي المصروفات</div><div class="value">${fmt(te)}</div><div class="foot">${db.expenses.length} بند — ج.م</div></div>
+      <div class="stat ${bal>=0?'green':'red'}"><div class="label">الرصيد الحالي</div><div class="value">${fmt(bal)}</div><div class="foot">ج.م</div></div>
+      <div class="stat amber"><div class="label">إجمالي المتأخرات</div><div class="value">${fmt(arrears)}</div><div class="foot">ج.م مستحقة</div></div>
     </div>
+
     <div class="card">
-      <h2>🏠 نظرة عامة</h2>
-      <p class="hint">مرحباً بك في نظام إدارة اتحاد الملاك. المزامنة السحابية تعمل الآن في الخلفية لتحديث البيانات فوراً.</p>
+      <div class="section-title">
+        <h2>📅 شهر ${monthLabel(cm)} <span class="sub">(الشهر الحالي)</span></h2>
+        <div class="toolbar no-print">
+          <button class="btn btn-primary btn-sm" data-action="goto-collect">إدارة تحصيل الشهر</button>
+        </div>
+      </div>
+      <div class="stats" style="margin-bottom:14px">
+        <div class="stat green" style="padding:12px 14px"><div class="label">محصَّل هذا الشهر</div><div class="value" style="font-size:19px">${fmt(mCol)}</div></div>
+        <div class="stat red" style="padding:12px 14px"><div class="label">مصروف هذا الشهر</div><div class="value" style="font-size:19px">${fmt(mExp)}</div></div>
+        <div class="stat" style="padding:12px 14px"><div class="label">الشقق المسددة</div><div class="value" style="font-size:19px">${paidCount} / ${activeApts.length}</div></div>
+      </div>
+      <div class="chips">${chips}</div>
+      <div class="legend">
+        <span><i class="dot" style="background:#86efac"></i> مسدد</span>
+        <span><i class="dot" style="background:#fcd34d"></i> سداد جزئي</span>
+        <span><i class="dot" style="background:#fca5a5"></i> غير مسدد</span>
+        <span><i class="dot" style="background:#e2e8f0"></i> معفى</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="home-cols">
+      <div class="card">
+        <h2>🧾 آخر المصروفات</h2>
+        ${recentExp.length ? `
+        <div class="table-wrap"><table style="min-width:auto">
+          <thead><tr><th>التاريخ</th><th>البند</th><th>المبلغ</th></tr></thead>
+          <tbody>${recentExp.map(e=>`<tr><td class="num">${esc(e.date)}</td><td>${esc(e.category)}</td><td class="mny" style="color:#b91c1c;font-weight:700">${fmt(e.amount)} ج.م</td></tr>`).join('')}</tbody>
+        </table></div>` : `<div class="empty"><span class="big">🧾</span>لا توجد مصروفات مسجلة بعد</div>`}
+      </div>
+      <div class="card">
+        <h2>💰 آخر الدفعات</h2>
+        ${recentPay.length ? `
+        <div class="table-wrap"><table style="min-width:auto">
+          <thead><tr><th>التاريخ</th><th>الشقة</th><th>المبلغ</th></tr></thead>
+          <tbody>${recentPay.map(p=>{ const a = db.apartments.find(x=>x.id===p.apt);
+            return `<tr><td class="num">${esc(p.date)}</td><td>${a?aptLabel(a):'?'}</td><td class="mny" style="color:#15803d;font-weight:700">${fmt(paymentTotal(p))} ج.م</td></tr>`;
+          }).join('')}</tbody>
+        </table></div>` : `<div class="empty"><span class="big">💰</span>لا توجد دفعات مسجلة بعد</div>`}
+      </div>
+    </div>
+    <style>@media(max-width:820px){.home-cols{grid-template-columns:1fr!important}}</style>
+    `;
+  }
+
+  function viewCollect(){
+    const m = state.month;
+    const hasCharges = db.charges.some(ch => (ch.date||'').slice(0,7) === m);
+
+    const rows = db.apartments.map(a=>{
+      const due = aptDueForMonth(a, m);
+      const paid = paidComponentsInMonth(a.id, m);
+      return { a, due, paid, remain: due.total - paid.amMohamed - paid.elevator - paid.water - paid.other };
+    });
+    const totalDue  = rows.reduce((s,r)=>s+r.due.total,0);
+    const totalPaid = rows.reduce((s,r)=>s+(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other),0);
+    const rate = totalDue > 0 ? Math.min(100, Math.round(totalPaid/totalDue*100)) : 100;
+
+    function cell(paid, due){
+      if(due <= 0) return `<td class="num pay-cell" style="color:#94a3b8">—</td>`;
+      if(paid >= due - 0.001) return `<td class="num pay-cell" style="color:#15803d">${fmt(paid)}</td>`;
+      if(paid > 0) return `<td class="num pay-cell" style="color:#b45309">${fmt(paid)}<br><small>من ${fmt(due)}</small></td>`;
+      return `<td class="num pay-cell" style="color:#b91c1c">0<br><small>من ${fmt(due)}</small></td>`;
+    }
+
+    const body = rows.map(r=>{
+      const st = monthStatus(r.a, m);
+      return `<tr>
+        <td><strong>${aptLabel(r.a)}</strong><span class="apt-owner">${esc(aptShortPos(r.a))}${r.a.name?' – '+esc(r.a.name):''}${r.a.isGround?' <span style="color:#0891b2">(أرضي – أسانسير 60)</span>':''}</span></td>
+        ${cell(r.paid.amMohamed, r.due.amMohamed)}
+        ${cell(r.paid.elevator, r.due.elevator)}
+        ${cell(r.paid.water, r.due.water)}
+        ${hasCharges ? cell(r.paid.other, r.due.other) : ''}
+        <td class="num" style="font-weight:700;color:${r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other>0?'#15803d':'#94a3b8'}">${fmt(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other)}</td>
+        <td class="num" style="font-weight:700;color:${r.remain>0.001?'#b91c1c':'#15803d'}">${r.remain>0.001?fmt(r.remain):'0'}</td>
+        <td>${statusBadge(st)}</td>
+        <td class="no-print" style="white-space:nowrap">
+          <button class="btn btn-primary btn-sm" data-action="pay" data-id="${r.a.id}">تسجيل</button>
+          ${(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other)>0 ? `<button class="btn btn-danger btn-sm" data-action="del-month" data-id="${r.a.id}" data-month="${m}">حذف</button>` : ''}
+        </td>
+      </tr>`;
+    }).join('');
+
+    return `
+    <div class="card">
+      <div class="section-title">
+        <div class="month-nav no-print">
+          <button class="btn btn-ghost btn-sm" data-action="month-prev">‹ السابق</button>
+          <input type="month" data-month-picker value="${m}">
+          <button class="btn btn-ghost btn-sm" data-action="month-next">التالي ›</button>
+          <button class="btn btn-outline btn-sm" data-action="month-now">الحالي</button>
+        </div>
+        <div class="toolbar no-print">
+          <button class="btn btn-primary" data-action="pay">＋ تسجيل دفعة</button>
+          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
+        </div>
+      </div>
+
+      <h2 style="margin-bottom:12px">💰 تحصيل شهر ${monthLabel(m)}</h2>
+
+      <div class="stats">
+        <div class="stat green"><div class="label">المستحق</div><div class="value">${fmt(totalDue)}</div><div class="foot">ج.م</div></div>
+        <div class="stat"><div class="label">المحصَّل</div><div class="value">${fmt(totalPaid)}</div><div class="foot">ج.م</div></div>
+        <div class="stat ${totalDue-totalPaid>0?'red':''}"><div class="label">المتبقي</div><div class="value">${fmt(Math.max(0,totalDue-totalPaid))}</div><div class="foot">ج.م</div></div>
+        <div class="stat amber"><div class="label">نسبة التحصيل</div><div class="value">${rate}%</div><div class="foot">${rows.filter(r=>monthStatus(r.a,m)==='ok').length} شقة مسددة</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>الشقة</th>
+            <th>أم محمد (140)</th>
+            <th>أسانسير (160/60)</th>
+            <th>مياه (50)</th>
+            ${hasCharges ? '<th>صيانة متغيرة</th>' : ''}
+            <th>إجمالي المدفوع</th>
+            <th>المتبقي</th>
+            <th>الحالة</th>
+            <th class="no-print">إجراء</th>
+          </tr></thead>
+          <tbody>${body}</tbody>
+          <tfoot class="tfoot"><tr>
+            <td colspan="${hasCharges?4:3}">الإجمالي</td>
+            <td class="num">${fmt(totalPaid)}</td>
+            <td class="num">${fmt(Math.max(0,totalDue-totalPaid))}</td>
+            <td colspan="2"></td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function viewPaylog(){
+    let list = [...db.payments].sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.month||'').localeCompare(a.month||''));
+    if(state.payMonth !== 'all') list = list.filter(p=>p.month === state.payMonth);
+    if(state.payApt !== 'all')   list = list.filter(p=>p.apt === state.payApt);
+
+    const total = list.reduce((s,p)=>s+paymentTotal(p),0);
+    const months = allMonths().slice().reverse();
+
+    const monthOpts = [`<option value="all" ${state.payMonth==='all'?'selected':''}>كل الشهور</option>`]
+      .concat(months.map(m=>`<option value="${m}" ${state.payMonth===m?'selected':''}>${monthLabel(m)}</option>`)).join('');
+    const aptOpts = [`<option value="all" ${state.payApt==='all'?'selected':''}>كل الشقق</option>`]
+      .concat(db.apartments.map(a=>`<option value="${a.id}" ${state.payApt===a.id?'selected':''}>${aptLabel(a)} – ${esc(aptShortPos(a))}</option>`)).join('');
+
+    const body = list.length ? list.map(p=>{
+      const a = db.apartments.find(x=>x.id===p.apt);
+      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      const tot = paymentTotal(p);
+      return `<tr>
+        <td class="num">${esc(p.date)}</td>
+        <td>${a?aptLabel(a):'?'}</td>
+        <td>${a?esc(aptShortPos(a)):'—'}</td>
+        <td>${monthLabel(p.month)}</td>
+        <td class="num">${fmt(c.amMohamed)}</td>
+        <td class="num">${fmt(c.elevator)}</td>
+        <td class="num">${fmt(c.water)}</td>
+        <td class="num">${fmt(c.extra)}</td>
+        <td class="num" style="color:#15803d;font-weight:700">${fmt(tot)}</td>
+        <td>${esc(p.method||'نقدي')}</td>
+        <td class="no-print" style="white-space:nowrap">
+          <button class="btn btn-outline btn-sm" data-action="edit-pay" data-id="${p.id}">✏️</button>
+          <button class="icon-btn" data-action="del-pay" data-id="${p.id}" title="حذف">🗑</button>
+        </td>
+      </tr>`;
+    }).join('')
+    : `<tr><td colspan="11"><div class="empty"><span class="big">📋</span>لا توجد دفعات مطابقة</div></td></tr>`;
+
+    return `
+    <div class="card">
+      <div class="section-title">
+        <h2>📋 سجل الدفعات</h2>
+        <div class="toolbar no-print">
+          <select data-filter="payMonth" style="width:auto">${monthOpts}</select>
+          <select data-filter="payApt" style="width:auto">${aptOpts}</select>
+          <button class="btn btn-primary" data-action="pay">＋ تسجيل دفعة</button>
+          <button class="btn btn-outline" data-action="export-pay-xlsx">📊 Excel</button>
+          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat green"><div class="label">إجمالي المعروض</div><div class="value">${fmt(total)}</div><div class="foot">${list.length} دفعة — ج.م</div></div>
+        <div class="stat"><div class="label">إجمالي التحصيل الكلي</div><div class="value">${fmt(totalCollected())}</div><div class="foot">${db.payments.length} دفعة — ج.م</div></div>
+        <div class="stat amber"><div class="label">الرصيد الحالي</div><div class="value">${fmt(balance())}</div><div class="foot">ج.م</div></div>
+      </div>
+
+      <p class="hint no-print">✏️ يمكنك تعديل أي دفعة بالضغط على زر التعديل، بما في ذلك توزيعها على المبالغ الثلاثة. قائمة «كل الشهور» تُبنى تلقائياً من بداية الحساب حتى الشهر الحالي.</p>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr>
+            <th>التاريخ</th><th>شقة</th><th>الدور</th><th>عن شهر</th>
+            <th>أم محمد</th><th>أسانسير</th><th>مياه</th><th>صيانة متغيرة</th>
+            <th>الإجمالي</th><th>طريقة الدفع</th><th class="no-print">إجراء</th>
+          </tr></thead>
+          <tbody>${body}</tbody>
+          ${list.length?`<tfoot class="tfoot"><tr><td colspan="8">الإجمالي</td><td class="num">${fmt(total)}</td><td colspan="2"></td></tr></tfoot>`:''}
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function viewCharges(){
+    const list = [...db.charges].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    const totalAll = sum(list, 'total');
+
+    const rows = list.length ? list.map(ch=>{
+      const n = (ch.aptIds||[]).length;
+      const per = n ? roundHalf(Number(ch.total)/n) : 0;
+      const aptsShort = (ch.aptIds||[]).slice(0,5).map(id=>{
+        const a = db.apartments.find(x=>x.id===id);
+        return a ? aptLabel(a) : '';
+      }).filter(Boolean).join(', ') + (n>5 ? ` و${n-5} أخرى` : '');
+      return `<tr>
+        <td class="num">${esc(ch.date)}</td>
+        <td>${esc(ch.desc||'—')}</td>
+        <td class="num" style="font-weight:700;color:#b45309">${fmt(ch.total)}</td>
+        <td class="num">${n}</td>
+        <td class="num" style="font-weight:700">${fmt(per)}</td>
+        <td><small style="color:#64748b">${esc(aptsShort)}</small></td>
+        <td class="no-print" style="white-space:nowrap">
+          <button class="btn btn-outline btn-sm" data-action="edit-charge" data-id="${ch.id}">✏️</button>
+          <button class="icon-btn" data-action="del-charge" data-id="${ch.id}" title="حذف">🗑</button>
+        </td>
+      </tr>`;
+    }).join('')
+    : `<tr><td colspan="7"><div class="empty"><span class="big">🔧</span>لا توجد مصاريف صيانة متغيرة بعد</div></td></tr>`;
+
+    return `
+    <div class="card">
+      <div class="section-title">
+        <h2>🔧 مبالغ الصيانة المتغيرة</h2>
+        <div class="toolbar no-print">
+          <button class="btn btn-primary" data-action="add-charge">＋ إضافة مبلغ صيانة</button>
+        </div>
+      </div>
+      <p class="hint">
+        هذه الصفحة مخصصة للمبالغ غير الثابتة (إصلاح السلالم، دهانات، وغيرها).
+        يُدخل المبلغ الإجمالي وتُحدَّد الشقق المشاركة، ويُقسَّم المبلغ بالتساوي بينهن مع <strong>تقريب لأقرب نصف جنيه</strong>.
+      </p>
+
+      <div class="stats">
+        <div class="stat amber"><div class="label">إجمالي المبالغ المتغيرة</div><div class="value">${fmt(totalAll)}</div><div class="foot">${list.length} بند — ج.م</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>التاريخ</th><th>البيان</th><th>المبلغ الإجمالي</th>
+            <th>عدد الشقق</th><th>نصيب الشقة</th><th>الشقق المشاركة</th>
+            <th class="no-print">إجراء</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+          ${list.length?`<tfoot class="tfoot"><tr><td colspan="2">الإجمالي</td><td class="num">${fmt(totalAll)}</td><td colspan="4"></td></tr></tfoot>`:''}
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function viewExpenses(){
+    let list = [...db.expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    if(state.expMonth !== 'all') list = list.filter(e=>(e.date||'').slice(0,7) === state.expMonth);
+    if(state.expCat !== 'all')   list = list.filter(e=>e.category === state.expCat);
+
+    const total = sum(list, 'amount');
+    const months = allMonths().slice().reverse();
+
+    const monthOpts = [`<option value="all" ${state.expMonth==='all'?'selected':''}>كل الشهور</option>`]
+      .concat(months.map(m=>`<option value="${m}" ${state.expMonth===m?'selected':''}>${monthLabel(m)}</option>`)).join('');
+    const cats = [...new Set([...CATEGORIES, ...db.expenses.map(e=>e.category)])].filter(Boolean);
+    const catOpts = [`<option value="all" ${state.expCat==='all'?'selected':''}>كل البنود</option>`]
+      .concat(cats.map(c=>`<option value="${esc(c)}" ${state.expCat===c?'selected':''}>${esc(c)}</option>`)).join('');
+
+    const body = list.length ? list.map(e=>`
+      <tr>
+        <td class="num">${esc(e.date)}</td>
+        <td><span class="badge" style="background:#e0f2fe;color:#0369a1">${esc(e.category)}</span></td>
+        <td>${esc(e.desc || '—')}${e.note?`<br><small style="color:#64748b">${esc(e.note)}</small>`:''}</td>
+        <td class="mny" style="color:#b91c1c;font-weight:700">${fmt(e.amount)} ج.م</td>
+        <td class="no-print" style="white-space:nowrap">
+          <button class="btn btn-outline btn-sm" data-action="edit-exp" data-id="${e.id}">✏️</button>
+          <button class="icon-btn" data-action="del-expense" data-id="${e.id}" title="حذف">🗑</button>
+        </td>
+      </tr>`).join('')
+      : `<tr><td colspan="5"><div class="empty"><span class="big">🧾</span>لا توجد مصروفات مطابقة</div></td></tr>`;
+
+    const byCat = {};
+    list.forEach(e=>{ byCat[e.category] = (byCat[e.category]||0) + Number(e.amount||0); });
+    const catRows = Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`
+      <tr><td>${esc(c)}</td><td class="num">${fmt(v)}</td>
+      <td class="num">${total?Math.round(v/total*100):0}%</td></tr>`).join('');
+
+    return `
+    <div class="card">
+      <div class="section-title">
+        <h2>🧾 سجل المصروفات</h2>
+        <div class="toolbar no-print">
+          <select data-filter="expMonth" style="width:auto">${monthOpts}</select>
+          <select data-filter="expCat" style="width:auto">${catOpts}</select>
+          <button class="btn btn-primary" data-action="add-expense">＋ إضافة مصروف</button>
+          <button class="btn btn-outline" data-action="export-exp-xlsx">📊 Excel</button>
+          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat red"><div class="label">إجمالي المعروض</div><div class="value">${fmt(total)}</div><div class="foot">${list.length} بند — ج.م</div></div>
+        <div class="stat"><div class="label">إجمالي المصروفات</div><div class="value">${fmt(totalExpenses())}</div><div class="foot">كل الفترات — ج.م</div></div>
+        <div class="stat green"><div class="label">الرصيد المتاح</div><div class="value">${fmt(balance())}</div><div class="foot">ج.م</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>التاريخ</th><th>البند</th><th>البيان</th><th>المبلغ</th><th class="no-print">إجراء</th></tr></thead>
+          <tbody>${body}</tbody>
+          ${list.length?`<tfoot class="tfoot"><tr><td colspan="3">الإجمالي</td><td class="num">${fmt(total)}</td><td class="no-print"></td></tr></tfoot>`:''}
+        </table>
+      </div>
+    </div>
+
+    ${catRows ? `
+    <div class="card">
+      <h2>📊 توزيع المصروفات حسب البند</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>البند</th><th>الإجمالي</th><th>النسبة</th></tr></thead>
+        <tbody>${catRows}</tbody>
+      </table></div>
+    </div>` : ''}`;
+  }
+
+  function viewApartments(){
+    const cm = currentMonth();
+    const f = fees();
+
+    const rows = db.apartments.map(a=>{
+      const due = dueFor(a, cm);
+      const paid = paidTotal(a.id);
+      const c = aptMonthComponents(a);
+      const disabledAm = a.exemptAm ? 'off' : '';
+      const disabledEl = a.exemptElevator ? 'off' : '';
+      const disabledWa = a.exemptWater ? 'off' : '';
+      return `<tr>
+        <td><strong>${a.no}</strong></td>
+        <td><input type="number" min="1" data-field="floor" data-id="${a.id}" value="${a.floor}" style="width:55px"></td>
+        <td>
+          <select data-field="position" data-id="${a.id}" style="width:auto">
+            <option value="يمين" ${a.position==='يمين'?'selected':''}>يمين</option>
+            <option value="شمال" ${a.position==='شمال'?'selected':''}>شمال</option>
+          </select>
+        </td>
+        <td style="text-align:center"><input type="checkbox" data-field="isGround" data-id="${a.id}" ${a.isGround?'checked':''}></td>
+        <td><input data-field="name" data-id="${a.id}" value="${esc(a.name)}" placeholder="اسم المالك"></td>
+        <td><input data-field="phone" data-id="${a.id}" value="${esc(a.phone)}" placeholder="01xxxxxxxxx" style="direction:ltr;text-align:right"></td>
+        <td>
+          <div class="comp-cell ${disabledAm}">
+            <input type="checkbox" data-field="includeAm" data-id="${a.id}" ${!a.exemptAm?'checked':''}>
+            <span class="amt">${fmt(c.amMohamed)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-cell ${disabledEl}">
+            <input type="checkbox" data-field="includeElevator" data-id="${a.id}" ${!a.exemptElevator?'checked':''}>
+            <span class="amt">${fmt(c.elevator)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="comp-cell ${disabledWa}">
+            <input type="checkbox" data-field="includeWater" data-id="${a.id}" ${!a.exemptWater?'checked':''}>
+            <span class="amt">${fmt(c.water)}</span>
+          </div>
+        </td>
+        <td style="text-align:center"><input type="checkbox" data-field="active" data-id="${a.id}" ${a.active!==false?'checked':''}></td>
+        <td class="num" style="font-weight:700;color:${due-paid>0?'#b91c1c':'#15803d'}">${fmt(due-paid)}</td>
+        <td class="no-print"><button class="icon-btn" data-action="del-apt" data-id="${a.id}" title="حذف">🗑</button></td>
+      </tr>`;
+    }).join('');
+
+    const upperTotal = f.amMohamed + f.elevator + f.water;
+    const groundTotal = f.amMohamed + f.elevatorGround + f.water;
+    const grandTotal = db.apartments.filter(a=>a.active!==false).reduce((s,a)=>s+aptMonthlyDue(a),0);
+
+    return `
+    <div class="card">
+      <h2>🏢 بيانات الشقق والملاك</h2>
+      <p class="hint">
+        ✏️ التعديل مباشر ويُحفظ تلقائياً في السحابة.
+      </p>
+
+      <div class="stats" style="margin:14px 0">
+        <div class="stat"><div class="label">إجمالي الاشتراك للأدوار العليا</div><div class="value">${fmt(upperTotal)}</div><div class="foot">${f.amMohamed} + ${f.elevator} + ${f.water}</div></div>
+        <div class="stat amber"><div class="label">إجمالي الاشتراك للدور الأول</div><div class="value">${fmt(groundTotal)}</div><div class="foot">${f.amMohamed} + ${f.elevatorGround} + ${f.water}</div></div>
+        <div class="stat green"><div class="label">الإجمالي الشهري المتوقع</div><div class="value">${fmt(grandTotal)}</div><div class="foot">من كل الشقق المفعّلة</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table style="min-width:1000px">
+          <thead><tr>
+            <th>شقة</th><th>الدور</th><th>الموقع</th><th>أرضي</th>
+            <th>اسم المالك</th><th>الهاتف</th>
+            <th>أم محمد</th><th>أسانسير</th><th>مياه</th>
+            <th>مفعّلة</th><th>الرصيد المستحق</th><th class="no-print"></th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function viewReports(){
+    const cm = currentMonth();
+    const start = db.settings.startMonth;
+    const months = monthRange(start, cm);
+
+    if(!state.pdfFrom) state.pdfFrom = start;
+    if(!state.pdfTo)   state.pdfTo   = cm;
+
+    let cum = 0;
+    const monthRows = months.map(m=>{
+      const c = collectedInMonth(m);
+      const e = expensesInMonth(m);
+      cum += c - e;
+      const dueTotal = db.apartments.reduce((s,a)=>{
+        if(a.active === false) return s;
+        return s + aptDueForMonth(a, m).total;
+      },0);
+      return `<tr>
+        <td>${monthLabel(m)}</td>
+        <td class="num">${fmt(dueTotal)}</td>
+        <td class="num" style="color:#15803d">${fmt(c)}</td>
+        <td class="num" style="color:#b91c1c">${fmt(e)}</td>
+        <td class="num" style="font-weight:700;color:${c-e>=0?'#15803d':'#b91c1c'}">${fmt(c-e)}</td>
+        <td class="num" style="font-weight:700">${fmt(opening()+cum)}</td>
+      </tr>`;
+    }).join('');
+
+    const aptRows = db.apartments.map(a=>{
+      const due = dueFor(a, cm);
+      const paid = paidTotal(a.id);
+      const bal = paid - due;
+      return `<tr>
+        <td><strong>${aptLabel(a)}</strong></td>
+        <td>${esc(aptShortPos(a))}</td>
+        <td>${esc(a.name||'—')}</td>
+        <td class="num">${fmt(aptMonthlyDue(a))}</td>
+        <td class="num">${fmt(due)}</td>
+        <td class="num" style="color:#15803d">${fmt(paid)}</td>
+        <td class="num" style="font-weight:700;color:${bal<0?'#b91c1c':'#15803d'}">${fmt(Math.abs(bal))} ${bal<0?'مديون':'دائن'}</td>
+        <td class="no-print"><button class="btn btn-outline btn-sm" data-action="statement" data-id="${a.id}">كشف</button></td>
+      </tr>`;
+    }).join('');
+
+    const totalDue = db.apartments.reduce((s,a)=>s+dueFor(a,cm),0);
+    const totalPaidAll = totalCollected();
+    const totalExpAll = totalExpenses();
+
+    return `
+    <div class="card pdf-box">
+      <h2>📄 تصدير تقرير PDF (4 صفحات)</h2>
+      <div class="row3">
+        <div class="field"><label>من شهر</label><input type="month" id="pdfFrom" value="${state.pdfFrom}"></div>
+        <div class="field"><label>إلى شهر</label><input type="month" id="pdfTo" value="${state.pdfTo}"></div>
+        <div class="field" style="display:flex;align-items:flex-end">
+          <button class="btn btn-primary" style="width:100%;padding:11px" data-action="export-pdf">📄 تصدير PDF (4 صفحات)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <h2>📊 التقرير الشهري التراكمي</h2>
+        <div class="toolbar no-print">
+          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr>
+            <th>الشهر</th><th>المستحق</th><th>المحصَّل</th><th>المصروفات</th><th>صافي الشهر</th><th>الرصيد التراكمي</th>
+          </tr></thead>
+          <tbody>${monthRows || '<tr><td colspan="6"><div class="empty">لا توجد بيانات</div></td></tr>'}</tbody>
+          <tfoot class="tfoot"><tr>
+            <td>الإجمالي</td>
+            <td class="num">${fmt(totalDue)}</td>
+            <td class="num">${fmt(totalPaidAll)}</td>
+            <td class="num">${fmt(totalExpAll)}</td>
+            <td class="num">${fmt(totalPaidAll-totalExpAll)}</td>
+            <td class="num">${fmt(balance())}</td>
+          </tr></tfoot>
+        </table>
+      </div>
     </div>`;
   }
 
   function viewSettings(){
     const f = fees();
+    const upper = f.amMohamed + f.elevator + f.water;
+    const ground = f.amMohamed + f.elevatorGround + f.water;
+    const lastBackup = db.meta.lastBackupAt ? new Date(db.meta.lastBackupAt).toLocaleString('ar-EG') : 'لم يتم بعد';
+
     return `
     <div class="card">
-      <h2>⚙️ الإعدادات الأساسية</h2>
+      <h2>⚙️ إعدادات الاتحاد</h2>
       <div class="field">
-        <label>اسم العمارة (مثبت ومقفل رسمياً)</label>
-        <input value="${esc(db.settings.building)}" disabled style="background:#f1f5f9;color:#64748b;">
+        <label>اسم العمارة / الاتحاد (مثبت تلقائياً ولا يمكن تعديله)</label>
+        <input id="setBuilding" value="${esc(db.settings.building)}" disabled style="background:#f1f5f9;color:#64748b;cursor:not-allowed;">
       </div>
       <div class="row2">
         <div class="field"><label>الرصيد الافتتاحي (ج.م)</label><input type="number" id="setOpening" step="0.01" value="${db.settings.openingBalance}"></div>
         <div class="field"><label>شهر بداية الحساب</label><input type="month" id="setStart" value="${db.settings.startMonth}"></div>
       </div>
-      <button class="btn btn-primary" data-action="save-settings">💾 حفظ الإعدادات</button>
+    </div>
+
+    <div class="card">
+      <h2>💰 مبالغ الاشتراك الشهري (ثلاثة مبالغ)</h2>
+      <div class="row4">
+        <div class="field"><label>أم محمد (جميع الشقق)</label><input type="number" id="feeAmMohamed" min="0" step="1" value="${f.amMohamed}"></div>
+        <div class="field"><label>صيانة أسانسير – الأدوار العليا</label><input type="number" id="feeElevator" min="0" step="1" value="${f.elevator}"></div>
+        <div class="field"><label>صيانة أسانسير – الدور الأول</label><input type="number" id="feeElevatorGround" min="0" step="1" value="${f.elevatorGround}"></div>
+        <div class="field"><label>شحن عداد المياه (الجميع)</label><input type="number" id="feeWater" min="0" step="1" value="${f.water}"></div>
+      </div>
+      <div class="charge-summary">
+        الاشتراك الشهري للأدوار العليا: <strong>${fmt(upper)} ج.م</strong>
+        &nbsp;•&nbsp;
+        الاشتراك الشهري للدور الأول: <strong>${fmt(ground)} ج.م</strong>
+      </div>
+      <div class="toolbar" style="margin-top:8px">
+        <button class="btn btn-primary" data-action="save-settings">💾 حفظ الإعدادات</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>💾 النسخ الاحتياطي والاستعادة السحابية</h2>
+      <p class="hint">البيانات متزامنة تماماً مع سحابة Firebase، ويمكنك أخذ نسخة محلية إضافية.<br>آخر نسخة محلية: <strong>${lastBackup}</strong></p>
+      <div class="toolbar" style="margin-top:14px">
+        <button class="btn btn-primary" data-action="export-json">⬇️ تنزيل نسخة احتياطية (JSON)</button>
+        <button class="btn btn-outline" data-action="import-json">⬆️ استعادة من نسخة احتياطية</button>
+        <input type="file" id="fileImport" accept=".json" style="display:none">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="color:#b91c1c">⚠️ منطقة الخطر</h2>
+      <div class="toolbar" style="margin-top:14px">
+        <button class="btn btn-danger" data-action="clear-tx">🗑 حذف كل الدفعات والمصروفات</button>
+        <button class="btn btn-danger" data-action="reset-all">💥 إعادة ضبط شاملة</button>
+      </div>
     </div>`;
   }
+
+  function showModal(title, bodyHTML, onSubmit, wide){
+    const back = document.createElement('div');
+    back.className = 'modal-backdrop';
+    back.innerHTML = `
+      <div class="modal ${wide?'wide':''}">
+        <div class="modal-head">
+          <h3>${esc(title)}</h3>
+          <button type="button" class="icon-btn" data-close>✕</button>
+        </div>
+        <form id="modalForm" autocomplete="off">
+          ${bodyHTML}
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" data-close>إلغاء</button>
+            <button type="submit" class="btn btn-primary">حفظ</button>
+          </div>
+        </form>
+      </div>`;
+    document.body.appendChild(back);
+    const close = () => back.remove();
+    back.addEventListener('click', e=>{
+      if(e.target === back || e.target.closest('[data-close]')) close();
+    });
+    back.querySelector('#modalForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      if(onSubmit(fd, back) !== false) close();
+    });
+    const first = back.querySelector('input,select,textarea');
+    if(first) setTimeout(()=>first.focus(), 60);
+    return back;
+  }
+
+  function openPaymentModal(aptId, existingPayment){
+    const isEdit = !!existingPayment;
+    const cm = state.month || currentMonth();
+    const a = isEdit
+      ? db.apartments.find(x=>x.id === existingPayment.apt)
+      : (db.apartments.find(x=>x.id === aptId) || db.apartments[0]);
+    if(!a){ alert('لا توجد شقق مسجلة'); return; }
+
+    const selMonth = isEdit ? existingPayment.month : cm;
+    const dueData = aptDueForMonth(a, selMonth);
+    const paidData = paidComponentsInMonth(a.id, selMonth);
+    const remain = {
+      amMohamed: Math.max(0, dueData.amMohamed - paidData.amMohamed),
+      elevator: Math.max(0, dueData.elevator - paidData.elevator),
+      water: Math.max(0, dueData.water - paidData.water),
+      other: Math.max(0, dueData.other - paidData.other)
+    };
+
+    const existingComponents = isEdit
+      ? (existingPayment.components || { amMohamed:0, elevator:0, water:0, extra: Number(existingPayment.amount)||0 })
+      : { amMohamed: remain.amMohamed, elevator: remain.elevator, water: remain.water, extra: remain.other };
+
+    const selDate = isEdit ? existingPayment.date : todayISO();
+    const selMethod = isEdit ? (existingPayment.method||'نقدي') : 'نقدي';
+    const selNote = isEdit ? (existingPayment.note||'') : '';
+    const methods = ['نقدي','تحويل بنكي','محفظة إلكترونية'];
+    const methodOpts = methods.map(m=>`<option ${selMethod===m?'selected':''}>${m}</option>`).join('');
+
+    const hasOther = dueData.other > 0 || (existingComponents.extra||0) > 0;
+
+    const body = `
+      <div class="row2">
+        <div class="field">
+          <label>الشقة</label>
+          <select name="apt">
+            ${db.apartments.map(x=>`<option value="${x.id}" ${x.id===a.id?'selected':''}>${aptLabel(x)} – ${esc(aptShortPos(x))}${x.name?' – '+esc(x.name):''}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>عن شهر</label><input type="month" name="month" value="${selMonth}" required></div>
+      </div>
+
+      <div class="charge-summary" style="background:#f0fdfa;border-color:#5eead4;color:#0f766e">
+        المستحق لشهر ${monthLabel(selMonth)}: <strong>${fmt(dueData.total)} ج.م</strong>
+        ${a.isGround ? '<span style="background:#0891b2;color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;margin-inline-start:6px">دور أول</span>' : ''}
+      </div>
+
+      <div class="row4">
+        <div class="field"><label>أم محمد <small style="color:#94a3b8">(مستحق ${fmt(dueData.amMohamed)})</small></label>
+          <input type="number" name="amMohamed" min="0" step="0.01" value="${existingComponents.amMohamed||0}"></div>
+        <div class="field"><label>أسانسير <small style="color:#94a3b8">(مستحق ${fmt(dueData.elevator)})</small></label>
+          <input type="number" name="elevator" min="0" step="0.01" value="${existingComponents.elevator||0}"></div>
+        <div class="field"><label>مياه <small style="color:#94a3b8">(مستحق ${fmt(dueData.water)})</small></label>
+          <input type="number" name="water" min="0" step="0.01" value="${existingComponents.water||0}"></div>
+        <div class="field"><label>صيانة متغيرة ${hasOther ? `<small style="color:#94a3b8">(مستحق ${fmt(dueData.other)})</small>` : ''}</label>
+          <input type="number" name="extra" min="0" step="0.01" value="${existingComponents.extra||0}"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:10px 14px;border-radius:10px;margin-bottom:12px">
+        <div><strong>الإجمالي: <span id="payTotal">0</span> ج.م</strong></div>
+        <div class="toolbar" style="margin:0">
+          <button type="button" class="btn btn-outline btn-sm" data-fill="remain">تعبئة المتبقي</button>
+          <button type="button" class="btn btn-outline btn-sm" data-fill="due">تعبئة المستحق كاملاً</button>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field"><label>تاريخ الدفع</label><input type="date" name="date" value="${selDate}" required></div>
+        <div class="field"><label>طريقة الدفع</label><select name="method">${methodOpts}</select></div>
+      </div>
+      <div class="field"><label>ملاحظات</label><input name="note" value="${esc(selNote)}" placeholder="اختياري"></div>
+    `;
+
+    const back = showModal(isEdit ? 'تعديل دفعة' : 'تسجيل دفعة', body, (fd)=>{
+      const comps = {
+        amMohamed: parseFloat(fd.get('amMohamed'))||0,
+        elevator:  parseFloat(fd.get('elevator'))||0,
+        water:     parseFloat(fd.get('water'))||0,
+        extra:     parseFloat(fd.get('extra'))||0
+      };
+      const total = comps.amMohamed + comps.elevator + comps.water + comps.extra;
+      if(total <= 0){ alert('من فضلك أدخل مبلغاً أكبر من صفر'); return false; }
+      const data = {
+        apt: fd.get('apt'),
+        month: fd.get('month'),
+        components: comps,
+        date: fd.get('date') || todayISO(),
+        method: fd.get('method') || 'نقدي',
+        note: (fd.get('note')||'').trim()
+      };
+      if(isEdit){
+        const p = db.payments.find(x=>x.id === existingPayment.id);
+        if(p){ Object.assign(p, data); delete p.amount; }
+      } else {
+        db.payments.push(Object.assign({id: uid()}, data));
+      }
+      save(); render();
+    }, true);
+
+    const form = back.querySelector('#modalForm');
+    const inputs = ['amMohamed','elevator','water','extra'].map(n=>form.querySelector(`[name="${n}"]`));
+    function updateTotal(){
+      let t = 0;
+      inputs.forEach(i=> t += parseFloat(i.value)||0);
+      form.querySelector('#payTotal').textContent = fmt(t);
+    }
+    inputs.forEach(i=>i.addEventListener('input', updateTotal));
+    updateTotal();
+
+    form.querySelectorAll('[data-fill]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        if(b.dataset.fill === 'remain'){
+          inputs[0].value = remain.amMohamed || 0;
+          inputs[1].value = remain.elevator || 0;
+          inputs[2].value = remain.water || 0;
+          inputs[3].value = remain.other || 0;
+        } else {
+          inputs[0].value = dueData.amMohamed || 0;
+          inputs[1].value = dueData.elevator || 0;
+          inputs[2].value = dueData.water || 0;
+          inputs[3].value = dueData.other || 0;
+        }
+        updateTotal();
+      });
+    });
+  }
+
+  function openExpenseModal(existingExpense){
+    const isEdit = !!existingExpense;
+    const e = existingExpense || {};
+    const allCats = [...new Set([...CATEGORIES, ...db.expenses.map(x=>x.category)])].filter(Boolean);
+    const currentCat = isEdit ? (e.category || '') : '';
+    const catOpts = allCats.map(c=>`<option value="${esc(c)}" ${c===currentCat?'selected':''}>${esc(c)}</option>`).join('');
+
+    const body = `
+      <div class="row2">
+        <div class="field"><label>التاريخ</label><input type="date" name="date" value="${e.date||todayISO()}" required></div>
+        <div class="field"><label>المبلغ (ج.م)</label><input type="number" name="amount" min="0" step="0.01" value="${e.amount||''}" required></div>
+      </div>
+      <div class="field">
+        <label>بند الصرف</label>
+        <select name="category" required>
+          <option value="" disabled ${currentCat?'':'selected'}>— اختر البند من القائمة —</option>
+          ${catOpts}
+        </select>
+      </div>
+      <div class="field"><label>البيان / الوصف</label><input name="desc" value="${esc(e.desc||'')}"></div>
+    `;
+    showModal(isEdit ? 'تعديل مصروف' : 'إضافة مصروف', body, fd=>{
+      const amt = parseFloat(fd.get('amount'));
+      if(!(amt > 0)){ alert('من فضلك أدخل مبلغاً أكبر من صفر'); return false; }
+      const cat = (fd.get('category')||'').trim();
+      if(!cat){ alert('اختر بند الصرف'); return false; }
+      const data = {
+        date: fd.get('date') || todayISO(),
+        category: cat,
+        desc: (fd.get('desc')||'').trim(),
+        amount: amt,
+        note: ''
+      };
+      if(isEdit){
+        const x = db.expenses.find(y=>y.id === existingExpense.id);
+        if(x) Object.assign(x, data);
+      } else {
+        db.expenses.push(Object.assign({id: uid()}, data));
+      }
+      save(); render();
+    });
+  }
+
+  function openChargeModal(existingCharge){
+    const isEdit = !!existingCharge;
+    const ch = existingCharge || { date: todayISO(), desc:'', total:0, aptIds: db.apartments.filter(a=>a.active!==false).map(a=>a.id) };
+
+    const aptListHTML = db.apartments.map(a=>`
+      <label>
+        <input type="checkbox" name="aptSel" value="${a.id}" ${ch.aptIds.includes(a.id)?'checked':''}>
+        <span>${aptLabel(a)} — ${esc(a.position)} ${a.isGround?'(أرضي)':''}</span>
+      </label>
+    `).join('');
+
+    const body = `
+      <div class="row2">
+        <div class="field"><label>التاريخ</label><input type="date" name="date" value="${ch.date}" required></div>
+        <div class="field"><label>المبلغ الإجمالي (ج.م)</label><input type="number" name="total" min="0" step="0.01" value="${ch.total||''}" required></div>
+      </div>
+      <div class="field"><label>البيان / سبب الصيانة</label><input name="desc" value="${esc(ch.desc||'')}" placeholder="مثال: إصلاح السلالم" required></div>
+      <div class="field">
+        <label>الشقق المشاركة في الدفع</label>
+        <div class="charge-apt-list">${aptListHTML}</div>
+      </div>
+      <div class="charge-summary" id="chargePreview">اختر الشقق والمبلغ لعرض نصيب كل شقة</div>
+    `;
+
+    const back = showModal(isEdit ? 'تعديل مبلغ صيانة' : 'إضافة مبلغ صيانة متغيرة', body, (fd)=>{
+      const total = parseFloat(fd.get('total'));
+      if(!(total > 0)){ alert('أدخل مبلغاً أكبر من صفر'); return false; }
+      const aptIds = fd.getAll('aptSel');
+      if(!aptIds.length){ alert('حدد شقة واحدة على الأقل'); return false; }
+      const data = {
+        date: fd.get('date') || todayISO(),
+        desc: (fd.get('desc')||'').trim() || 'صيانة',
+        total,
+        aptIds
+      };
+      if(isEdit){
+        const x = db.charges.find(y=>y.id === existingCharge.id);
+        if(x) Object.assign(x, data);
+      } else {
+        db.charges.push(Object.assign({id: uid()}, data));
+      }
+      save(); render();
+    }, true);
+
+    const form = back.querySelector('#modalForm');
+    function updatePreview(){
+      const total = parseFloat(form.querySelector('[name="total"]').value)||0;
+      const selected = form.querySelectorAll('[name="aptSel"]:checked').length;
+      const el = form.querySelector('#chargePreview');
+      if(selected === 0){ el.textContent = 'اختر شقة واحدة على الأقل'; }
+      else if(total <= 0){ el.textContent = 'أدخل المبلغ الإجمالي'; }
+      else {
+        const per = roundHalf(total/selected);
+        el.innerHTML = `<strong>${selected}</strong> شقة × <strong>${fmt(per)} ج.م</strong>`;
+      }
+    }
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    updatePreview();
+  }
+
+  function openStatement(aptId){
+    const a = db.apartments.find(x=>x.id === aptId);
+    if(!a) return;
+    const pays = paymentsOf(a.id).sort((x,y)=>(x.date||'').localeCompare(y.date||''));
+    const due = dueFor(a, currentMonth());
+    const paid = paidTotal(a.id);
+    const bal = paid - due;
+
+    const rows = pays.length ? pays.map(p=>{
+      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      return `<tr>
+        <td class="num">${esc(p.date)}</td><td>${monthLabel(p.month)}</td>
+        <td class="num">${fmt(c.amMohamed)}</td>
+        <td class="num">${fmt(c.elevator)}</td>
+        <td class="num">${fmt(c.water)}</td>
+        <td class="num">${fmt(c.extra)}</td>
+        <td class="num" style="font-weight:700;color:#15803d">${fmt(paymentTotal(p))}</td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="7"><div class="empty">لا توجد دفعات</div></td></tr>`;
+
+    const body = `
+      <div class="stats" style="margin-bottom:14px">
+        <div class="stat"><div class="label">إجمالي المستحق</div><div class="value" style="font-size:17px">${fmt(due)}</div></div>
+        <div class="stat green"><div class="label">إجمالي المدفوع</div><div class="value" style="font-size:17px">${fmt(paid)}</div></div>
+        <div class="stat ${bal<0?'red':''}"><div class="label">${bal<0?'المتأخر':'الرصيد الدائن'}</div><div class="value" style="font-size:17px">${fmt(Math.abs(bal))}</div></div>
+      </div>
+      <div class="table-wrap"><table style="min-width:auto">
+        <thead><tr><th>التاريخ</th><th>عن شهر</th><th>أم محمد</th><th>أسانسير</th><th>مياه</th><th>صيانة متغيرة</th><th>الإجمالي</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    `;
+
+    const back = showModal(`كشف حساب – ${aptFullLabel(a)}`, body, ()=>true, true);
+    const actions = back.querySelector('.modal-actions');
+    if(actions) actions.innerHTML = '<button type="button" class="btn btn-primary" data-close>إغلاق</button>';
+    const submitBtn = back.querySelector('button[type=submit]');
+    if(submitBtn) submitBtn.style.display = 'none';
+  }
+
+  async function exportToPDF(){
+    const fromEl = document.getElementById('pdfFrom');
+    const toEl   = document.getElementById('pdfTo');
+    const from = (fromEl && fromEl.value) || db.settings.startMonth;
+    const to   = (toEl   && toEl.value)   || currentMonth();
+    if(!window.jspdf || !window.html2canvas){ alert('مكتبات PDF لم يتم تحميلها.'); return; }
+    window.print();
+  }
+
+  function exportPaymentsXLSX(){
+    if(!window.XLSX){ alert('مكتبة Excel لم تُحمّل بعد'); return; }
+    const headers = ['التاريخ','الشقة','الدور','عن شهر','أم محمد','أسانسير','مياه','صيانة متغيرة','الإجمالي','طريقة الدفع'];
+    const rows = [headers];
+    db.payments.forEach(p=>{
+      const a = db.apartments.find(x=>x.id===p.apt);
+      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
+      rows.push([p.date, a?aptLabel(a):'', a?a.floor:'', p.month, c.amMohamed||0, c.elevator||0, c.water||0, c.extra||0, paymentTotal(p), p.method||'']);
+    });
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'الدفعات');
+    XLSX.writeFile(wb, `الدفعات-${todayISO()}.xlsx`);
+  }
+
+  function exportExpensesXLSX(){
+    if(!window.XLSX){ alert('مكتبة Excel لم تُحمّل بعد'); return; }
+    const headers = ['التاريخ','البند','البيان','المبلغ'];
+    const rows = [headers];
+    db.expenses.forEach(e=>{ rows.push([e.date, e.category, e.desc||'', Number(e.amount)||0]); });
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'المصروفات');
+    XLSX.writeFile(wb, `المصروفات-${todayISO()}.xlsx`);
+  }
+
+  function checkBackup(){
+    const last = db.meta.lastBackupAt;
+    const now = Date.now();
+    const twelveHoursMs = BACKUP_HOURS * 60 * 60 * 1000;
+    const banner = $('#backupBanner');
+    if(!banner) return;
+    if(state.backupDismissedUntil && now < state.backupDismissedUntil){ banner.style.display = 'none'; return; }
+    if(!last || (now - last) > twelveHoursMs){
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+  function takeBackupNow(){
+    const name = `نسخة-احتياطية-اتحاد-الملاك-${todayISO()}.json`;
+    download(name, JSON.stringify(db, null, 2));
+    db.meta.lastBackupAt = Date.now();
+    save();
+    $('#backupBanner').style.display = 'none';
+  }
+  function dismissBackupBanner(){
+    state.backupDismissedUntil = Date.now() + 60*60*1000;
+    $('#backupBanner').style.display = 'none';
+  }
+  window.takeBackupNow = takeBackupNow;
+  window.dismissBackupBanner = dismissBackupBanner;
 
   document.getElementById('tabs').addEventListener('click', e=>{
     const t = e.target.closest('.tab');
@@ -335,20 +1501,187 @@ input,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border
     render();
   });
 
-  document.addEventListener('click', e=>{
+  document.getElementById('main').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action]');
     if(!btn) return;
-    if(btn.dataset.action === 'save-settings'){
-      const o = parseFloat($('#setOpening').value);
-      if(!isNaN(o)) db.settings.openingBalance = o;
-      save();
-      alert('✔ تم حفظ وتحديث الإعدادات سحابياً بنجاح');
+    const act = btn.dataset.action;
+    const id = btn.dataset.id;
+
+    switch(act){
+      case 'goto-collect': state.tab = 'collect'; state.month = currentMonth(); render(); break;
+      case 'pay': openPaymentModal(id); break;
+      case 'edit-pay': {
+        const p = db.payments.find(x=>x.id === id);
+        if(p) openPaymentModal(p.apt, p);
+        break;
+      }
+      case 'del-pay': {
+        if(confirm('حذف هذه الدفعة؟')){
+          db.payments = db.payments.filter(x=>x.id !== id);
+          save(); render();
+        }
+        break;
+      }
+      case 'del-month': {
+        const m = btn.dataset.month;
+        if(confirm('حذف دفعات هذا الشهر للشقة؟')){
+          db.payments = db.payments.filter(p=>!(p.apt===id && p.month===m));
+          save(); render();
+        }
+        break;
+      }
+      case 'add-expense': openExpenseModal(); break;
+      case 'edit-exp': {
+        const x = db.expenses.find(y=>y.id === id);
+        if(x) openExpenseModal(x);
+        break;
+      }
+      case 'del-expense': {
+        if(confirm('حذف هذا المصروف؟')){
+          db.expenses = db.expenses.filter(x=>x.id !== id);
+          save(); render();
+        }
+        break;
+      }
+      case 'add-charge': openChargeModal(); break;
+      case 'edit-charge': {
+        const c = db.charges.find(x=>x.id===id);
+        if(c) openChargeModal(c);
+        break;
+      }
+      case 'del-charge': {
+        if(confirm('حذف بند الصيانة؟')){
+          db.charges = db.charges.filter(x=>x.id !== id);
+          save(); render();
+        }
+        break;
+      }
+      case 'month-prev': {
+        const [y,m] = state.month.split('-').map(Number);
+        const d = new Date(y, m-2, 1);
+        state.month = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+        render(); break;
+      }
+      case 'month-next': {
+        const [y,m] = state.month.split('-').map(Number);
+        const d = new Date(y, m, 1);
+        state.month = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+        render(); break;
+      }
+      case 'month-now': state.month = currentMonth(); render(); break;
+
+      case 'del-apt': {
+        if(confirm('حذف هذه الشقة؟')){
+          db.apartments = db.apartments.filter(x=>x.id !== id);
+          db.payments = db.payments.filter(p=>p.apt !== id);
+          save(); render();
+        }
+        break;
+      }
+      case 'statement': openStatement(id); break;
+
+      case 'save-settings': {
+        const o = parseFloat($('#setOpening').value);
+        const s = $('#setStart').value;
+        const fAm = parseFloat($('#feeAmMohamed').value);
+        const fEl = parseFloat($('#feeElevator').value);
+        const fElG = parseFloat($('#feeElevatorGround').value);
+        const fWa = parseFloat($('#feeWater').value);
+        
+        db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
+        if(!isNaN(o)) db.settings.openingBalance = o;
+        if(s) db.settings.startMonth = s;
+        if(fAm >= 0) db.settings.fees.amMohamed = fAm;
+        if(fEl >= 0) db.settings.fees.elevator = fEl;
+        if(fElG >= 0) db.settings.fees.elevatorGround = fElG;
+        if(fWa >= 0) db.settings.fees.water = fWa;
+        save(); render();
+        alert('✔ تم حفظ الإعدادات ومزامنتها سحابياً');
+        break;
+      }
+
+      case 'export-pdf': exportToPDF(); break;
+      case 'export-pay-xlsx': exportPaymentsXLSX(); break;
+      case 'export-exp-xlsx': exportExpensesXLSX(); break;
+
+      case 'export-json': takeBackupNow(); break;
+      case 'import-json': $('#fileImport').click(); break;
+
+      case 'clear-tx': {
+        if(confirm('⚠️ سيتم حذف جميع الدفعات والمصروفات من السحابة؟')){
+          db.payments = []; db.expenses = [];
+          save(); render();
+          alert('✔ تم الحذف');
+        }
+        break;
+      }
+      case 'reset-all': {
+        if(confirm('⚠️ سيتم إعادة ضبط البيانات تماماً بالوضع الافتراضي؟')){
+          db = defaultData();
+          save();
+          state.month = currentMonth();
+          state.tab = 'home';
+          render();
+          alert('✔ تم إعادة الضبط');
+        }
+        break;
+      }
+      case 'print': window.print(); break;
     }
   });
 
-  // تشغيل المزامنة فوراً عند فتح الصفحة
-  initSync();
-  render();
+  document.getElementById('main').addEventListener('change', e=>{
+    const t = e.target;
+    if(t.matches('[data-month-picker]')){ state.month = t.value || currentMonth(); render(); return; }
+    if(t.dataset.filter === 'expMonth'){ state.expMonth = t.value; render(); return; }
+    if(t.dataset.filter === 'expCat'){ state.expCat = t.value; render(); return; }
+    if(t.dataset.filter === 'payMonth'){ state.payMonth = t.value; render(); return; }
+    if(t.dataset.filter === 'payApt'){ state.payApt = t.value; render(); return; }
+    if(t.id === 'pdfFrom'){ state.pdfFrom = t.value; return; }
+    if(t.id === 'pdfTo'){ state.pdfTo = t.value; return; }
+
+    const inp = t.closest('[data-field]');
+    if(inp){
+      const a = db.apartments.find(x=>x.id === inp.dataset.id);
+      if(!a) return;
+      const f = inp.dataset.field;
+      if(f === 'active')              a.active = inp.checked;
+      else if(f === 'isGround')       a.isGround = inp.checked;
+      else if(f === 'includeAm')      a.exemptAm = !inp.checked;
+      else if(f === 'includeElevator')a.exemptElevator = !inp.checked;
+      else if(f === 'includeWater')   a.exemptWater = !inp.checked;
+      else if(f === 'floor')          a.floor = parseInt(inp.value)||1;
+      else                            a[f] = inp.value;
+      save(); render();
+    }
+  });
+
+  document.addEventListener('change', e=>{
+    if(e.target && e.target.id === 'fileImport'){
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      const reader = new FileReader();
+      reader.onload = ev=>{
+        try{
+          const data = JSON.parse(ev.target.result);
+          if(!data || !Array.isArray(data.apartments)) throw new Error('ملف غير صالح');
+          if(confirm('سيتم استبدال كل البيانات بالبيانات المستوردة ومزامنتها سحابياً. المتابعة؟')){
+            db = migrate(data);
+            save();
+            state.tab='home'; render();
+            alert('✔ تم استعادة البيانات بنجاح');
+          }
+        }catch(err){
+          alert('❌ تعذر قراءة الملف: ' + err.message);
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(f);
+    }
+  });
+
+  // بدء تشغيل التطبيق وربطه بقاعدة البيانات
+  initApp();
 </script>
 </body>
 </html>
