@@ -1,1687 +1,1864 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية</title>
-<!-- شعار العمارة كأيقونة للموقع -->
-<link rel="icon" type="image/jpeg" href="https://i.postimg.cc/g0YYpjs2/01.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-:root{
-  --bg:#f1f5f9; --card:#fff; --primary:#0f766e; --primary-dark:#115e59;
-  --primary-light:#ccfbf1; --danger:#dc2626; --danger-light:#fee2e2;
-  --success:#16a34a; --success-light:#dcfce7; --warn:#d97706; --warn-light:#fef3c7;
-  --text:#1f2937; --muted:#64748b; --border:#e2e8f0;
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{font-family:'Cairo','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);direction:rtl;font-size:15px;line-height:1.5}
-.app-header{background:linear-gradient(135deg,#0f766e,#134e4a);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 4px 14px rgba(15,118,110,.25)}
-.brand{display:flex;align-items:center;gap:14px}
-.logo{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(255,255,255,.35);flex:0 0 auto}
-.logo img{width:100%;height:100%;object-fit:cover}
-.app-header h1{margin:0;font-size:18px;font-weight:700}
-.app-header p{margin:2px 0 0;font-size:12.5px;opacity:.85}
-.hdr-balance{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:8px 16px;text-align:center;min-width:170px}
-.hdr-balance span{display:block;font-size:11.5px;opacity:.85}
-.hdr-balance strong{font-size:19px;display:block;margin-top:2px}
-.hdr-balance small{display:block;font-size:10.5px;opacity:.75;margin-top:2px}
-.backup-banner{background:#fef3c7;border-bottom:2px solid #f59e0b;padding:10px 20px;display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600;color:#92400e;font-size:13.5px}
-.backup-banner .btn{padding:6px 12px;font-size:12.5px}
-.tabs{display:flex;gap:6px;overflow-x:auto;background:#fff;padding:9px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.tabs::-webkit-scrollbar{height:0}
-.tab{padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;border:none;background:transparent;font-family:inherit;font-size:14px;color:var(--muted);font-weight:600;transition:.18s}
-.tab:hover{background:#f1f5f9;color:var(--primary)}
-.tab.active{background:var(--primary);color:#fff;box-shadow:0 3px 10px rgba(15,118,110,.3)}
-main{padding:18px;max-width:1280px;margin:0 auto}
-.card{background:var(--card);border-radius:16px;padding:18px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px}
-.card h2{margin:0 0 14px;font-size:16.5px;color:var(--primary-dark);display:flex;align-items:center;gap:8px}
-.card h2 .sub{font-size:12.5px;color:var(--muted);font-weight:400}
-.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.section-title h2{margin:0;font-size:17px;color:var(--primary-dark)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:#fff;border-radius:15px;padding:15px 16px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden}
-.stat::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--primary)}
-.stat.green::before{background:var(--success)}
-.stat.red::before{background:var(--danger)}
-.stat.amber::before{background:var(--warn)}
-.stat .label{font-size:12.5px;color:var(--muted);font-weight:600}
-.stat .value{font-size:22px;font-weight:700;margin-top:5px;direction:ltr;text-align:right}
-.stat .foot{font-size:11.5px;color:var(--muted);margin-top:3px}
-.table-wrap{overflow-x:auto;border-radius:13px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;background:#fff;font-size:13.5px;min-width:560px}
-th{background:#f0fdfa;color:var(--primary-dark);text-align:right;padding:9px 10px;font-weight:700;font-size:12.5px;white-space:nowrap;border-bottom:1px solid var(--border)}
-td{padding:8px 10px;border-top:1px solid var(--border);vertical-align:middle}
-tbody tr:hover{background:#fafcfb}
-tbody tr:first-child td{border-top:none}
-.num{direction:ltr;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.mny{direction:rtl;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.tfoot td{background:#f8fafc;font-weight:700;border-top:2px solid var(--border)}
-.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
-.badge.ok{background:var(--success-light);color:#15803d}
-.badge.part{background:var(--warn-light);color:#b45309}
-.badge.no{background:var(--danger-light);color:#b91c1c}
-.badge.off{background:#e2e8f0;color:#475569}
-.btn{padding:8px 14px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;transition:.15s;white-space:nowrap}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover:not(:disabled){background:var(--primary-dark)}
-.btn-ghost{background:#f1f5f9;color:var(--text)}
-.btn-ghost:hover{background:#e2e8f0}
-.btn-danger{background:var(--danger-light);color:var(--danger)}
-.btn-danger:hover{background:#fecaca}
-.btn-sm{padding:5px 10px;font-size:12px;border-radius:7px}
-.btn-outline{background:#fff;border:1.5px solid var(--border);color:var(--text)}
-.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-.icon-btn{background:transparent;border:none;font-size:17px;cursor:pointer;color:var(--muted);width:30px;height:30px;border-radius:8px;line-height:1}
-.icon-btn:hover{background:#f1f5f9;color:var(--danger)}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:5px}
-input,select,textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:inherit;font-size:14px;background:#fff;color:var(--text);transition:.15s}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,118,110,.12)}
-input[type=checkbox]{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
-@media(max-width:700px){.row2,.row3,.row4{grid-template-columns:1fr}}
-.hint{font-size:12.5px;color:var(--muted);margin:6px 0 0;background:#f8fafc;padding:8px 11px;border-radius:8px}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px;backdrop-filter:blur(2px)}
-.modal{background:#fff;border-radius:18px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:pop .18s ease}
-.modal.wide{max-width:720px}
-@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-head h3{margin:0;font-size:17px;color:var(--primary-dark)}
-.modal-actions{display:flex;gap:10px;justify-content:flex-start;margin-top:18px}
-.modal-actions .btn{flex:1;padding:11px}
-.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
-.chip{border-radius:11px;padding:8px 6px;text-align:center;font-weight:700;font-size:14px;border:1.5px solid transparent;line-height:1.25}
-.chip small{display:block;font-size:10px;font-weight:400;opacity:.8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip.ok{background:var(--success-light);color:#15803d;border-color:#86efac}
-.chip.no{background:var(--danger-light);color:#b91c1c;border-color:#fca5a5}
-.chip.part{background:var(--warn-light);color:#b45309;border-color:#fcd34d}
-.chip.off{background:#f1f5f9;color:#94a3b8;border-color:#e2e8f0}
-.empty{text-align:center;padding:34px 16px;color:var(--muted);font-size:14px}
-.empty .big{font-size:36px;display:block;margin-bottom:8px;opacity:.5}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:12px}
-.legend span{display:flex;align-items:center;gap:5px}
-.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
-.month-nav{display:flex;align-items:center;gap:8px;background:#f8fafc;padding:6px;border-radius:11px;border:1px solid var(--border)}
-.month-nav input[type=month]{border:none;background:transparent;font-weight:700;color:var(--primary-dark);width:auto;padding:5px 8px}
-.month-nav input:focus{box-shadow:none}
-.pdf-box{background:#f0fdfa;border:1.5px dashed #5eead4;border-radius:12px;padding:14px}
-.apt-owner{font-size:11px;color:var(--muted);display:block}
-.pay-cell{font-weight:700;font-size:12.5px}
-.pay-cell small{font-weight:400;color:#94a3b8;font-size:10.5px}
-.charge-apt-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;max-height:280px;overflow-y:auto;border:1px solid var(--border);padding:10px;border-radius:10px;background:#f8fafc}
-.charge-apt-list label{display:flex;align-items:center;gap:7px;font-size:13px;padding:5px 8px;border-radius:8px;cursor:pointer;background:#fff;border:1px solid #e2e8f0}
-.charge-apt-list label:hover{background:#f0fdfa}
-.charge-apt-list label input{width:16px;height:16px;flex:0 0 auto}
-.charge-apt-list label span{flex:1;font-size:12px}
-.charge-summary{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;margin:10px 0;font-size:13px;color:#92400e;font-weight:600}
-.comp-cell{display:flex;align-items:center;gap:5px;justify-content:flex-start}
-.comp-cell input[type=checkbox]{width:16px;height:16px;flex:0 0 auto}
-.comp-cell .amt{font-weight:700;font-size:12.5px;color:#0f766e;direction:ltr}
-.comp-cell.off .amt{color:#cbd5e1;text-decoration:line-through}
-@media print{
-  body{background:#fff;font-size:12px}
-  .app-header,.tabs,.toolbar,.btn,.icon-btn,.no-print,.backup-banner{display:none!important}
-  main{padding:0;max-width:100%}
-  .card{border:none;box-shadow:none;padding:0;margin-bottom:14px;break-inside:avoid}
-  table{font-size:11px;min-width:0}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>شركة نايف للأغذية - نظام إدارة الوجبات والريسبي</title>
+
+    <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        naifPurple: {
+                            800: '#58325a',
+                            900: '#6d4370',
+                            950: '#3d203f'
+                        },
+                        naifPink: {
+                            500: '#c95574'
+                        }
+                    },
+                    fontFamily: { sans: ['Segoe UI', 'Tahoma', 'Cairo', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+        body { 
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f7f3f8;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #9d68a0; border-radius: 4px; }
+
+        .signature-card {
+            position: fixed;
+            bottom: 12px;
+            left: 12px;
+            background: #ffffff;
+            color: #1e3a8a;
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(109, 67, 112, 0.25);
+            font-size: 0.68rem;
+            font-weight: 700;
+            z-index: 99;
+            animation: floatSignature 5s ease-in-out infinite;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #ef4444;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .signature-card:hover { transform: scale(1.05); }
+
+        @keyframes floatSignature { 
+            0% { transform: translateY(0px); } 
+            50% { transform: translateY(-8px); } 
+            100% { transform: translateY(0px); } 
+        }
+
+        .signature-card .name { font-size: 0.78rem; font-weight: 800; color: #1e3a8a; }
+        .signature-card .title { font-size: 0.58rem; color: #2563eb; font-weight: 600; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .signature-card { display: none !important; }
+        }
+
+        .sticky-search-holder {
+            position: sticky;
+            top: 72px;
+            z-index: 30;
+            background-color: rgba(247, 243, 248, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 768px) {
+            .sticky-search-holder { top: 64px; }
+            input, select, button { font-size: 14px !important; }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-purple-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-purple-200">
 
-<div id="backupBanner" class="backup-banner no-print" style="display:none">
-  <span id="backupMsg">⚠️ لم تأخذ نسخة احتياطية منذ أكثر من 12 ساعة</span>
-  <button class="btn btn-primary btn-sm" onclick="takeBackupNow()">⬇️ خذ نسخة الآن</button>
-  <button class="btn btn-ghost btn-sm" onclick="dismissBackupBanner()">تذكيري لاحقاً</button>
-</div>
-
-<header class="app-header">
-  <div class="brand">
-    <div class="logo">
-      <img src="https://i.postimg.cc/g0YYpjs2/01.jpg" alt="شعار العمارة">
-    </div>
-    <div>
-      <h1 id="hdrTitle">اتحاد ملاك عمارة 45 شارع سيبويه</h1>
-      <p>الإسكندرية &nbsp;•&nbsp; متابعة التحصيل والمصروفات</p>
-    </div>
-  </div>
-  <div class="hdr-balance">
-    <span>الرصيد الحالي بالصندوق</span>
-    <strong id="hdrBalance">0 ج.م</strong>
-    <small id="hdrOpening"></small>
-  </div>
-</header>
-
-<nav class="tabs" id="tabs">
-  <button class="tab active" data-tab="home">🏠 الرئيسية</button>
-  <button class="tab" data-tab="collect">💰 التحصيل الشهري</button>
-  <button class="tab" data-tab="paylog">📋 سجل الدفعات</button>
-  <button class="tab" data-tab="charges">🔧 صيانة متغيرة</button>
-  <button class="tab" data-tab="expenses">🧾 المصروفات</button>
-  <button class="tab" data-tab="apartments">🏢 الشقق والملاك</button>
-  <button class="tab" data-tab="reports">📊 التقارير</button>
-  <button class="tab" data-tab="settings">⚙️ الإعدادات</button>
-</nav>
-
-<main id="main"></main>
-
-<!-- Firebase SDKs -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBiVvV-CYUvApZOzUC0NYJn5V1hTo3PfwY",
-    authDomain: "sybaweya.firebaseapp.com",
-    projectId: "sybaweya",
-    storageBucket: "sybaweya.firebasestorage.app",
-    messagingSenderId: "11492643411",
-    appId: "1:11492643411:web:e2b5ed80f4a6401612aca6",
-    databaseURL: "https://console.firebase.google.com/u/0/project/sybaweya/database/sybaweya-default-rtdb/data/~2F"
-  };
-
-  const firebaseApp = initializeApp(firebaseConfig);
-  const rtdb = getDatabase(firebaseApp);
-
-  const STORAGE_KEY = 'sibawayh45_data_v4';
-  const OLD_KEYS = ['sibawayh45_data_v3','sibawayh45_data_v2','sibawayh45_data_v1'];
-  const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-  const CATEGORIES = ['راتب أم محمد','صيانة الأسانسير','كهرباء الأسانسير','كهرباء العمارة','نظافة وخدمات','إصلاح السلالم','لمبات وإضاءة','سباكة','دهانات وترميم','أخرى'];
-  const BACKUP_HOURS = 12;
-
-  const $  = s => document.querySelector(s);
-  const sum = (arr, key) => arr.reduce((s,x)=> s + (Number(x[key])||0), 0);
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const todayISO = () => new Date().toISOString().slice(0,10);
-  const r0 = n => Math.round((Number(n)||0) * 100) / 100;
-  const roundHalf = n => Math.round((Number(n)||0) * 2) / 2;
-
-  function currentMonth(){
-    const d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-  }
-  function monthLabel(m){
-    if(!m) return '—';
-    const [y,mm] = m.split('-');
-    return (MONTHS_AR[+mm-1] || mm) + ' ' + y;
-  }
-  function fmt(n){ n = Number(n)||0; return n.toLocaleString('en-US',{minimumFractionDigits:0, maximumFractionDigits:2}); }
-  function money(n){ return fmt(n) + ' ج.م'; }
-  function monthDiff(a,b){
-    const [ay,am] = a.split('-').map(Number);
-    const [by,bm] = b.split('-').map(Number);
-    return (by-ay)*12 + (bm-am);
-  }
-  function monthRange(from,to){
-    const out = [];
-    if(!from || !to) return out;
-    let [y,m] = from.split('-').map(Number);
-    const [ey,em] = to.split('-').map(Number);
-    let guard = 0;
-    while((y<ey || (y===ey && m<=em)) && guard++ < 600){
-      out.push(`${y}-${String(m).padStart(2,'0')}`);
-      m++; if(m>12){ m=1; y++; }
-    }
-    return out;
-  }
-  function download(filename, content, type='application/json;charset=utf-8'){
-    const blob = new Blob([content], {type});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url), 1000);
-  }
-
-  function defaultData(){
-    const apts = [];
-    let n = 0;
-    for(let floor = 1; floor <= 11; floor++){
-      n++; apts.push({
-        id:'a'+n, no:n, floor, position:'يمين', isGround: floor===1,
-        name:'', phone:'',
-        exemptAm:false, exemptElevator:false, exemptWater:false,
-        dueFrom:'', active:true
-      });
-      n++; apts.push({
-        id:'a'+n, no:n, floor, position:'شمال', isGround: floor===1,
-        name:'', phone:'',
-        exemptAm:false, exemptElevator:false, exemptWater:false,
-        dueFrom:'', active:true
-      });
-    }
-    return {
-      settings:{
-        building:'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية',
-        openingBalance: 0,
-        startMonth: currentMonth(),
-        fees: { amMohamed: 140, elevator: 160, elevatorGround: 60, water: 50 }
-      },
-      apartments: apts,
-      payments: [],
-      expenses: [],
-      charges: [],
-      meta: { lastBackupAt: null }
-    };
-  }
-
-  let db = null;
-
-  function migrate(data){
-    if(!data || !Array.isArray(data.apartments) || !data.apartments.length) return defaultData();
-    data.settings = data.settings || {};
-    // القفل على اسم العمارة الإلزامي
-    data.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
-    data.settings.openingBalance = Number(data.settings.openingBalance)||0;
-    data.settings.startMonth = data.settings.startMonth || currentMonth();
-    data.settings.fees = data.settings.fees || {};
-    data.settings.fees.amMohamed = Number(data.settings.fees.amMohamed)||140;
-    data.settings.fees.elevator = Number(data.settings.fees.elevator)||160;
-    data.settings.fees.elevatorGround = Number(data.settings.fees.elevatorGround)||60;
-    data.settings.fees.water = Number(data.settings.fees.water)||50;
-
-    data.apartments.forEach((a,i)=>{
-      if(a.floor === undefined) a.floor = Math.ceil((i+1)/2);
-      if(!a.position) a.position = (i%2 === 0) ? 'يمين' : 'شمال';
-      if(a.isGround === undefined) a.isGround = a.floor === 1;
-      if(a.active === undefined) a.active = true;
-      if(a.exemptAm === undefined) a.exemptAm = false;
-      if(a.exemptElevator === undefined) a.exemptElevator = false;
-      if(a.exemptWater === undefined) a.exemptWater = false;
-      if(a.dueFrom === undefined) a.dueFrom = '';
-      delete a.amount;
-    });
-
-    data.payments = data.payments || [];
-    data.payments.forEach(p=>{
-      if(!p.components){
-        p.components = { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      }
-      p.components.amMohamed = Number(p.components.amMohamed)||0;
-      p.components.elevator = Number(p.components.elevator)||0;
-      p.components.water = Number(p.components.water)||0;
-      p.components.extra = Number(p.components.extra)||0;
-    });
-
-    data.expenses = data.expenses || [];
-    data.charges = data.charges || [];
-    data.meta = data.meta || {};
-    data.meta.lastBackupAt = data.meta.lastBackupAt || null;
-    return data;
-  }
-
-  let isSyncingFromFirebase = false;
-
-  function save(){
-    db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }catch(e){}
-    if(!isSyncingFromFirebase){
-      set(ref(rtdb, 'buildingData'), db).catch(err => {
-        console.error("Firebase sync error:", err);
-      });
-    }
-  }
-
-  function initApp(){
-    let raw = null;
-    try{ raw = localStorage.getItem(STORAGE_KEY); }catch(e){}
-    if(!raw){
-      for(const k of OLD_KEYS){
-        try{ raw = localStorage.getItem(k); if(raw) break; }catch(e){}
-      }
-    }
-    let parsed = null;
-    if(raw){ try{ parsed = JSON.parse(raw); }catch(e){} }
-    db = migrate(parsed);
-
-    // ربط الاستماع المباشر مع Firebase RTDB لمزامنة أي تغيير فوري
-    onValue(ref(rtdb, 'buildingData'), (snapshot) => {
-      const serverData = snapshot.val();
-      if(serverData){
-        isSyncingFromFirebase = true;
-        db = migrate(serverData);
-        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }catch(e){}
-        render();
-        isSyncingFromFirebase = false;
-      } else {
-        // إذا كانت القاعدة فارغة، يتم رفع البيانات الافتراضية/المحلية إليها
-        save();
-      }
-    }, (error) => {
-      console.error("Firebase read error:", error);
-    });
-
-    render();
-    checkBackup();
-    setInterval(checkBackup, 5 * 60 * 1000);
-  }
-
-  function aptStart(a){ return a.dueFrom || db.settings.startMonth; }
-  function opening(){ return Number(db.settings.openingBalance)||0; }
-  function fees(){ return db.settings.fees; }
-
-  function aptLabel(a){ return `شقة ${a.no}`; }
-  function aptFullLabel(a){ return `شقة ${a.no} – الدور ${a.floor} ${a.position}`; }
-  function aptShortPos(a){ return `د${a.floor} ${a.position}`; }
-
-  function aptMonthComponents(a){
-    const f = fees();
-    const amMohamed = a.exemptAm ? 0 : f.amMohamed;
-    const elevator = a.exemptElevator ? 0 : (a.isGround ? f.elevatorGround : f.elevator);
-    const water = a.exemptWater ? 0 : f.water;
-    return { amMohamed, elevator, water };
-  }
-  function aptMonthTotal(a){
-    const c = aptMonthComponents(a);
-    return c.amMohamed + c.elevator + c.water;
-  }
-  function aptMonthlyDue(a){ return aptMonthTotal(a); }
-
-  function aptChargesForMonth(a, month){
-    let total = 0;
-    db.charges.forEach(ch=>{
-      const chMonth = (ch.date||'').slice(0,7);
-      if(chMonth !== month) return;
-      if(!Array.isArray(ch.aptIds) || !ch.aptIds.length) return;
-      if(!ch.aptIds.includes(a.id)) return;
-      total += roundHalf(Number(ch.total) / ch.aptIds.length);
-    });
-    return r0(total);
-  }
-
-  function aptDueForMonth(a, month){
-    if(a.active === false) return { amMohamed:0, elevator:0, water:0, other:0, total:0 };
-    if(monthDiff(aptStart(a), month) < 0) return { amMohamed:0, elevator:0, water:0, other:0, total:0 };
-    const c = aptMonthComponents(a);
-    const other = aptChargesForMonth(a, month);
-    return {
-      amMohamed: c.amMohamed,
-      elevator: c.elevator,
-      water: c.water,
-      other,
-      total: c.amMohamed + c.elevator + c.water + other
-    };
-  }
-
-  function dueFor(a, upto){
-    if(a.active === false) return 0;
-    const start = aptStart(a);
-    if(monthDiff(start, upto) < 0) return 0;
-    let total = 0;
-    monthRange(start, upto).forEach(m=>{
-      total += aptMonthTotal(a);
-      total += aptChargesForMonth(a, m);
-    });
-    return r0(total);
-  }
-
-  function aptDueInPeriod(a, from, to){
-    let amMohamed=0, elevator=0, water=0, other=0;
-    for(const m of monthRange(from, to)){
-      if(a.active === false) continue;
-      if(monthDiff(aptStart(a), m) < 0) continue;
-      const c = aptMonthComponents(a);
-      amMohamed += c.amMohamed;
-      elevator += c.elevator;
-      water += c.water;
-      other += aptChargesForMonth(a, m);
-    }
-    return { amMohamed, elevator, water, other, total: amMohamed+elevator+water+other };
-  }
-
-  function paymentTotal(p){
-    if(!p.components) return Number(p.amount)||0;
-    const c = p.components;
-    return (Number(c.amMohamed)||0) + (Number(c.elevator)||0) + (Number(c.water)||0) + (Number(c.extra)||0);
-  }
-  function paymentsOf(aptId){ return db.payments.filter(p=>p.apt === aptId); }
-  function paidTotal(aptId){ return r0(paymentsOf(aptId).reduce((s,p)=>s+paymentTotal(p),0)); }
-  function paidInMonth(aptId, month){
-    return r0(db.payments.filter(p=>p.apt===aptId && p.month===month).reduce((s,p)=>s+paymentTotal(p),0));
-  }
-  function paidComponentsInMonth(aptId, month){
-    const res = { amMohamed:0, elevator:0, water:0, other:0 };
-    db.payments.filter(p=>p.apt===aptId && p.month===month).forEach(p=>{
-      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      res.amMohamed += Number(c.amMohamed)||0;
-      res.elevator  += Number(c.elevator)||0;
-      res.water     += Number(c.water)||0;
-      res.other     += Number(c.extra)||0;
-    });
-    return res;
-  }
-  function paidComponentsInPeriod(aptId, from, to){
-    const res = { amMohamed:0, elevator:0, water:0, other:0, total:0 };
-    db.payments.filter(p=>p.apt===aptId && p.month >= from && p.month <= to).forEach(p=>{
-      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      res.amMohamed += Number(c.amMohamed)||0;
-      res.elevator  += Number(c.elevator)||0;
-      res.water     += Number(c.water)||0;
-      res.other     += Number(c.extra)||0;
-    });
-    res.total = res.amMohamed + res.elevator + res.water + res.other;
-    return res;
-  }
-
-  function expensesInMonth(month){ return sum(db.expenses.filter(e=>(e.date||'').slice(0,7)===month), 'amount'); }
-  function collectedInMonth(month){ return r0(db.payments.filter(p=>p.month===month).reduce((s,p)=>s+paymentTotal(p),0)); }
-  function totalCollected(){ return r0(db.payments.reduce((s,p)=>s+paymentTotal(p),0)); }
-  function totalExpenses(){ return sum(db.expenses, 'amount'); }
-  function balance(){ return r0(opening() + totalCollected() - totalExpenses()); }
-
-  function monthStatus(a, month){
-    if(a.active === false) return 'off';
-    const due = aptDueForMonth(a, month).total;
-    const paid = paidInMonth(a.id, month);
-    if(due <= 0) return paid > 0 ? 'ok' : 'ok';
-    if(paid >= due - 0.001) return 'ok';
-    if(paid > 0) return 'part';
-    return 'no';
-  }
-  function statusBadge(st){
-    if(st === 'ok')   return '<span class="badge ok">✔ مسدد</span>';
-    if(st === 'part') return '<span class="badge part">◐ جزئي</span>';
-    if(st === 'off')  return '<span class="badge off">معفى</span>';
-    return '<span class="badge no">✖ غير مسدد</span>';
-  }
-
-  function allMonths(){
-    const set = new Set();
-    set.add(db.settings.startMonth || currentMonth());
-    set.add(currentMonth());
-    db.payments.forEach(p=>p.month && set.add(p.month));
-    db.expenses.forEach(e=>e.date && set.add(e.date.slice(0,7)));
-    db.charges.forEach(c=>c.date && set.add(c.date.slice(0,7)));
-    const arr = [...set].filter(Boolean).sort();
-    if(!arr.length) return [currentMonth()];
-    return monthRange(arr[0], arr[arr.length-1]);
-  }
-
-  const state = {
-    tab:'home',
-    month: currentMonth(),
-    expMonth:'all',
-    expCat:'all',
-    payMonth:'all',
-    payApt:'all',
-    pdfFrom: null,
-    pdfTo: null,
-    backupDismissedUntil: 0
-  };
-
-  function render(){
-    db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
-    $('#hdrTitle').textContent = db.settings.building;
-    document.title = db.settings.building;
-    $('#hdrBalance').textContent = money(balance());
-    $('#hdrOpening').textContent = 'رصيد افتتاحي: ' + money(opening());
-
-    const main = $('#main');
-    let html = '';
-    if(state.tab === 'home')        html = viewHome();
-    else if(state.tab === 'collect')     html = viewCollect();
-    else if(state.tab === 'paylog')      html = viewPaylog();
-    else if(state.tab === 'charges')     html = viewCharges();
-    else if(state.tab === 'expenses')    html = viewExpenses();
-    else if(state.tab === 'apartments')  html = viewApartments();
-    else if(state.tab === 'reports')     html = viewReports();
-    else if(state.tab === 'settings')    html = viewSettings();
-    main.innerHTML = html;
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab === state.tab));
-    window.scrollTo({top:0, behavior:'instant'});
-  }
-
-  function viewHome(){
-    const cm = currentMonth();
-    const tc = totalCollected();
-    const te = totalExpenses();
-    const bal = balance();
-
-    let arrears = 0;
-    db.apartments.forEach(a=>{
-      const d = dueFor(a, cm), p = paidTotal(a.id);
-      if(d - p > 0) arrears += d - p;
-    });
-
-    const activeApts = db.apartments.filter(a=>a.active !== false);
-    const paidCount = activeApts.filter(a=>monthStatus(a, cm) === 'ok').length;
-    const mCol = collectedInMonth(cm);
-    const mExp = expensesInMonth(cm);
-
-    const chips = db.apartments.map(a=>{
-      const st = monthStatus(a, cm);
-      const cls = st === 'ok' ? 'ok' : st === 'part' ? 'part' : st === 'off' ? 'off' : 'no';
-      const paid = paidInMonth(a.id, cm);
-      return `<div class="chip ${cls}" title="${esc(aptFullLabel(a))} — ${esc(a.name||'بدون اسم')} — مدفوع ${money(paid)}">
-        ${a.no}<small>${esc(a.name || aptShortPos(a))}</small></div>`;
-    }).join('');
-
-    const recentExp = [...db.expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);
-    const recentPay = [...db.payments].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);
-
-    return `
-    <div class="stats">
-      <div class="stat"><div class="label">الرصيد الافتتاحي</div><div class="value">${fmt(opening())}</div><div class="foot">ج.م</div></div>
-      <div class="stat green"><div class="label">إجمالي المحصَّل</div><div class="value">${fmt(tc)}</div><div class="foot">${db.payments.length} دفعة — ج.م</div></div>
-      <div class="stat red"><div class="label">إجمالي المصروفات</div><div class="value">${fmt(te)}</div><div class="foot">${db.expenses.length} بند — ج.م</div></div>
-      <div class="stat ${bal>=0?'green':'red'}"><div class="label">الرصيد الحالي</div><div class="value">${fmt(bal)}</div><div class="foot">ج.م</div></div>
-      <div class="stat amber"><div class="label">إجمالي المتأخرات</div><div class="value">${fmt(arrears)}</div><div class="foot">ج.م مستحقة</div></div>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="fixed inset-0 bg-naifPurple-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 border border-naifPurple-900">
+            <div class="text-center mb-6">
+                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/80?text=NAIF';" alt="شركة نايف للأغذية" class="w-20 h-20 mx-auto rounded-full shadow-lg border-2 border-naifPurple-900 object-cover mb-3">
+                <h2 class="text-2xl font-black text-naifPurple-900">شركة نايف للأغذية</h2>
+                <p class="text-xs text-slate-500 font-bold mt-1">نظام إدارة الأصناف وتكاليف الريسبي</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم</label>
+                    <select id="loginUserSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-naifPurple-900 outline-none">
+                        <option value="الادارة" selected>الادارة</option>
+                        <option value="مستخدم">مستخدم</option>
+                        <option value="Yasser">Yasser</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
+                    <input type="password" id="loginPassword" required placeholder="أدخل كلمة المرور" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-naifPurple-900 hover:bg-naifPurple-800 active:scale-[0.98] text-white font-black py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
+                </button>
+            </form>
+        </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">
-        <h2>📅 شهر ${monthLabel(cm)} <span class="sub">(الشهر الحالي)</span></h2>
-        <div class="toolbar no-print">
-          <button class="btn btn-primary btn-sm" data-action="goto-collect">إدارة تحصيل الشهر</button>
+    <!-- الهيدر الرئيسي -->
+    <header class="bg-naifPurple-900 text-white shadow-xl sticky top-0 z-40 border-b-4 border-naifPink-500">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button onclick="toggleMobileSidebar()" class="md:hidden text-white p-2 rounded-lg hover:bg-naifPurple-800 text-xl flex items-center justify-center">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="text-right">
+                        <h1 class="text-base sm:text-xl font-black tracking-wide leading-tight">شركة نايف للأغذية</h1>
+                        <p class="text-[10px] sm:text-xs text-purple-200">إدارة الريسبي والتكاليف</p>
+                    </div>
+                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/50?text=NAIF';" alt="شركة نايف للأغذية" class="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-2 border-white object-cover shadow-md">
+                </div>
+
+                <div class="flex items-center gap-1.5 sm:gap-3">
+                    <div class="bg-naifPurple-950/60 px-2.5 py-1.5 rounded-xl border border-purple-700/50 flex items-center gap-1.5 text-[11px] sm:text-xs">
+                        <i class="fa-solid fa-user-gear text-purple-300"></i>
+                        <span class="hidden sm:inline">المستخدم:</span> <strong id="currentUserDisplay" class="text-white">--</strong>
+                    </div>
+
+                    <label id="btnImportExcel" title="سحب من ملف الإكسل" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span class="hidden sm:inline">سحب إكسل</span>
+                        <input type="file" id="excelFileInput" accept=".xlsx, .xlsm, .xls" onchange="importExcelFile(event)" class="hidden">
+                    </label>
+
+                    <button onclick="downloadBackup()" title="تنزيل نسخة احتياطية" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md">
+                        <i class="fa-solid fa-download"></i>
+                        <span class="hidden md:inline">نسخة احتياطية</span>
+                    </button>
+
+                    <label id="btnRestoreBackup" title="استعادة نسخة احتياطية" class="bg-amber-600 hover:bg-amber-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-upload"></i>
+                        <span class="hidden md:inline">استعادة</span>
+                        <input type="file" id="restoreFileInput" accept=".json" onchange="restoreBackup(event)" class="hidden">
+                    </label>
+
+                    <button onclick="logout()" title="تسجيل الخروج" class="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition shadow-md">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="stats" style="margin-bottom:14px">
-        <div class="stat green" style="padding:12px 14px"><div class="label">محصَّل هذا الشهر</div><div class="value" style="font-size:19px">${fmt(mCol)}</div></div>
-        <div class="stat red" style="padding:12px 14px"><div class="label">مصروف هذا الشهر</div><div class="value" style="font-size:19px">${fmt(mExp)}</div></div>
-        <div class="stat" style="padding:12px 14px"><div class="label">الشقق المسددة</div><div class="value" style="font-size:19px">${paidCount} / ${activeApts.length}</div></div>
-      </div>
-      <div class="chips">${chips}</div>
-      <div class="legend">
-        <span><i class="dot" style="background:#86efac"></i> مسدد</span>
-        <span><i class="dot" style="background:#fcd34d"></i> سداد جزئي</span>
-        <span><i class="dot" style="background:#fca5a5"></i> غير مسدد</span>
-        <span><i class="dot" style="background:#e2e8f0"></i> معفى</span>
-      </div>
+    </header>
+
+    <!-- مؤشر حالة المزامنة السحابية Firebase -->
+    <div id="cloudSyncStatus" class="bg-purple-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-purple-700">
+        <i class="fa-solid fa-cloud-arrow-up text-emerald-400 animate-pulse"></i>
+        <span>جاري المزامنة مع السحابة (Firebase)...</span>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="home-cols">
-      <div class="card">
-        <h2>🧾 آخر المصروفات</h2>
-        ${recentExp.length ? `
-        <div class="table-wrap"><table style="min-width:auto">
-          <thead><tr><th>التاريخ</th><th>البند</th><th>المبلغ</th></tr></thead>
-          <tbody>${recentExp.map(e=>`<tr><td class="num">${esc(e.date)}</td><td>${esc(e.category)}</td><td class="mny" style="color:#b91c1c;font-weight:700">${fmt(e.amount)} ج.م</td></tr>`).join('')}</tbody>
-        </table></div>` : `<div class="empty"><span class="big">🧾</span>لا توجد مصروفات مسجلة بعد</div>`}
-      </div>
-      <div class="card">
-        <h2>💰 آخر الدفعات</h2>
-        ${recentPay.length ? `
-        <div class="table-wrap"><table style="min-width:auto">
-          <thead><tr><th>التاريخ</th><th>الشقة</th><th>المبلغ</th></tr></thead>
-          <tbody>${recentPay.map(p=>{ const a = db.apartments.find(x=>x.id===p.apt);
-            return `<tr><td class="num">${esc(p.date)}</td><td>${a?aptLabel(a):'?'}</td><td class="mny" style="color:#15803d;font-weight:700">${fmt(paymentTotal(p))} ج.م</td></tr>`;
-          }).join('')}</tbody>
-        </table></div>` : `<div class="empty"><span class="big">💰</span>لا توجد دفعات مسجلة بعد</div>`}
-      </div>
-    </div>
-    <style>@media(max-width:820px){.home-cols{grid-template-columns:1fr!important}}</style>
-    `;
-  }
+    <!-- خلفية معتمة لإغلاق القائمة الجانبية على الموبايل -->
+    <div id="mobileSidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden transition-opacity"></div>
 
-  function viewCollect(){
-    const m = state.month;
-    const hasCharges = db.charges.some(ch => (ch.date||'').slice(0,7) === m);
+    <!-- الحاوية الرئيسية -->
+    <div class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col md:flex-row gap-4 sm:gap-6">
 
-    const rows = db.apartments.map(a=>{
-      const due = aptDueForMonth(a, m);
-      const paid = paidComponentsInMonth(a.id, m);
-      return { a, due, paid, remain: due.total - paid.amMohamed - paid.elevator - paid.water - paid.other };
-    });
-    const totalDue  = rows.reduce((s,r)=>s+r.due.total,0);
-    const totalPaid = rows.reduce((s,r)=>s+(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other),0);
-    const rate = totalDue > 0 ? Math.min(100, Math.round(totalPaid/totalDue*100)) : 100;
+        <!-- القائمة الجانبية -->
+        <aside id="mainSidebar" class="w-full md:w-64 bg-white rounded-2xl shadow-lg border border-purple-100 p-3 shrink-0 self-start sticky top-20 hidden md:block z-30 transition-all duration-300">
+            <div class="text-[11px] font-black text-naifPurple-900 uppercase px-3 py-2 flex items-center justify-between">
+                <span>القائمة الرئيسية</span>
+                <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+            <nav class="space-y-1">
+                <button onclick="switchTab('recipes')" id="nav-recipes" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-utensils text-naifPurple-900 text-base w-5"></i>
+                    <span>وصفات الوجبات (BOM)</span>
+                </button>
+                <button onclick="switchTab('pricelist')" id="nav-pricelist" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-tags text-naifPurple-900 text-base w-5"></i>
+                    <span>دليل الأسعار والأصناف</span>
+                </button>
+                <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-chart-line text-naifPurple-900 text-base w-5"></i>
+                    <span>التقارير التحليلية</span>
+                </button>
+                <button onclick="switchTab('pending')" id="nav-pending" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-hourglass-half text-amber-600 text-base w-5"></i>
+                    <span>وجبات قيد الاعتماد</span> <span id="pendingBadge" class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full mr-auto font-bold">0</span>
+                </button>
+                <button onclick="switchTab('cancelled')" id="nav-cancelled" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-ban text-rose-600 text-base w-5"></i>
+                    <span>الوجبات الملغية</span> <span id="cancelledBadge" class="bg-rose-100 text-rose-800 text-[10px] px-2 py-0.5 rounded-full mr-auto font-bold">0</span>
+                </button>
+                <button onclick="switchTab('auditlog')" id="nav-auditlog" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
+                    <i class="fa-solid fa-clock-rotate-left text-naifPurple-900 text-base w-5"></i>
+                    <span>سجل الحركات الكامل</span>
+                </button>
+            </nav>
+        </aside>
 
-    function cell(paid, due){
-      if(due <= 0) return `<td class="num pay-cell" style="color:#94a3b8">—</td>`;
-      if(paid >= due - 0.001) return `<td class="num pay-cell" style="color:#15803d">${fmt(paid)}</td>`;
-      if(paid > 0) return `<td class="num pay-cell" style="color:#b45309">${fmt(paid)}<br><small>من ${fmt(due)}</small></td>`;
-      return `<td class="num pay-cell" style="color:#b91c1c">0<br><small>من ${fmt(due)}</small></td>`;
-    }
+        <!-- الشاشات الرئيسية -->
+        <main class="flex-1 min-w-0">
 
-    const body = rows.map(r=>{
-      const st = monthStatus(r.a, m);
-      return `<tr>
-        <td><strong>${aptLabel(r.a)}</strong><span class="apt-owner">${esc(aptShortPos(r.a))}${r.a.name?' – '+esc(r.a.name):''}${r.a.isGround?' <span style="color:#0891b2">(أرضي – أسانسير 60)</span>':''}</span></td>
-        ${cell(r.paid.amMohamed, r.due.amMohamed)}
-        ${cell(r.paid.elevator, r.due.elevator)}
-        ${cell(r.paid.water, r.due.water)}
-        ${hasCharges ? cell(r.paid.other, r.due.other) : ''}
-        <td class="num" style="font-weight:700;color:${r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other>0?'#15803d':'#94a3b8'}">${fmt(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other)}</td>
-        <td class="num" style="font-weight:700;color:${r.remain>0.001?'#b91c1c':'#15803d'}">${r.remain>0.001?fmt(r.remain):'0'}</td>
-        <td>${statusBadge(st)}</td>
-        <td class="no-print" style="white-space:nowrap">
-          <button class="btn btn-primary btn-sm" data-action="pay" data-id="${r.a.id}">تسجيل</button>
-          ${(r.paid.amMohamed+r.paid.elevator+r.paid.water+r.paid.other)>0 ? `<button class="btn btn-danger btn-sm" data-action="del-month" data-id="${r.a.id}" data-month="${m}">حذف</button>` : ''}
-        </td>
-      </tr>`;
-    }).join('');
+            <!-- الشاشة 1: الوصفات -->
+            <section id="view-recipes" class="tab-view space-y-4">
+                <div class="sticky-search-holder p-3 rounded-2xl border border-naifPurple-900/30 shadow-md flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                    <div class="flex items-center gap-2 flex-1">
+                        <i class="fa-solid fa-magnifying-glass text-naifPurple-900 text-base pr-1"></i>
+                        <input type="text" id="recipeSearchInput" onkeyup="renderRecipeCards()" placeholder="ابحث باسم الوجبة بالحرف أو الكلمة..." class="w-full bg-white border border-naifPurple-900/40 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none shadow-inner">
+                        <span class="text-xs font-black text-naifPurple-900 shrink-0 bg-purple-100 px-3 py-2 rounded-xl border border-naifPurple-900/20">
+                            العدد: <span id="recipesCountBadge" class="text-naifPurple-900 font-mono">0</span>
+                        </span>
+                    </div>
+                    <button onclick="openNewRecipeModal()" class="bg-naifPurple-900 hover:bg-naifPurple-800 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow">
+                        <i class="fa-solid fa-plus"></i> إضافة وجبة جديدة
+                    </button>
+                </div>
+                <div id="recipesContainer" class="space-y-4 sm:space-y-6"></div>
+            </section>
 
-    return `
-    <div class="card">
-      <div class="section-title">
-        <div class="month-nav no-print">
-          <button class="btn btn-ghost btn-sm" data-action="month-prev">‹ السابق</button>
-          <input type="month" data-month-picker value="${m}">
-          <button class="btn btn-ghost btn-sm" data-action="month-next">التالي ›</button>
-          <button class="btn btn-outline btn-sm" data-action="month-now">الحالي</button>
-        </div>
-        <div class="toolbar no-print">
-          <button class="btn btn-primary" data-action="pay">＋ تسجيل دفعة</button>
-          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
-        </div>
-      </div>
+            <!-- الشاشة 2: دليل الأسعار -->
+            <section id="view-pricelist" class="tab-view hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-extrabold text-naifPurple-900">دليل الأصناف والأسعار (pricelist)</h2>
+                        <p class="text-xs text-slate-500">قائمة تكاليف الأصناف بجميع الوحدات المعتمدة</p>
+                    </div>
+                    <div class="w-full sm:w-auto">
+                        <input type="text" id="priceSearchInput" onkeyup="renderPricelistTable()" placeholder="ابحث برمز أو اسم الصنف..." class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold outline-none">
+                    </div>
+                </div>
 
-      <h2 style="margin-bottom:12px">💰 تحصيل شهر ${monthLabel(m)}</h2>
+                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs min-w-[700px]">
+                            <thead class="bg-naifPurple-900 text-white font-bold">
+                                <tr>
+                                    <th class="p-3">اسم الصنف</th>
+                                    <th class="p-3 text-center">حبة</th>
+                                    <th class="p-3 text-center">جرام</th>
+                                    <th class="p-3 text-center">علبة</th>
+                                    <th class="p-3 text-center">شريحة</th>
+                                    <th class="p-3 text-center">جالون</th>
+                                    <th class="p-3 text-center">ماعون</th>
+                                    <th class="p-3 text-center">باكت</th>
+                                    <th class="p-3 text-center">بطل</th>
+                                    <th class="p-3 text-center">قطعة</th>
+                                    <th class="p-3 text-center">اونس</th>
+                                    <th class="p-3 text-center">مل لتر</th>
+                                    <th class="p-3 text-center">الشد</th>
+                                    <th class="p-3 text-center no-print">تعديل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pricelistTableBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-      <div class="stats">
-        <div class="stat green"><div class="label">المستحق</div><div class="value">${fmt(totalDue)}</div><div class="foot">ج.م</div></div>
-        <div class="stat"><div class="label">المحصَّل</div><div class="value">${fmt(totalPaid)}</div><div class="foot">ج.م</div></div>
-        <div class="stat ${totalDue-totalPaid>0?'red':''}"><div class="label">المتبقي</div><div class="value">${fmt(Math.max(0,totalDue-totalPaid))}</div><div class="foot">ج.م</div></div>
-        <div class="stat amber"><div class="label">نسبة التحصيل</div><div class="value">${rate}%</div><div class="foot">${rows.filter(r=>monthStatus(r.a,m)==='ok').length} شقة مسددة</div></div>
-      </div>
+            <!-- الشاشة 3: التقارير -->
+            <section id="view-reports" class="tab-view hidden space-y-4">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-purple-100 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-extrabold text-naifPurple-900">التقارير التحليلية الشاملة لجميع الوجبات</h2>
+                        <p class="text-xs text-slate-500">استعراض أسعار البيع، التكاليف، الأرباح، ونسب الربحية الاحترافية</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="exportReportPDF()" class="flex-1 sm:flex-initial bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-file-pdf"></i> تصدير PDF
+                        </button>
+                        <button onclick="exportReportExcel()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-file-excel"></i> تصدير إكسل
+                        </button>
+                    </div>
+                </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>الشقة</th>
-            <th>أم محمد (140)</th>
-            <th>أسانسير (160/60)</th>
-            <th>مياه (50)</th>
-            ${hasCharges ? '<th>صيانة متغيرة</th>' : ''}
-            <th>إجمالي المدفوع</th>
-            <th>المتبقي</th>
-            <th>الحالة</th>
-            <th class="no-print">إجراء</th>
-          </tr></thead>
-          <tbody>${body}</tbody>
-          <tfoot class="tfoot"><tr>
-            <td colspan="${hasCharges?4:3}">الإجمالي</td>
-            <td class="num">${fmt(totalPaid)}</td>
-            <td class="num">${fmt(Math.max(0,totalDue-totalPaid))}</td>
-            <td colspan="2"></td>
-          </tr></tfoot>
-        </table>
-      </div>
-    </div>`;
-  }
+                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden" id="reportPrintArea">
+                    <div class="p-4 bg-naifPurple-900 text-white flex justify-between items-center">
+                        <h3 class="font-bold text-sm">تقرير ربحية وتكاليف الوجبات الرئيسي</h3>
+                        <span class="text-xs text-purple-200" id="reportDateBadge">--</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs min-w-[600px]">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b">
+                                <tr>
+                                    <th class="p-3">اسم الوجبة</th>
+                                    <th class="p-3 text-center">سعر البيع</th>
+                                    <th class="p-3 text-center">التكلفة الرئيسية</th>
+                                    <th class="p-3 text-center">الربح المالي</th>
+                                    <th class="p-3 text-center">نسبة الربح %</th>
+                                    <th class="p-3 text-center">نسبة التكلفة %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-  function viewPaylog(){
-    let list = [...db.payments].sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.month||'').localeCompare(a.month||''));
-    if(state.payMonth !== 'all') list = list.filter(p=>p.month === state.payMonth);
-    if(state.payApt !== 'all')   list = list.filter(p=>p.apt === state.payApt);
+            <!-- الشاشة 4: وجبات قيد الاعتماد -->
+            <section id="view-pending" class="tab-view hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm">
+                    <h2 class="text-base font-extrabold text-naifPurple-900">الوجبات الجديدة قيد الاعتماد</h2>
+                </div>
+                <div id="pendingContainer" class="space-y-3 sm:space-y-4"></div>
+            </section>
 
-    const total = list.reduce((s,p)=>s+paymentTotal(p),0);
-    const months = allMonths().slice().reverse();
+            <!-- الشاشة 5: الوجبات الملغية -->
+            <section id="view-cancelled" class="tab-view hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm">
+                    <h2 class="text-base font-extrabold text-rose-700">الوجبات الملغية</h2>
+                </div>
+                <div id="cancelledContainer" class="space-y-3 sm:space-y-4"></div>
+            </section>
 
-    const monthOpts = [`<option value="all" ${state.payMonth==='all'?'selected':''}>كل الشهور</option>`]
-      .concat(months.map(m=>`<option value="${m}" ${state.payMonth===m?'selected':''}>${monthLabel(m)}</option>`)).join('');
-    const aptOpts = [`<option value="all" ${state.payApt==='all'?'selected':''}>كل الشقق</option>`]
-      .concat(db.apartments.map(a=>`<option value="${a.id}" ${state.payApt===a.id?'selected':''}>${aptLabel(a)} – ${esc(aptShortPos(a))}</option>`)).join('');
+            <!-- الشاشة 6: سجل الحركات -->
+            <section id="view-auditlog" class="tab-view hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-extrabold text-naifPurple-900">سجل أنشطة وحركات النظام (Audit Log)</h2>
+                        <p class="text-xs text-slate-500">سجل التعديلات والعمليات في النظام</p>
+                    </div>
+                    <button id="btnDeleteLogSelection" onclick="deleteSelectedLogs()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 hidden">
+                        <i class="fa-solid fa-trash-can"></i> مسح المكتمل
+                    </button>
+                </div>
 
-    const body = list.length ? list.map(p=>{
-      const a = db.apartments.find(x=>x.id===p.apt);
-      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      const tot = paymentTotal(p);
-      return `<tr>
-        <td class="num">${esc(p.date)}</td>
-        <td>${a?aptLabel(a):'?'}</td>
-        <td>${a?esc(aptShortPos(a)):'—'}</td>
-        <td>${monthLabel(p.month)}</td>
-        <td class="num">${fmt(c.amMohamed)}</td>
-        <td class="num">${fmt(c.elevator)}</td>
-        <td class="num">${fmt(c.water)}</td>
-        <td class="num">${fmt(c.extra)}</td>
-        <td class="num" style="color:#15803d;font-weight:700">${fmt(tot)}</td>
-        <td>${esc(p.method||'نقدي')}</td>
-        <td class="no-print" style="white-space:nowrap">
-          <button class="btn btn-outline btn-sm" data-action="edit-pay" data-id="${p.id}">✏️</button>
-          <button class="icon-btn" data-action="del-pay" data-id="${p.id}" title="حذف">🗑</button>
-        </td>
-      </tr>`;
-    }).join('')
-    : `<tr><td colspan="11"><div class="empty"><span class="big">📋</span>لا توجد دفعات مطابقة</div></td></tr>`;
+                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs min-w-[550px]">
+                            <thead class="bg-naifPurple-950 text-white font-bold">
+                                <tr>
+                                    <th class="p-3 text-center" id="thLogSelect"><input type="checkbox" onchange="toggleSelectAllLogs(this)"></th>
+                                    <th class="p-3">التاريخ والوقت</th>
+                                    <th class="p-3">المستخدم</th>
+                                    <th class="p-3">نوع الحركة</th>
+                                    <th class="p-3">تفاصيل الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogTableBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-    return `
-    <div class="card">
-      <div class="section-title">
-        <h2>📋 سجل الدفعات</h2>
-        <div class="toolbar no-print">
-          <select data-filter="payMonth" style="width:auto">${monthOpts}</select>
-          <select data-filter="payApt" style="width:auto">${aptOpts}</select>
-          <button class="btn btn-primary" data-action="pay">＋ تسجيل دفعة</button>
-          <button class="btn btn-outline" data-action="export-pay-xlsx">📊 Excel</button>
-          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat green"><div class="label">إجمالي المعروض</div><div class="value">${fmt(total)}</div><div class="foot">${list.length} دفعة — ج.م</div></div>
-        <div class="stat"><div class="label">إجمالي التحصيل الكلي</div><div class="value">${fmt(totalCollected())}</div><div class="foot">${db.payments.length} دفعة — ج.م</div></div>
-        <div class="stat amber"><div class="label">الرصيد الحالي</div><div class="value">${fmt(balance())}</div><div class="foot">ج.م</div></div>
-      </div>
-
-      <p class="hint no-print">✏️ يمكنك تعديل أي دفعة بالضغط على زر التعديل، بما في ذلك توزيعها على المبالغ الثلاثة. قائمة «كل الشهور» تُبنى تلقائياً من بداية الحساب حتى الشهر الحالي.</p>
-
-      <div class="table-wrap" style="margin-top:12px">
-        <table>
-          <thead><tr>
-            <th>التاريخ</th><th>شقة</th><th>الدور</th><th>عن شهر</th>
-            <th>أم محمد</th><th>أسانسير</th><th>مياه</th><th>صيانة متغيرة</th>
-            <th>الإجمالي</th><th>طريقة الدفع</th><th class="no-print">إجراء</th>
-          </tr></thead>
-          <tbody>${body}</tbody>
-          ${list.length?`<tfoot class="tfoot"><tr><td colspan="8">الإجمالي</td><td class="num">${fmt(total)}</td><td colspan="2"></td></tr></tfoot>`:''}
-        </table>
-      </div>
-    </div>`;
-  }
-
-  function viewCharges(){
-    const list = [...db.charges].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-    const totalAll = sum(list, 'total');
-
-    const rows = list.length ? list.map(ch=>{
-      const n = (ch.aptIds||[]).length;
-      const per = n ? roundHalf(Number(ch.total)/n) : 0;
-      const aptsShort = (ch.aptIds||[]).slice(0,5).map(id=>{
-        const a = db.apartments.find(x=>x.id===id);
-        return a ? aptLabel(a) : '';
-      }).filter(Boolean).join(', ') + (n>5 ? ` و${n-5} أخرى` : '');
-      return `<tr>
-        <td class="num">${esc(ch.date)}</td>
-        <td>${esc(ch.desc||'—')}</td>
-        <td class="num" style="font-weight:700;color:#b45309">${fmt(ch.total)}</td>
-        <td class="num">${n}</td>
-        <td class="num" style="font-weight:700">${fmt(per)}</td>
-        <td><small style="color:#64748b">${esc(aptsShort)}</small></td>
-        <td class="no-print" style="white-space:nowrap">
-          <button class="btn btn-outline btn-sm" data-action="edit-charge" data-id="${ch.id}">✏️</button>
-          <button class="icon-btn" data-action="del-charge" data-id="${ch.id}" title="حذف">🗑</button>
-        </td>
-      </tr>`;
-    }).join('')
-    : `<tr><td colspan="7"><div class="empty"><span class="big">🔧</span>لا توجد مصاريف صيانة متغيرة بعد</div></td></tr>`;
-
-    return `
-    <div class="card">
-      <div class="section-title">
-        <h2>🔧 مبالغ الصيانة المتغيرة</h2>
-        <div class="toolbar no-print">
-          <button class="btn btn-primary" data-action="add-charge">＋ إضافة مبلغ صيانة</button>
-        </div>
-      </div>
-      <p class="hint">
-        هذه الصفحة مخصصة للمبالغ غير الثابتة (إصلاح السلالم، دهانات، وغيرها).
-        يُدخل المبلغ الإجمالي وتُحدَّد الشقق المشاركة، ويُقسَّم المبلغ بالتساوي بينهن مع <strong>تقريب لأقرب نصف جنيه</strong>.
-      </p>
-
-      <div class="stats">
-        <div class="stat amber"><div class="label">إجمالي المبالغ المتغيرة</div><div class="value">${fmt(totalAll)}</div><div class="foot">${list.length} بند — ج.م</div></div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>التاريخ</th><th>البيان</th><th>المبلغ الإجمالي</th>
-            <th>عدد الشقق</th><th>نصيب الشقة</th><th>الشقق المشاركة</th>
-            <th class="no-print">إجراء</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-          ${list.length?`<tfoot class="tfoot"><tr><td colspan="2">الإجمالي</td><td class="num">${fmt(totalAll)}</td><td colspan="4"></td></tr></tfoot>`:''}
-        </table>
-      </div>
-    </div>`;
-  }
-
-  function viewExpenses(){
-    let list = [...db.expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-    if(state.expMonth !== 'all') list = list.filter(e=>(e.date||'').slice(0,7) === state.expMonth);
-    if(state.expCat !== 'all')   list = list.filter(e=>e.category === state.expCat);
-
-    const total = sum(list, 'amount');
-    const months = allMonths().slice().reverse();
-
-    const monthOpts = [`<option value="all" ${state.expMonth==='all'?'selected':''}>كل الشهور</option>`]
-      .concat(months.map(m=>`<option value="${m}" ${state.expMonth===m?'selected':''}>${monthLabel(m)}</option>`)).join('');
-    const cats = [...new Set([...CATEGORIES, ...db.expenses.map(e=>e.category)])].filter(Boolean);
-    const catOpts = [`<option value="all" ${state.expCat==='all'?'selected':''}>كل البنود</option>`]
-      .concat(cats.map(c=>`<option value="${esc(c)}" ${state.expCat===c?'selected':''}>${esc(c)}</option>`)).join('');
-
-    const body = list.length ? list.map(e=>`
-      <tr>
-        <td class="num">${esc(e.date)}</td>
-        <td><span class="badge" style="background:#e0f2fe;color:#0369a1">${esc(e.category)}</span></td>
-        <td>${esc(e.desc || '—')}${e.note?`<br><small style="color:#64748b">${esc(e.note)}</small>`:''}</td>
-        <td class="mny" style="color:#b91c1c;font-weight:700">${fmt(e.amount)} ج.م</td>
-        <td class="no-print" style="white-space:nowrap">
-          <button class="btn btn-outline btn-sm" data-action="edit-exp" data-id="${e.id}">✏️</button>
-          <button class="icon-btn" data-action="del-expense" data-id="${e.id}" title="حذف">🗑</button>
-        </td>
-      </tr>`).join('')
-      : `<tr><td colspan="5"><div class="empty"><span class="big">🧾</span>لا توجد مصروفات مطابقة</div></td></tr>`;
-
-    const byCat = {};
-    list.forEach(e=>{ byCat[e.category] = (byCat[e.category]||0) + Number(e.amount||0); });
-    const catRows = Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`
-      <tr><td>${esc(c)}</td><td class="num">${fmt(v)}</td>
-      <td class="num">${total?Math.round(v/total*100):0}%</td></tr>`).join('');
-
-    return `
-    <div class="card">
-      <div class="section-title">
-        <h2>🧾 سجل المصروفات</h2>
-        <div class="toolbar no-print">
-          <select data-filter="expMonth" style="width:auto">${monthOpts}</select>
-          <select data-filter="expCat" style="width:auto">${catOpts}</select>
-          <button class="btn btn-primary" data-action="add-expense">＋ إضافة مصروف</button>
-          <button class="btn btn-outline" data-action="export-exp-xlsx">📊 Excel</button>
-          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat red"><div class="label">إجمالي المعروض</div><div class="value">${fmt(total)}</div><div class="foot">${list.length} بند — ج.م</div></div>
-        <div class="stat"><div class="label">إجمالي المصروفات</div><div class="value">${fmt(totalExpenses())}</div><div class="foot">كل الفترات — ج.م</div></div>
-        <div class="stat green"><div class="label">الرصيد المتاح</div><div class="value">${fmt(balance())}</div><div class="foot">ج.م</div></div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>التاريخ</th><th>البند</th><th>البيان</th><th>المبلغ</th><th class="no-print">إجراء</th></tr></thead>
-          <tbody>${body}</tbody>
-          ${list.length?`<tfoot class="tfoot"><tr><td colspan="3">الإجمالي</td><td class="num">${fmt(total)}</td><td class="no-print"></td></tr></tfoot>`:''}
-        </table>
-      </div>
+        </main>
     </div>
 
-    ${catRows ? `
-    <div class="card">
-      <h2>📊 توزيع المصروفات حسب البند</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>البند</th><th>الإجمالي</th><th>النسبة</th></tr></thead>
-        <tbody>${catRows}</tbody>
-      </table></div>
-    </div>` : ''}`;
-  }
+    <!-- مودال إضافة / تعديل الوجبة -->
+    <div id="recipeEditModal" class="fixed inset-0 bg-naifPurple-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="bg-naifPurple-900 text-white p-3.5 sm:p-4 flex items-center justify-between shrink-0">
+                <h3 class="font-extrabold text-xs sm:text-sm" id="modalTitle">إضافة / تعديل الوجبة</h3>
+                <button onclick="closeModal('recipeEditModal')" class="text-purple-200 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
+                <input type="hidden" id="editMealIndex">
+                <input type="hidden" id="modalMode" value="add">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">اسم الوجبة</label>
+                        <input type="text" id="editMealName" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">سعر البيع</label>
+                        <input type="number" step="any" id="editMealPrice" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-mono font-bold text-emerald-700 focus:ring-2 focus:ring-naifPurple-900 outline-none">
+                    </div>
+                </div>
 
-  function viewApartments(){
-    const cm = currentMonth();
-    const f = fees();
+                <div class="border border-purple-100 rounded-xl overflow-hidden mt-2">
+                    <div class="bg-purple-50 p-2.5 sm:p-3 flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-naifPurple-900">جدول المكونات والخامات (البحث بالحرف)</span>
+                        <button onclick="addIngredientRowToModal()" class="bg-naifPurple-900 hover:bg-naifPurple-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg active:scale-95">
+                            + إضافة خامة
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs min-w-[550px]">
+                            <thead class="bg-slate-100 text-slate-600 font-bold">
+                                <tr>
+                                    <th class="p-2">اسم الصنف (بحث بالحرف)</th>
+                                    <th class="p-2">مكان الصنف</th>
+                                    <th class="p-2">الوحدة</th>
+                                    <th class="p-2">الكمية</th>
+                                    <th class="p-2">السعر التلقائي</th>
+                                    <th class="p-2 text-center">حذف</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalIngredientsTableBody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-    const rows = db.apartments.map(a=>{
-      const due = dueFor(a, cm);
-      const paid = paidTotal(a.id);
-      const c = aptMonthComponents(a);
-      const disabledAm = a.exemptAm ? 'off' : '';
-      const disabledEl = a.exemptElevator ? 'off' : '';
-      const disabledWa = a.exemptWater ? 'off' : '';
-      return `<tr>
-        <td><strong>${a.no}</strong></td>
-        <td><input type="number" min="1" data-field="floor" data-id="${a.id}" value="${a.floor}" style="width:55px"></td>
-        <td>
-          <select data-field="position" data-id="${a.id}" style="width:auto">
-            <option value="يمين" ${a.position==='يمين'?'selected':''}>يمين</option>
-            <option value="شمال" ${a.position==='شمال'?'selected':''}>شمال</option>
-          </select>
-        </td>
-        <td style="text-align:center"><input type="checkbox" data-field="isGround" data-id="${a.id}" ${a.isGround?'checked':''}></td>
-        <td><input data-field="name" data-id="${a.id}" value="${esc(a.name)}" placeholder="اسم المالك"></td>
-        <td><input data-field="phone" data-id="${a.id}" value="${esc(a.phone)}" placeholder="01xxxxxxxxx" style="direction:ltr;text-align:right"></td>
-        <td>
-          <div class="comp-cell ${disabledAm}">
-            <input type="checkbox" data-field="includeAm" data-id="${a.id}" ${!a.exemptAm?'checked':''}>
-            <span class="amt">${fmt(c.amMohamed)}</span>
-          </div>
-        </td>
-        <td>
-          <div class="comp-cell ${disabledEl}">
-            <input type="checkbox" data-field="includeElevator" data-id="${a.id}" ${!a.exemptElevator?'checked':''}>
-            <span class="amt">${fmt(c.elevator)}</span>
-          </div>
-        </td>
-        <td>
-          <div class="comp-cell ${disabledWa}">
-            <input type="checkbox" data-field="includeWater" data-id="${a.id}" ${!a.exemptWater?'checked':''}>
-            <span class="amt">${fmt(c.water)}</span>
-          </div>
-        </td>
-        <td style="text-align:center"><input type="checkbox" data-field="active" data-id="${a.id}" ${a.active!==false?'checked':''}></td>
-        <td class="num" style="font-weight:700;color:${due-paid>0?'#b91c1c':'#15803d'}">${fmt(due-paid)}</td>
-        <td class="no-print"><button class="icon-btn" data-action="del-apt" data-id="${a.id}" title="حذف">🗑</button></td>
-      </tr>`;
-    }).join('');
-
-    const upperTotal = f.amMohamed + f.elevator + f.water;
-    const groundTotal = f.amMohamed + f.elevatorGround + f.water;
-    const grandTotal = db.apartments.filter(a=>a.active!==false).reduce((s,a)=>s+aptMonthlyDue(a),0);
-
-    return `
-    <div class="card">
-      <h2>🏢 بيانات الشقق والملاك</h2>
-      <p class="hint">
-        ✏️ التعديل مباشر ويُحفظ تلقائياً في السحابة.
-      </p>
-
-      <div class="stats" style="margin:14px 0">
-        <div class="stat"><div class="label">إجمالي الاشتراك للأدوار العليا</div><div class="value">${fmt(upperTotal)}</div><div class="foot">${f.amMohamed} + ${f.elevator} + ${f.water}</div></div>
-        <div class="stat amber"><div class="label">إجمالي الاشتراك للدور الأول</div><div class="value">${fmt(groundTotal)}</div><div class="foot">${f.amMohamed} + ${f.elevatorGround} + ${f.water}</div></div>
-        <div class="stat green"><div class="label">الإجمالي الشهري المتوقع</div><div class="value">${fmt(grandTotal)}</div><div class="foot">من كل الشقق المفعّلة</div></div>
-      </div>
-
-      <div class="table-wrap">
-        <table style="min-width:1000px">
-          <thead><tr>
-            <th>شقة</th><th>الدور</th><th>الموقع</th><th>أرضي</th>
-            <th>اسم المالك</th><th>الهاتف</th>
-            <th>أم محمد</th><th>أسانسير</th><th>مياه</th>
-            <th>مفعّلة</th><th>الرصيد المستحق</th><th class="no-print"></th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>`;
-  }
-
-  function viewReports(){
-    const cm = currentMonth();
-    const start = db.settings.startMonth;
-    const months = monthRange(start, cm);
-
-    if(!state.pdfFrom) state.pdfFrom = start;
-    if(!state.pdfTo)   state.pdfTo   = cm;
-
-    let cum = 0;
-    const monthRows = months.map(m=>{
-      const c = collectedInMonth(m);
-      const e = expensesInMonth(m);
-      cum += c - e;
-      const dueTotal = db.apartments.reduce((s,a)=>{
-        if(a.active === false) return s;
-        return s + aptDueForMonth(a, m).total;
-      },0);
-      return `<tr>
-        <td>${monthLabel(m)}</td>
-        <td class="num">${fmt(dueTotal)}</td>
-        <td class="num" style="color:#15803d">${fmt(c)}</td>
-        <td class="num" style="color:#b91c1c">${fmt(e)}</td>
-        <td class="num" style="font-weight:700;color:${c-e>=0?'#15803d':'#b91c1c'}">${fmt(c-e)}</td>
-        <td class="num" style="font-weight:700">${fmt(opening()+cum)}</td>
-      </tr>`;
-    }).join('');
-
-    const aptRows = db.apartments.map(a=>{
-      const due = dueFor(a, cm);
-      const paid = paidTotal(a.id);
-      const bal = paid - due;
-      return `<tr>
-        <td><strong>${aptLabel(a)}</strong></td>
-        <td>${esc(aptShortPos(a))}</td>
-        <td>${esc(a.name||'—')}</td>
-        <td class="num">${fmt(aptMonthlyDue(a))}</td>
-        <td class="num">${fmt(due)}</td>
-        <td class="num" style="color:#15803d">${fmt(paid)}</td>
-        <td class="num" style="font-weight:700;color:${bal<0?'#b91c1c':'#15803d'}">${fmt(Math.abs(bal))} ${bal<0?'مديون':'دائن'}</td>
-        <td class="no-print"><button class="btn btn-outline btn-sm" data-action="statement" data-id="${a.id}">كشف</button></td>
-      </tr>`;
-    }).join('');
-
-    const totalDue = db.apartments.reduce((s,a)=>s+dueFor(a,cm),0);
-    const totalPaidAll = totalCollected();
-    const totalExpAll = totalExpenses();
-
-    return `
-    <div class="card pdf-box">
-      <h2>📄 تصدير تقرير PDF (4 صفحات)</h2>
-      <div class="row3">
-        <div class="field"><label>من شهر</label><input type="month" id="pdfFrom" value="${state.pdfFrom}"></div>
-        <div class="field"><label>إلى شهر</label><input type="month" id="pdfTo" value="${state.pdfTo}"></div>
-        <div class="field" style="display:flex;align-items:flex-end">
-          <button class="btn btn-primary" style="width:100%;padding:11px" data-action="export-pdf">📄 تصدير PDF (4 صفحات)</button>
+            <div class="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2 shrink-0">
+                <button onclick="closeModal('recipeEditModal')" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300">إلغاء</button>
+                <button onclick="saveModalRecipeChanges()" class="px-5 py-2 rounded-xl text-xs font-bold bg-naifPurple-900 hover:bg-naifPurple-800 text-white shadow-md active:scale-95">حفظ وإرسال</button>
+            </div>
         </div>
-      </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">
-        <h2>📊 التقرير الشهري التراكمي</h2>
-        <div class="toolbar no-print">
-          <button class="btn btn-outline" data-action="print">🖨 طباعة</button>
+    <!-- مودال تعديل سعر الصنف المباشر -->
+    <div id="priceEditModal" class="fixed inset-0 bg-naifPurple-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-5 space-y-4">
+            <h3 class="font-extrabold text-sm text-naifPurple-900 border-b pb-2">تعديل أسعار الصنف</h3>
+            <input type="hidden" id="editPriceItemName">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1" id="lblEditItemName">الصنف</label>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">سعر التكلفة (الوحدة الرئيسية)</label>
+                <input type="number" step="0.00001" id="editItemPriceValue" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-mono font-bold">
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeModal('priceEditModal')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-200">إلغاء</button>
+                <button onclick="saveItemPriceChange()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-naifPurple-900 text-white">حفظ</button>
+            </div>
         </div>
-      </div>
-      <div class="table-wrap" style="margin-top:12px">
-        <table>
-          <thead><tr>
-            <th>الشهر</th><th>المستحق</th><th>المحصَّل</th><th>المصروفات</th><th>صافي الشهر</th><th>الرصيد التراكمي</th>
-          </tr></thead>
-          <tbody>${monthRows || '<tr><td colspan="6"><div class="empty">لا توجد بيانات</div></td></tr>'}</tbody>
-          <tfoot class="tfoot"><tr>
-            <td>الإجمالي</td>
-            <td class="num">${fmt(totalDue)}</td>
-            <td class="num">${fmt(totalPaidAll)}</td>
-            <td class="num">${fmt(totalExpAll)}</td>
-            <td class="num">${fmt(totalPaidAll-totalExpAll)}</td>
-            <td class="num">${fmt(balance())}</td>
-          </tr></tfoot>
-        </table>
-      </div>
-    </div>`;
-  }
-
-  function viewSettings(){
-    const f = fees();
-    const upper = f.amMohamed + f.elevator + f.water;
-    const ground = f.amMohamed + f.elevatorGround + f.water;
-    const lastBackup = db.meta.lastBackupAt ? new Date(db.meta.lastBackupAt).toLocaleString('ar-EG') : 'لم يتم بعد';
-
-    return `
-    <div class="card">
-      <h2>⚙️ إعدادات الاتحاد</h2>
-      <div class="field">
-        <label>اسم العمارة / الاتحاد (مثبت تلقائياً ولا يمكن تعديله)</label>
-        <input id="setBuilding" value="${esc(db.settings.building)}" disabled style="background:#f1f5f9;color:#64748b;cursor:not-allowed;">
-      </div>
-      <div class="row2">
-        <div class="field"><label>الرصيد الافتتاحي (ج.م)</label><input type="number" id="setOpening" step="0.01" value="${db.settings.openingBalance}"></div>
-        <div class="field"><label>شهر بداية الحساب</label><input type="month" id="setStart" value="${db.settings.startMonth}"></div>
-      </div>
     </div>
 
-    <div class="card">
-      <h2>💰 مبالغ الاشتراك الشهري (ثلاثة مبالغ)</h2>
-      <div class="row4">
-        <div class="field"><label>أم محمد (جميع الشقق)</label><input type="number" id="feeAmMohamed" min="0" step="1" value="${f.amMohamed}"></div>
-        <div class="field"><label>صيانة أسانسير – الأدوار العليا</label><input type="number" id="feeElevator" min="0" step="1" value="${f.elevator}"></div>
-        <div class="field"><label>صيانة أسانسير – الدور الأول</label><input type="number" id="feeElevatorGround" min="0" step="1" value="${f.elevatorGround}"></div>
-        <div class="field"><label>شحن عداد المياه (الجميع)</label><input type="number" id="feeWater" min="0" step="1" value="${f.water}"></div>
-      </div>
-      <div class="charge-summary">
-        الاشتراك الشهري للأدوار العليا: <strong>${fmt(upper)} ج.م</strong>
-        &nbsp;•&nbsp;
-        الاشتراك الشهري للدور الأول: <strong>${fmt(ground)} ج.م</strong>
-      </div>
-      <div class="toolbar" style="margin-top:8px">
-        <button class="btn btn-primary" data-action="save-settings">💾 حفظ الإعدادات</button>
-      </div>
-    </div>
+    <!-- التوقيع العائم -->
+    <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card" target="_blank" rel="noopener noreferrer">
+        <div class="name">Yasser Elkhateeb</div>
+        <div class="title">مطور البرنامج - 67011143</div>
+    </a>
 
-    <div class="card">
-      <h2>💾 النسخ الاحتياطي والاستعادة السحابية</h2>
-      <p class="hint">البيانات متزامنة تماماً مع سحابة Firebase، ويمكنك أخذ نسخة محلية إضافية.<br>آخر نسخة محلية: <strong>${lastBackup}</strong></p>
-      <div class="toolbar" style="margin-top:14px">
-        <button class="btn btn-primary" data-action="export-json">⬇️ تنزيل نسخة احتياطية (JSON)</button>
-        <button class="btn btn-outline" data-action="import-json">⬆️ استعادة من نسخة احتياطية</button>
-        <input type="file" id="fileImport" accept=".json" style="display:none">
-      </div>
-    </div>
+    <!-- إدراج مكتبات Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    <div class="card">
-      <h2 style="color:#b91c1c">⚠️ منطقة الخطر</h2>
-      <div class="toolbar" style="margin-top:14px">
-        <button class="btn btn-danger" data-action="clear-tx">🗑 حذف كل الدفعات والمصروفات</button>
-        <button class="btn btn-danger" data-action="reset-all">💥 إعادة ضبط شاملة</button>
-      </div>
-    </div>`;
-  }
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqHC3lSZgvqYvdYg5TwIPqGVCXNaXbhD8",
+            authDomain: "n-rcp-39b7c.firebaseapp.com",
+            projectId: "n-rcp-39b7c",
+            storageBucket: "n-rcp-39b7c.firebasestorage.app",
+            messagingSenderId: "159389648050",
+            appId: "1:159389648050:web:38b156903403cf887af5ab"
+        };
 
-  function showModal(title, bodyHTML, onSubmit, wide){
-    const back = document.createElement('div');
-    back.className = 'modal-backdrop';
-    back.innerHTML = `
-      <div class="modal ${wide?'wide':''}">
-        <div class="modal-head">
-          <h3>${esc(title)}</h3>
-          <button type="button" class="icon-btn" data-close>✕</button>
-        </div>
-        <form id="modalForm" autocomplete="off">
-          ${bodyHTML}
-          <div class="modal-actions">
-            <button type="button" class="btn btn-ghost" data-close>إلغاء</button>
-            <button type="submit" class="btn btn-primary">حفظ</button>
-          </div>
-        </form>
-      </div>`;
-    document.body.appendChild(back);
-    const close = () => back.remove();
-    back.addEventListener('click', e=>{
-      if(e.target === back || e.target.closest('[data-close]')) close();
-    });
-    back.querySelector('#modalForm').addEventListener('submit', e=>{
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      if(onSubmit(fd, back) !== false) close();
-    });
-    const first = back.querySelector('input,select,textarea');
-    if(first) setTimeout(()=>first.focus(), 60);
-    return back;
-  }
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const dbFirestore = getFirestore(app);
 
-  function openPaymentModal(aptId, existingPayment){
-    const isEdit = !!existingPayment;
-    const cm = state.month || currentMonth();
-    const a = isEdit
-      ? db.apartments.find(x=>x.id === existingPayment.apt)
-      : (db.apartments.find(x=>x.id === aptId) || db.apartments[0]);
-    if(!a){ alert('لا توجد شقق مسجلة'); return; }
+        // المسار السحابي الآمن والمعتمد
+        const docRef = doc(dbFirestore, 'artifacts', 'n-rcp-39b7c', 'public', 'data', 'naif_main_db', 'main_doc');
 
-    const selMonth = isEdit ? existingPayment.month : cm;
-    const dueData = aptDueForMonth(a, selMonth);
-    const paidData = paidComponentsInMonth(a.id, selMonth);
-    const remain = {
-      amMohamed: Math.max(0, dueData.amMohamed - paidData.amMohamed),
-      elevator: Math.max(0, dueData.elevator - paidData.elevator),
-      water: Math.max(0, dueData.water - paidData.water),
-      other: Math.max(0, dueData.other - paidData.other)
-    };
+        window.isFirebaseSaving = false;
 
-    const existingComponents = isEdit
-      ? (existingPayment.components || { amMohamed:0, elevator:0, water:0, extra: Number(existingPayment.amount)||0 })
-      : { amMohamed: remain.amMohamed, elevator: remain.elevator, water: remain.water, extra: remain.other };
-
-    const selDate = isEdit ? existingPayment.date : todayISO();
-    const selMethod = isEdit ? (existingPayment.method||'نقدي') : 'نقدي';
-    const selNote = isEdit ? (existingPayment.note||'') : '';
-    const methods = ['نقدي','تحويل بنكي','محفظة إلكترونية'];
-    const methodOpts = methods.map(m=>`<option ${selMethod===m?'selected':''}>${m}</option>`).join('');
-
-    const hasOther = dueData.other > 0 || (existingComponents.extra||0) > 0;
-
-    const body = `
-      <div class="row2">
-        <div class="field">
-          <label>الشقة</label>
-          <select name="apt">
-            ${db.apartments.map(x=>`<option value="${x.id}" ${x.id===a.id?'selected':''}>${aptLabel(x)} – ${esc(aptShortPos(x))}${x.name?' – '+esc(x.name):''}</option>`).join('')}
-          </select>
-        </div>
-        <div class="field"><label>عن شهر</label><input type="month" name="month" value="${selMonth}" required></div>
-      </div>
-
-      <div class="charge-summary" style="background:#f0fdfa;border-color:#5eead4;color:#0f766e">
-        المستحق لشهر ${monthLabel(selMonth)}: <strong>${fmt(dueData.total)} ج.م</strong>
-        ${a.isGround ? '<span style="background:#0891b2;color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;margin-inline-start:6px">دور أول</span>' : ''}
-      </div>
-
-      <div class="row4">
-        <div class="field"><label>أم محمد <small style="color:#94a3b8">(مستحق ${fmt(dueData.amMohamed)})</small></label>
-          <input type="number" name="amMohamed" min="0" step="0.01" value="${existingComponents.amMohamed||0}"></div>
-        <div class="field"><label>أسانسير <small style="color:#94a3b8">(مستحق ${fmt(dueData.elevator)})</small></label>
-          <input type="number" name="elevator" min="0" step="0.01" value="${existingComponents.elevator||0}"></div>
-        <div class="field"><label>مياه <small style="color:#94a3b8">(مستحق ${fmt(dueData.water)})</small></label>
-          <input type="number" name="water" min="0" step="0.01" value="${existingComponents.water||0}"></div>
-        <div class="field"><label>صيانة متغيرة ${hasOther ? `<small style="color:#94a3b8">(مستحق ${fmt(dueData.other)})</small>` : ''}</label>
-          <input type="number" name="extra" min="0" step="0.01" value="${existingComponents.extra||0}"></div>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:10px 14px;border-radius:10px;margin-bottom:12px">
-        <div><strong>الإجمالي: <span id="payTotal">0</span> ج.م</strong></div>
-        <div class="toolbar" style="margin:0">
-          <button type="button" class="btn btn-outline btn-sm" data-fill="remain">تعبئة المتبقي</button>
-          <button type="button" class="btn btn-outline btn-sm" data-fill="due">تعبئة المستحق كاملاً</button>
-        </div>
-      </div>
-
-      <div class="row2">
-        <div class="field"><label>تاريخ الدفع</label><input type="date" name="date" value="${selDate}" required></div>
-        <div class="field"><label>طريقة الدفع</label><select name="method">${methodOpts}</select></div>
-      </div>
-      <div class="field"><label>ملاحظات</label><input name="note" value="${esc(selNote)}" placeholder="اختياري"></div>
-    `;
-
-    const back = showModal(isEdit ? 'تعديل دفعة' : 'تسجيل دفعة', body, (fd)=>{
-      const comps = {
-        amMohamed: parseFloat(fd.get('amMohamed'))||0,
-        elevator:  parseFloat(fd.get('elevator'))||0,
-        water:     parseFloat(fd.get('water'))||0,
-        extra:     parseFloat(fd.get('extra'))||0
-      };
-      const total = comps.amMohamed + comps.elevator + comps.water + comps.extra;
-      if(total <= 0){ alert('من فضلك أدخل مبلغاً أكبر من صفر'); return false; }
-      const data = {
-        apt: fd.get('apt'),
-        month: fd.get('month'),
-        components: comps,
-        date: fd.get('date') || todayISO(),
-        method: fd.get('method') || 'نقدي',
-        note: (fd.get('note')||'').trim()
-      };
-      if(isEdit){
-        const p = db.payments.find(x=>x.id === existingPayment.id);
-        if(p){ Object.assign(p, data); delete p.amount; }
-      } else {
-        db.payments.push(Object.assign({id: uid()}, data));
-      }
-      save(); render();
-    }, true);
-
-    const form = back.querySelector('#modalForm');
-    const inputs = ['amMohamed','elevator','water','extra'].map(n=>form.querySelector(`[name="${n}"]`));
-    function updateTotal(){
-      let t = 0;
-      inputs.forEach(i=> t += parseFloat(i.value)||0);
-      form.querySelector('#payTotal').textContent = fmt(t);
-    }
-    inputs.forEach(i=>i.addEventListener('input', updateTotal));
-    updateTotal();
-
-    form.querySelectorAll('[data-fill]').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        if(b.dataset.fill === 'remain'){
-          inputs[0].value = remain.amMohamed || 0;
-          inputs[1].value = remain.elevator || 0;
-          inputs[2].value = remain.water || 0;
-          inputs[3].value = remain.other || 0;
-        } else {
-          inputs[0].value = dueData.amMohamed || 0;
-          inputs[1].value = dueData.elevator || 0;
-          inputs[2].value = dueData.water || 0;
-          inputs[3].value = dueData.other || 0;
+        // بدء تسجيل الدخول السحابي أولاً
+        async function initFirebaseConnection() {
+            try {
+                await signInAnonymously(auth);
+            } catch (authErr) {
+                console.log("Anonymous auth fallback mode");
+            }
+            setupFirestoreListener();
         }
-        updateTotal();
-      });
-    });
-  }
 
-  function openExpenseModal(existingExpense){
-    const isEdit = !!existingExpense;
-    const e = existingExpense || {};
-    const allCats = [...new Set([...CATEGORIES, ...db.expenses.map(x=>x.category)])].filter(Boolean);
-    const currentCat = isEdit ? (e.category || '') : '';
-    const catOpts = allCats.map(c=>`<option value="${esc(c)}" ${c===currentCat?'selected':''}>${esc(c)}</option>`).join('');
+        // استماع تلقائي ومستمر للتغييرات السحابية
+        function setupFirestoreListener() {
+            onSnapshot(docRef, (docSnap) => {
+                if (window.isFirebaseSaving) {
+                    window.isFirebaseSaving = false;
+                    return;
+                }
 
-    const body = `
-      <div class="row2">
-        <div class="field"><label>التاريخ</label><input type="date" name="date" value="${e.date||todayISO()}" required></div>
-        <div class="field"><label>المبلغ (ج.م)</label><input type="number" name="amount" min="0" step="0.01" value="${e.amount||''}" required></div>
-      </div>
-      <div class="field">
-        <label>بند الصرف</label>
-        <select name="category" required>
-          <option value="" disabled ${currentCat?'':'selected'}>— اختر البند من القائمة —</option>
-          ${catOpts}
-        </select>
-      </div>
-      <div class="field"><label>البيان / الوصف</label><input name="desc" value="${esc(e.desc||'')}"></div>
-    `;
-    showModal(isEdit ? 'تعديل مصروف' : 'إضافة مصروف', body, fd=>{
-      const amt = parseFloat(fd.get('amount'));
-      if(!(amt > 0)){ alert('من فضلك أدخل مبلغاً أكبر من صفر'); return false; }
-      const cat = (fd.get('category')||'').trim();
-      if(!cat){ alert('اختر بند الصرف'); return false; }
-      const data = {
-        date: fd.get('date') || todayISO(),
-        category: cat,
-        desc: (fd.get('desc')||'').trim(),
-        amount: amt,
-        note: ''
-      };
-      if(isEdit){
-        const x = db.expenses.find(y=>y.id === existingExpense.id);
-        if(x) Object.assign(x, data);
-      } else {
-        db.expenses.push(Object.assign({id: uid()}, data));
-      }
-      save(); render();
-    });
-  }
+                if (docSnap.exists()) {
+                    const remoteData = docSnap.data();
+                    if (remoteData) {
+                        window.db = {
+                            pricelist: remoteData.pricelist || [],
+                            meals: remoteData.meals || [],
+                            pendingMeals: remoteData.pendingMeals || [],
+                            cancelledMeals: remoteData.cancelledMeals || [],
+                            auditLogs: remoteData.auditLogs || []
+                        };
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(window.db));
+                        
+                        if (typeof window.refreshAllUI === 'function') {
+                            window.refreshAllUI();
+                        }
 
-  function openChargeModal(existingCharge){
-    const isEdit = !!existingCharge;
-    const ch = existingCharge || { date: todayISO(), desc:'', total:0, aptIds: db.apartments.filter(a=>a.active!==false).map(a=>a.id) };
-
-    const aptListHTML = db.apartments.map(a=>`
-      <label>
-        <input type="checkbox" name="aptSel" value="${a.id}" ${ch.aptIds.includes(a.id)?'checked':''}>
-        <span>${aptLabel(a)} — ${esc(a.position)} ${a.isGround?'(أرضي)':''}</span>
-      </label>
-    `).join('');
-
-    const body = `
-      <div class="row2">
-        <div class="field"><label>التاريخ</label><input type="date" name="date" value="${ch.date}" required></div>
-        <div class="field"><label>المبلغ الإجمالي (ج.م)</label><input type="number" name="total" min="0" step="0.01" value="${ch.total||''}" required></div>
-      </div>
-      <div class="field"><label>البيان / سبب الصيانة</label><input name="desc" value="${esc(ch.desc||'')}" placeholder="مثال: إصلاح السلالم" required></div>
-      <div class="field">
-        <label>الشقق المشاركة في الدفع</label>
-        <div class="charge-apt-list">${aptListHTML}</div>
-      </div>
-      <div class="charge-summary" id="chargePreview">اختر الشقق والمبلغ لعرض نصيب كل شقة</div>
-    `;
-
-    const back = showModal(isEdit ? 'تعديل مبلغ صيانة' : 'إضافة مبلغ صيانة متغيرة', body, (fd)=>{
-      const total = parseFloat(fd.get('total'));
-      if(!(total > 0)){ alert('أدخل مبلغاً أكبر من صفر'); return false; }
-      const aptIds = fd.getAll('aptSel');
-      if(!aptIds.length){ alert('حدد شقة واحدة على الأقل'); return false; }
-      const data = {
-        date: fd.get('date') || todayISO(),
-        desc: (fd.get('desc')||'').trim() || 'صيانة',
-        total,
-        aptIds
-      };
-      if(isEdit){
-        const x = db.charges.find(y=>y.id === existingCharge.id);
-        if(x) Object.assign(x, data);
-      } else {
-        db.charges.push(Object.assign({id: uid()}, data));
-      }
-      save(); render();
-    }, true);
-
-    const form = back.querySelector('#modalForm');
-    function updatePreview(){
-      const total = parseFloat(form.querySelector('[name="total"]').value)||0;
-      const selected = form.querySelectorAll('[name="aptSel"]:checked').length;
-      const el = form.querySelector('#chargePreview');
-      if(selected === 0){ el.textContent = 'اختر شقة واحدة على الأقل'; }
-      else if(total <= 0){ el.textContent = 'أدخل المبلغ الإجمالي'; }
-      else {
-        const per = roundHalf(total/selected);
-        el.innerHTML = `<strong>${selected}</strong> شقة × <strong>${fmt(per)} ج.م</strong>`;
-      }
-    }
-    form.addEventListener('input', updatePreview);
-    form.addEventListener('change', updatePreview);
-    updatePreview();
-  }
-
-  function openStatement(aptId){
-    const a = db.apartments.find(x=>x.id === aptId);
-    if(!a) return;
-    const pays = paymentsOf(a.id).sort((x,y)=>(x.date||'').localeCompare(y.date||''));
-    const due = dueFor(a, currentMonth());
-    const paid = paidTotal(a.id);
-    const bal = paid - due;
-
-    const rows = pays.length ? pays.map(p=>{
-      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      return `<tr>
-        <td class="num">${esc(p.date)}</td><td>${monthLabel(p.month)}</td>
-        <td class="num">${fmt(c.amMohamed)}</td>
-        <td class="num">${fmt(c.elevator)}</td>
-        <td class="num">${fmt(c.water)}</td>
-        <td class="num">${fmt(c.extra)}</td>
-        <td class="num" style="font-weight:700;color:#15803d">${fmt(paymentTotal(p))}</td>
-      </tr>`;
-    }).join('') : `<tr><td colspan="7"><div class="empty">لا توجد دفعات</div></td></tr>`;
-
-    const body = `
-      <div class="stats" style="margin-bottom:14px">
-        <div class="stat"><div class="label">إجمالي المستحق</div><div class="value" style="font-size:17px">${fmt(due)}</div></div>
-        <div class="stat green"><div class="label">إجمالي المدفوع</div><div class="value" style="font-size:17px">${fmt(paid)}</div></div>
-        <div class="stat ${bal<0?'red':''}"><div class="label">${bal<0?'المتأخر':'الرصيد الدائن'}</div><div class="value" style="font-size:17px">${fmt(Math.abs(bal))}</div></div>
-      </div>
-      <div class="table-wrap"><table style="min-width:auto">
-        <thead><tr><th>التاريخ</th><th>عن شهر</th><th>أم محمد</th><th>أسانسير</th><th>مياه</th><th>صيانة متغيرة</th><th>الإجمالي</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table></div>
-    `;
-
-    const back = showModal(`كشف حساب – ${aptFullLabel(a)}`, body, ()=>true, true);
-    const actions = back.querySelector('.modal-actions');
-    if(actions) actions.innerHTML = '<button type="button" class="btn btn-primary" data-close>إغلاق</button>';
-    const submitBtn = back.querySelector('button[type=submit]');
-    if(submitBtn) submitBtn.style.display = 'none';
-  }
-
-  async function exportToPDF(){
-    const fromEl = document.getElementById('pdfFrom');
-    const toEl   = document.getElementById('pdfTo');
-    const from = (fromEl && fromEl.value) || db.settings.startMonth;
-    const to   = (toEl   && toEl.value)   || currentMonth();
-    if(!window.jspdf || !window.html2canvas){ alert('مكتبات PDF لم يتم تحميلها.'); return; }
-    window.print();
-  }
-
-  function exportPaymentsXLSX(){
-    if(!window.XLSX){ alert('مكتبة Excel لم تُحمّل بعد'); return; }
-    const headers = ['التاريخ','الشقة','الدور','عن شهر','أم محمد','أسانسير','مياه','صيانة متغيرة','الإجمالي','طريقة الدفع'];
-    const rows = [headers];
-    db.payments.forEach(p=>{
-      const a = db.apartments.find(x=>x.id===p.apt);
-      const c = p.components || { amMohamed:0, elevator:0, water:0, extra: Number(p.amount)||0 };
-      rows.push([p.date, a?aptLabel(a):'', a?a.floor:'', p.month, c.amMohamed||0, c.elevator||0, c.water||0, c.extra||0, paymentTotal(p), p.method||'']);
-    });
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'الدفعات');
-    XLSX.writeFile(wb, `الدفعات-${todayISO()}.xlsx`);
-  }
-
-  function exportExpensesXLSX(){
-    if(!window.XLSX){ alert('مكتبة Excel لم تُحمّل بعد'); return; }
-    const headers = ['التاريخ','البند','البيان','المبلغ'];
-    const rows = [headers];
-    db.expenses.forEach(e=>{ rows.push([e.date, e.category, e.desc||'', Number(e.amount)||0]); });
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'المصروفات');
-    XLSX.writeFile(wb, `المصروفات-${todayISO()}.xlsx`);
-  }
-
-  function checkBackup(){
-    const last = db.meta.lastBackupAt;
-    const now = Date.now();
-    const twelveHoursMs = BACKUP_HOURS * 60 * 60 * 1000;
-    const banner = $('#backupBanner');
-    if(!banner) return;
-    if(state.backupDismissedUntil && now < state.backupDismissedUntil){ banner.style.display = 'none'; return; }
-    if(!last || (now - last) > twelveHoursMs){
-      banner.style.display = 'flex';
-    } else {
-      banner.style.display = 'none';
-    }
-  }
-  function takeBackupNow(){
-    const name = `نسخة-احتياطية-اتحاد-الملاك-${todayISO()}.json`;
-    download(name, JSON.stringify(db, null, 2));
-    db.meta.lastBackupAt = Date.now();
-    save();
-    $('#backupBanner').style.display = 'none';
-  }
-  function dismissBackupBanner(){
-    state.backupDismissedUntil = Date.now() + 60*60*1000;
-    $('#backupBanner').style.display = 'none';
-  }
-  window.takeBackupNow = takeBackupNow;
-  window.dismissBackupBanner = dismissBackupBanner;
-
-  document.getElementById('tabs').addEventListener('click', e=>{
-    const t = e.target.closest('.tab');
-    if(!t) return;
-    state.tab = t.dataset.tab;
-    render();
-  });
-
-  document.getElementById('main').addEventListener('click', e=>{
-    const btn = e.target.closest('[data-action]');
-    if(!btn) return;
-    const act = btn.dataset.action;
-    const id = btn.dataset.id;
-
-    switch(act){
-      case 'goto-collect': state.tab = 'collect'; state.month = currentMonth(); render(); break;
-      case 'pay': openPaymentModal(id); break;
-      case 'edit-pay': {
-        const p = db.payments.find(x=>x.id === id);
-        if(p) openPaymentModal(p.apt, p);
-        break;
-      }
-      case 'del-pay': {
-        if(confirm('حذف هذه الدفعة؟')){
-          db.payments = db.payments.filter(x=>x.id !== id);
-          save(); render();
+                        const statusEl = document.getElementById('cloudSyncStatus');
+                        if (statusEl) {
+                            statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-400"></i> <span>المزامنة السحابية متصلة وشغالة بنجاح 100%</span>`;
+                            statusEl.className = "bg-emerald-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-emerald-700";
+                        }
+                    }
+                } else {
+                    window.syncToFirebase();
+                }
+            }, (error) => {
+                console.warn("Firestore Rules Notice:", error);
+                const statusEl = document.getElementById('cloudSyncStatus');
+                if (statusEl) {
+                    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-300"></i> <span>تنبيه: قم بلصق قواعد القراءة والكتابة في Rules بـ Firebase واضغط Publish</span>`;
+                    statusEl.className = "bg-amber-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-amber-700";
+                }
+            });
         }
-        break;
-      }
-      case 'del-month': {
-        const m = btn.dataset.month;
-        if(confirm('حذف دفعات هذا الشهر للشقة؟')){
-          db.payments = db.payments.filter(p=>!(p.apt===id && p.month===m));
-          save(); render();
+
+        initFirebaseConnection();
+
+        window.syncToFirebase = async function() {
+            try {
+                window.isFirebaseSaving = true;
+                const statusEl = document.getElementById('cloudSyncStatus');
+                if (statusEl) {
+                    statusEl.innerHTML = `<i class="fa-solid fa-rotate text-purple-300 animate-spin"></i> <span>جاري إرسال التعديل للسحابة...</span>`;
+                }
+                
+                await setDoc(docRef, {
+                    pricelist: window.db.pricelist || [],
+                    meals: window.db.meals || [],
+                    pendingMeals: window.db.pendingMeals || [],
+                    cancelledMeals: window.db.cancelledMeals || [],
+                    auditLogs: window.db.auditLogs || [],
+                    lastUpdatedBy: window.currentUser || 'النظام',
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+
+                setTimeout(() => {
+                    if (statusEl) {
+                        statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-400"></i> <span>تم الحفظ والمزامنة السحابية بنجاح</span>`;
+                        statusEl.className = "bg-emerald-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-emerald-700";
+                    }
+                }, 400);
+            } catch (err) {
+                console.warn("Error saving to Firebase:", err);
+                window.isFirebaseSaving = false;
+                const statusEl = document.getElementById('cloudSyncStatus');
+                if (statusEl) {
+                    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-300"></i> <span>تنبيه: اضغط Publish على Rules بـ Firebase لتأكيد تفعيل الحفظ السحابي</span>`;
+                    statusEl.className = "bg-amber-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-amber-700";
+                }
+            }
+        };
+    </script>
+
+    <script>
+        const STORAGE_KEY = 'NAIF_FOODS_RECIPES_DB_V2026_MOBILE';
+        const SESSION_USER_KEY = 'NAIF_FOODS_ACTIVE_SESSION_USER';
+        let currentUser = null;
+
+        window.db = {
+            pricelist: [],
+            meals: [],
+            pendingMeals: [],
+            cancelledMeals: [],
+            auditLogs: []
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDatabase();
+            restoreActiveSession();
+            switchTab('recipes');
+        });
+
+        function restoreActiveSession() {
+            const savedUser = sessionStorage.getItem(SESSION_USER_KEY);
+            if (savedUser) {
+                currentUser = savedUser;
+                window.currentUser = savedUser;
+
+                const loginScreen = document.getElementById('loginScreen');
+                if (loginScreen) loginScreen.classList.add('hidden');
+
+                const userDisplay = document.getElementById('currentUserDisplay');
+                if (userDisplay) userDisplay.innerText = currentUser;
+
+                applyPermissions();
+            } else {
+                const loginScreen = document.getElementById('loginScreen');
+                if (loginScreen) loginScreen.classList.remove('hidden');
+            }
         }
-        break;
-      }
-      case 'add-expense': openExpenseModal(); break;
-      case 'edit-exp': {
-        const x = db.expenses.find(y=>y.id === id);
-        if(x) openExpenseModal(x);
-        break;
-      }
-      case 'del-expense': {
-        if(confirm('حذف هذا المصروف؟')){
-          db.expenses = db.expenses.filter(x=>x.id !== id);
-          save(); render();
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const userSelect = document.getElementById('loginUserSelect');
+            const passInput = document.getElementById('loginPassword');
+            
+            if (!userSelect || !passInput) return;
+
+            const user = userSelect.value;
+            const rawPass = passInput.value.trim();
+
+            const validPasswords = {
+                'الادارة': '66661',
+                'مستخدم': '885522',
+                'Yasser': 'Y@sser321'
+            };
+
+            if (validPasswords[user] && validPasswords[user] === rawPass) {
+                currentUser = user;
+            } else {
+                alert('كلمة المرور غير صحيحة!');
+                return;
+            }
+
+            window.currentUser = currentUser;
+            sessionStorage.setItem(SESSION_USER_KEY, currentUser);
+            
+            const loginScreen = document.getElementById('loginScreen');
+            if (loginScreen) loginScreen.classList.add('hidden');
+            
+            const userDisplay = document.getElementById('currentUserDisplay');
+            if (userDisplay) userDisplay.innerText = currentUser;
+            
+            applyPermissions();
+            addAuditLog('تسجيل دخول', `تم تسجيل الدخول بنجاح بواسطة ${currentUser}`);
+            refreshAllUI();
         }
-        break;
-      }
-      case 'add-charge': openChargeModal(); break;
-      case 'edit-charge': {
-        const c = db.charges.find(x=>x.id===id);
-        if(c) openChargeModal(c);
-        break;
-      }
-      case 'del-charge': {
-        if(confirm('حذف بند الصيانة؟')){
-          db.charges = db.charges.filter(x=>x.id !== id);
-          save(); render();
+
+        function logout() {
+            if (currentUser) addAuditLog('تسجيل خروج', `قام ${currentUser} بتسجيل الخروج`);
+            currentUser = null;
+            window.currentUser = null;
+            sessionStorage.removeItem(SESSION_USER_KEY);
+
+            const loginScreen = document.getElementById('loginScreen');
+            if (loginScreen) loginScreen.classList.remove('hidden');
+            const passInput = document.getElementById('loginPassword');
+            if (passInput) passInput.value = '';
         }
-        break;
-      }
-      case 'month-prev': {
-        const [y,m] = state.month.split('-').map(Number);
-        const d = new Date(y, m-2, 1);
-        state.month = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-        render(); break;
-      }
-      case 'month-next': {
-        const [y,m] = state.month.split('-').map(Number);
-        const d = new Date(y, m, 1);
-        state.month = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-        render(); break;
-      }
-      case 'month-now': state.month = currentMonth(); render(); break;
 
-      case 'del-apt': {
-        if(confirm('حذف هذه الشقة؟')){
-          db.apartments = db.apartments.filter(x=>x.id !== id);
-          db.payments = db.payments.filter(p=>p.apt !== id);
-          save(); render();
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('mobileSidebarOverlay');
+            
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('fixed', 'top-16', 'right-2', 'left-2', 'z-30');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('hidden');
+                sidebar.classList.remove('fixed', 'top-16', 'right-2', 'left-2', 'z-30');
+                overlay.classList.add('hidden');
+            }
         }
-        break;
-      }
-      case 'statement': openStatement(id); break;
 
-      case 'save-settings': {
-        const o = parseFloat($('#setOpening').value);
-        const s = $('#setStart').value;
-        const fAm = parseFloat($('#feeAmMohamed').value);
-        const fEl = parseFloat($('#feeElevator').value);
-        const fElG = parseFloat($('#feeElevatorGround').value);
-        const fWa = parseFloat($('#feeWater').value);
-        
-        db.settings.building = 'اتحاد ملاك عمارة 45 شارع سيبويه – الإسكندرية';
-        if(!isNaN(o)) db.settings.openingBalance = o;
-        if(s) db.settings.startMonth = s;
-        if(fAm >= 0) db.settings.fees.amMohamed = fAm;
-        if(fEl >= 0) db.settings.fees.elevator = fEl;
-        if(fElG >= 0) db.settings.fees.elevatorGround = fElG;
-        if(fWa >= 0) db.settings.fees.water = fWa;
-        save(); render();
-        alert('✔ تم حفظ الإعدادات ومزامنتها سحابياً');
-        break;
-      }
+        window.handleLogin = handleLogin;
+        window.logout = logout;
+        window.toggleMobileSidebar = toggleMobileSidebar;
+        window.switchTab = switchTab;
+        window.openNewRecipeModal = openNewRecipeModal;
+        window.openRecipeEditModal = openRecipeEditModal;
+        window.saveModalRecipeChanges = saveModalRecipeChanges;
+        window.addIngredientRowToModal = addIngredientRowToModal;
+        window.onItemInputChanged = onItemInputChanged;
+        window.onUnitChanged = onUnitChanged;
+        window.editMealNameDirect = editMealNameDirect;
+        window.requestCancelMeal = requestCancelMeal;
+        window.approvePendingMeal = approvePendingMeal;
+        window.rejectPendingMeal = rejectPendingMeal;
+        window.restoreCancelledMeal = restoreCancelledMeal;
+        window.permanentDeleteCancelledMeal = permanentDeleteCancelledMeal;
+        window.openPriceEditModal = openPriceEditModal;
+        window.saveItemPriceChange = saveItemPriceChange;
+        window.exportReportPDF = exportReportPDF;
+        window.exportReportExcel = exportReportExcel;
+        window.importExcelFile = importExcelFile;
+        window.exportSingleRecipePDF = exportSingleRecipePDF;
+        window.downloadBackup = downloadBackup;
+        window.restoreBackup = restoreBackup;
+        window.deleteSelectedLogs = deleteSelectedLogs;
+        window.toggleSelectAllLogs = toggleSelectAllLogs;
+        window.closeModal = closeModal;
+        window.renderRecipeCards = renderRecipeCards;
+        window.renderPricelistTable = renderPricelistTable;
 
-      case 'export-pdf': exportToPDF(); break;
-      case 'export-pay-xlsx': exportPaymentsXLSX(); break;
-      case 'export-exp-xlsx': exportExpensesXLSX(); break;
-
-      case 'export-json': takeBackupNow(); break;
-      case 'import-json': $('#fileImport').click(); break;
-
-      case 'clear-tx': {
-        if(confirm('⚠️ سيتم حذف جميع الدفعات والمصروفات من السحابة؟')){
-          db.payments = []; db.expenses = [];
-          save(); render();
-          alert('✔ تم الحذف');
+        function loadDatabase() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try { 
+                    window.db = JSON.parse(data); 
+                    if (!window.db.pricelist) window.db.pricelist = [];
+                    if (!window.db.meals) window.db.meals = [];
+                    if (!window.db.pendingMeals) window.db.pendingMeals = [];
+                    if (!window.db.cancelledMeals) window.db.cancelledMeals = [];
+                    if (!window.db.auditLogs) window.db.auditLogs = [];
+                } catch (e) { initDefaultData(); }
+            } else { initDefaultData(); }
         }
-        break;
-      }
-      case 'reset-all': {
-        if(confirm('⚠️ سيتم إعادة ضبط البيانات تماماً بالوضع الافتراضي؟')){
-          db = defaultData();
-          save();
-          state.month = currentMonth();
-          state.tab = 'home';
-          render();
-          alert('✔ تم إعادة الضبط');
+
+        function saveDatabase() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(window.db));
+            updateBadges();
+            if (typeof window.syncToFirebase === 'function') {
+                window.syncToFirebase();
+            }
         }
-        break;
-      }
-      case 'print': window.print(); break;
-    }
-  });
 
-  document.getElementById('main').addEventListener('change', e=>{
-    const t = e.target;
-    if(t.matches('[data-month-picker]')){ state.month = t.value || currentMonth(); render(); return; }
-    if(t.dataset.filter === 'expMonth'){ state.expMonth = t.value; render(); return; }
-    if(t.dataset.filter === 'expCat'){ state.expCat = t.value; render(); return; }
-    if(t.dataset.filter === 'payMonth'){ state.payMonth = t.value; render(); return; }
-    if(t.dataset.filter === 'payApt'){ state.payApt = t.value; render(); return; }
-    if(t.id === 'pdfFrom'){ state.pdfFrom = t.value; return; }
-    if(t.id === 'pdfTo'){ state.pdfTo = t.value; return; }
-
-    const inp = t.closest('[data-field]');
-    if(inp){
-      const a = db.apartments.find(x=>x.id === inp.dataset.id);
-      if(!a) return;
-      const f = inp.dataset.field;
-      if(f === 'active')              a.active = inp.checked;
-      else if(f === 'isGround')       a.isGround = inp.checked;
-      else if(f === 'includeAm')      a.exemptAm = !inp.checked;
-      else if(f === 'includeElevator')a.exemptElevator = !inp.checked;
-      else if(f === 'includeWater')   a.exemptWater = !inp.checked;
-      else if(f === 'floor')          a.floor = parseInt(inp.value)||1;
-      else                            a[f] = inp.value;
-      save(); render();
-    }
-  });
-
-  document.addEventListener('change', e=>{
-    if(e.target && e.target.id === 'fileImport'){
-      const f = e.target.files && e.target.files[0];
-      if(!f) return;
-      const reader = new FileReader();
-      reader.onload = ev=>{
-        try{
-          const data = JSON.parse(ev.target.result);
-          if(!data || !Array.isArray(data.apartments)) throw new Error('ملف غير صالح');
-          if(confirm('سيتم استبدال كل البيانات بالبيانات المستوردة ومزامنتها سحابياً. المتابعة؟')){
-            db = migrate(data);
-            save();
-            state.tab='home'; render();
-            alert('✔ تم استعادة البيانات بنجاح');
-          }
-        }catch(err){
-          alert('❌ تعذر قراءة الملف: ' + err.message);
+        function refreshAllUI() {
+            renderRecipeCards();
+            renderPricelistTable();
+            renderReportsTable();
+            renderPendingMeals();
+            renderCancelledMeals();
+            renderAuditLogs();
+            updateBadges();
         }
-        e.target.value = '';
-      };
-      reader.readAsText(f);
-    }
-  });
+        window.refreshAllUI = refreshAllUI;
 
-  // بدء تشغيل التطبيق وربطه بقاعدة البيانات
-  initApp();
-</script>
+        function updateBadges() {
+            const pBadge = document.getElementById('pendingBadge');
+            const cBadge = document.getElementById('cancelledBadge');
+            if (pBadge) pBadge.innerText = window.db.pendingMeals ? window.db.pendingMeals.length : 0;
+            if (cBadge) cBadge.innerText = window.db.cancelledMeals ? window.db.cancelledMeals.length : 0;
+        }
+
+        function initDefaultData() {
+            window.db = {
+                pricelist: [],
+                meals: [],
+                pendingMeals: [],
+                cancelledMeals: [],
+                auditLogs: []
+            };
+            saveDatabase();
+        }
+
+        function applyPermissions() {
+            const btnRestore = document.getElementById('btnRestoreBackup');
+            const btnImport = document.getElementById('btnImportExcel');
+            const navPricelist = document.getElementById('nav-pricelist');
+            const navReports = document.getElementById('nav-reports');
+            const navAudit = document.getElementById('nav-auditlog');
+
+            if (currentUser === 'Yasser') {
+                if (navPricelist) navPricelist.style.display = 'flex';
+                if (navReports) navReports.style.display = 'flex';
+                if (navAudit) navAudit.style.display = 'flex';
+                btnImport.classList.remove('hidden');
+                btnRestore.classList.remove('hidden'); 
+            } else if (currentUser === 'الادارة') {
+                if (navPricelist) navPricelist.style.display = 'none';
+                if (navReports) navReports.style.display = 'flex';
+                if (navAudit) navAudit.style.display = 'flex';
+                btnImport.classList.add('hidden');
+                btnRestore.classList.add('hidden');
+            } else if (currentUser === 'مستخدم') {
+                if (navPricelist) navPricelist.style.display = 'none';
+                if (navReports) navReports.style.display = 'none';
+                if (navAudit) navAudit.style.display = 'none';
+                btnImport.classList.add('hidden');
+                btnRestore.classList.add('hidden');
+            }
+
+            const thLogSelect = document.getElementById('thLogSelect');
+            const btnDeleteLog = document.getElementById('btnDeleteLogSelection');
+            if (currentUser === 'Yasser' && thLogSelect) {
+                thLogSelect.classList.remove('hidden');
+                btnDeleteLog.classList.remove('hidden');
+            } else if (thLogSelect) {
+                thLogSelect.classList.add('hidden');
+                btnDeleteLog.classList.add('hidden');
+            }
+        }
+
+        function addAuditLog(actionType, details) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB');
+            db.auditLogs.unshift({
+                id: Date.now() + Math.random(),
+                date: dateStr,
+                user: currentUser || 'النظام',
+                type: actionType,
+                details: details
+            });
+
+            if (db.auditLogs.length > 1000) {
+                db.auditLogs = db.auditLogs.slice(0, 1000);
+            }
+            saveDatabase();
+        }
+
+        function switchTab(tabId) {
+            if ((currentUser === 'ادمن' || currentUser === 'مستخدم') && tabId === 'pricelist') {
+                alert('عذراً! لا تمتلك صلاحية الدخول لشاشة دليل الأسعار والأصناف');
+                return;
+            }
+            if (currentUser === 'مستخدم' && (tabId === 'reports' || tabId === 'auditlog')) {
+                alert('عذراً! لا تمتلك صلاحية الدخول لهذه الشاشة');
+                return;
+            }
+
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-purple-100', 'text-naifPurple-900'));
+            
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) activeNav.classList.add('bg-purple-100', 'text-naifPurple-900');
+
+            if (tabId === 'reports') renderReportsTable();
+            if (tabId === 'pending') renderPendingMeals();
+            if (tabId === 'cancelled') renderCancelledMeals();
+
+            const sidebar = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('mobileSidebarOverlay');
+            if (!sidebar.classList.contains('hidden') && window.innerWidth < 768) {
+                sidebar.classList.add('hidden');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function formatQty(val) {
+            if (val === null || val === undefined || isNaN(val)) return '0';
+            const num = parseFloat(val);
+            if (Number.isInteger(num)) return num.toString();
+            return num.toString();
+        }
+
+        function formatPrice(val, decimals = 3) {
+            if (val === null || val === undefined || isNaN(val) || val === 0) return '-';
+            return parseFloat(val).toFixed(decimals);
+        }
+
+        function renderRecipeCards() {
+            const container = document.getElementById('recipesContainer');
+            const q = (document.getElementById('recipeSearchInput').value || '').trim().toLowerCase();
+            
+            let filtered = db.meals || [];
+            if (q) {
+                filtered = db.meals.filter(m => m.name.toLowerCase().includes(q));
+            }
+
+            document.getElementById('recipesCountBadge').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-purple-100 font-bold">لا توجد وجبات مسجلة في النظام</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map((meal, index) => {
+                let mainCost = 0;
+                let outExtra = 0;
+                let inExtra = 0;
+
+                meal.ingredients.forEach(ing => {
+                    const lineTotal = (ing.qty || 0) * (ing.price || 0);
+                    if (ing.location === 'ALL') mainCost += lineTotal;
+                    else if (ing.location === 'OUT') outExtra += lineTotal;
+                    else if (ing.location === 'IN') inExtra += lineTotal;
+                });
+
+                const totalOutCost = mainCost + outExtra;
+                const totalInCost = mainCost + inExtra;
+                const sp = meal.sellingPrice || 0;
+
+                const mainProfit = sp > 0 ? sp - mainCost : 0;
+                const outProfit = sp > 0 ? sp - totalOutCost : 0;
+                const inProfit = sp > 0 ? sp - totalInCost : 0;
+
+                const mainProfitPct = sp > 0 ? (mainProfit / sp * 100) : 0;
+                const outProfitPct = sp > 0 ? (outProfit / sp * 100) : 0;
+                const inProfitPct = sp > 0 ? (inProfit / sp * 100) : 0;
+
+                const mainCostPct = sp > 0 ? (mainCost / sp * 100) : 0;
+                const outCostPct = sp > 0 ? (totalOutCost / sp * 100) : 0;
+                const inCostPct = sp > 0 ? (totalInCost / sp * 100) : 0;
+
+                const hidePrices = currentUser === 'مستخدم'; 
+                const canEditAll = currentUser === 'Yasser' || currentUser === 'ادمن';
+
+                const realMealIndex = db.meals.findIndex(m => (m.id && meal.id ? m.id === meal.id : m.name === meal.name));
+
+                const rowsHtml = meal.ingredients.map((ing) => `
+                    <tr class="hover:bg-purple-50/50 border-b border-slate-100 text-xs">
+                        <td class="py-2 px-1 font-bold text-slate-800 text-right text-[13px] sm:text-[13.5px]">${ing.item}</td>
+                        <td class="py-2 px-1 text-center font-bold text-naifPurple-900">${ing.location || 'ALL'}</td>
+                        <td class="py-2 px-1 text-center text-slate-600">${ing.unit}</td>
+                        <td class="py-2 px-1 text-center font-bold font-mono text-slate-900">${formatQty(ing.qty)}</td>
+                        <td class="py-2 px-1 text-center font-mono">${hidePrices ? '***' : formatPrice(ing.price, 5)}</td>
+                        <td class="py-2 px-1 text-center font-mono font-black text-naifPurple-900 text-xs sm:text-sm">${hidePrices ? '***' : formatPrice(ing.qty * ing.price, 3)}</td>
+                    </tr>
+                `).join('');
+
+                return `
+                <div class="bg-white rounded-2xl border-2 border-purple-200 shadow-md overflow-hidden flex flex-col recipe-card-box">
+                    
+                    <div class="bg-naifPurple-900 text-white p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2.5">
+                        <div class="flex items-center gap-2.5">
+                            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/40?text=NAIF';" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white object-cover">
+                            <div>
+                                <h3 class="font-extrabold text-base sm:text-lg text-white flex items-center gap-2">
+                                    <span>${meal.name}</span>
+                                    <button onclick="editMealNameDirect('${meal.name}', ${realMealIndex})" class="text-[11px] bg-naifPurple-800 hover:bg-naifPurple-950 px-2 py-0.5 rounded text-purple-200 no-print active:scale-95">
+                                        <i class="fa-solid fa-pen"></i> <span class="hidden sm:inline">تعديل الاسم</span>
+                                    </button>
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="bg-naifPurple-950/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-purple-600/50 text-left mr-auto sm:mr-0">
+                            <span class="text-[9px] sm:text-[10px] text-purple-200 block font-bold">سعر البيع</span>
+                            <span class="text-lg sm:text-xl font-black font-mono text-emerald-400">${formatPrice(sp, 3)}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 sm:p-4 bg-purple-50/20 overflow-x-auto">
+                        <table class="w-full text-right border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="bg-naifPurple-900 text-white text-xs">
+                                    <th class="py-2 px-1">الصنف</th>
+                                    <th class="py-2 px-1 text-center">مكان الصنف</th>
+                                    <th class="py-2 px-1 text-center">الوحدة</th>
+                                    <th class="py-2 px-1 text-center">الكمية</th>
+                                    <th class="py-2 px-1 text-center">الأسعار</th>
+                                    <th class="py-2 px-1 text-center">القيمة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    ${hidePrices ? '' : `
+                    <div class="p-3 sm:p-4 bg-naifPurple-800 text-white space-y-3 border-t-2 border-purple-300">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            
+                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
+                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">الوجبة الأصلية</h4>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>سعر البيع:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
+                                    <span>التكلفة:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(mainCost, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>الربح المالي:</span>
+                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(mainProfit, 3) : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
+                                    <span>نسبة الربح %:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? mainProfitPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>نسبة التكلفة %:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? mainCostPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
+                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">توصيل خارجي</h4>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>سعر البيع:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
+                                    <span>التكلفة:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(totalOutCost, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>الربح المالي:</span>
+                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(outProfit, 3) : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
+                                    <span>نسبة الربح %:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? outProfitPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>نسبة التكلفة %:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? outCostPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
+                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">داخل المطعم (داين إن)</h4>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>سعر البيع:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
+                                    <span>التكلفة:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(totalInCost, 3)}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>الربح المالي:</span>
+                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(inProfit, 3) : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
+                                    <span>نسبة الربح %:</span>
+                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? inProfitPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm font-bold">
+                                    <span>نسبة التكلفة %:</span>
+                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? inCostPct.toFixed(2) + '%' : '-'}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    `}
+
+                    <div class="p-3 bg-purple-50 border-t border-purple-200 flex flex-wrap items-center justify-between gap-2 no-print">
+                        ${canEditAll ? `
+                            <button onclick="openRecipeEditModal(${realMealIndex})" class="bg-naifPurple-900 hover:bg-naifPurple-800 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                                <i class="fa-solid fa-pen-to-square"></i> تعديل المكونات
+                            </button>
+                        ` : '<span class="text-xs text-slate-400 font-bold">عرض فقط</span>'}
+
+                        <div class="flex items-center gap-2 mr-auto">
+                            <button onclick="requestCancelMeal(${realMealIndex})" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                                <i class="fa-solid fa-ban"></i> إلغاء الوجبة
+                            </button>
+                            <button onclick="exportSingleRecipePDF(${realMealIndex})" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                `;
+            }).join('');
+        }
+
+        function editMealNameDirect(currentName, index) {
+            const newName = prompt('أدخل اسم الوجبة الجديد:', currentName);
+            if (!newName || !newName.trim()) return;
+            const trimmed = newName.trim();
+            db.meals[index].name = trimmed;
+            saveDatabase();
+            addAuditLog('تعديل مسمى وجبة', `تغير الاسم من [${currentName}] إلى [${trimmed}] بواسطة ${currentUser}`);
+            renderRecipeCards();
+        }
+
+        function openNewRecipeModal() {
+            document.getElementById('modalTitle').innerText = 'إضافة وجبة جديدة';
+            document.getElementById('modalMode').value = 'add';
+            document.getElementById('editMealIndex').value = '';
+            document.getElementById('editMealName').value = '';
+            document.getElementById('editMealPrice').value = '';
+
+            const tbody = document.getElementById('modalIngredientsTableBody');
+            tbody.innerHTML = '';
+            addIngredientRowToModal();
+            document.getElementById('recipeEditModal').classList.remove('hidden');
+        }
+
+        function openRecipeEditModal(index) {
+            if (currentUser === 'مستخدم') {
+                alert('عذراً! لا تمتلك صلاحية تعديل مكونات الوجبة');
+                return;
+            }
+            const meal = db.meals[index];
+            if (!meal) return;
+
+            document.getElementById('modalTitle').innerText = 'تعديل مكونات الوجبة والتكاليف';
+            document.getElementById('modalMode').value = 'edit';
+            document.getElementById('editMealIndex').value = index;
+            document.getElementById('editMealName').value = meal.name;
+            document.getElementById('editMealPrice').value = meal.sellingPrice || 0;
+
+            const tbody = document.getElementById('modalIngredientsTableBody');
+            tbody.innerHTML = '';
+
+            meal.ingredients.forEach((ing) => {
+                addIngredientRowToModal(ing.item, ing.location, ing.unit, ing.qty, ing.price);
+            });
+
+            document.getElementById('recipeEditModal').classList.remove('hidden');
+        }
+
+        function addIngredientRowToModal(item = '', location = 'ALL', unit = 'حبة', qty = 1, price = 0) {
+            const tbody = document.getElementById('modalIngredientsTableBody');
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-slate-100';
+
+            let optionsHtml = db.pricelist ? db.pricelist.map(p => `<option value="${p.item}" ${p.item === item ? 'selected' : ''}>${p.item}</option>`).join('') : '';
+
+            tr.innerHTML = `
+                <td class="p-1.5">
+                    <input type="text" list="pricelistOptions" value="${item}" onchange="onItemInputChanged(this)" placeholder="اكتب للبحث بالحرف..." class="ing-item w-full bg-slate-50 border p-1.5 rounded text-xs font-bold">
+                </td>
+                <td class="p-1.5">
+                    <select class="ing-location bg-slate-50 border p-1 rounded text-xs font-bold">
+                        <option value="ALL" ${location === 'ALL' ? 'selected' : ''}>ALL</option>
+                        <option value="OUT" ${location === 'OUT' ? 'selected' : ''}>OUT</option>
+                        <option value="IN" ${location === 'IN' ? 'selected' : ''}>IN</option>
+                    </select>
+                </td>
+                <td class="p-1.5">
+                    <select onchange="onUnitChanged(this)" class="ing-unit bg-slate-50 border p-1 rounded text-xs text-center font-bold">
+                        <option value="حبة" ${unit === 'حبة' ? 'selected' : ''}>حبة</option>
+                        <option value="جرام" ${unit === 'جرام' ? 'selected' : ''}>جرام</option>
+                        <option value="علبة" ${unit === 'علبة' ? 'selected' : ''}>علبة</option>
+                        <option value="شريحة" ${unit === 'شريحة' ? 'selected' : ''}>شريحة</option>
+                        <option value="جالون" ${unit === 'جالون' ? 'selected' : ''}>جالون</option>
+                        <option value="ماعون" ${unit === 'ماعون' ? 'selected' : ''}>ماعون</option>
+                        <option value="باكت" ${unit === 'باكت' ? 'selected' : ''}>باكت</option>
+                        <option value="بطل" ${unit === 'بطل' ? 'selected' : ''}>بطل</option>
+                        <option value="قطعة" ${unit === 'قطعة' ? 'selected' : ''}>قطعة</option>
+                        <option value="اونس" ${unit === 'اونس' ? 'selected' : ''}>اونس</option>
+                        <option value="مل لتر" ${unit === 'مل لتر' ? 'selected' : ''}>مل لتر</option>
+                        <option value="الشد" ${unit === 'الشد' ? 'selected' : ''}>الشد</option>
+                    </select>
+                </td>
+                <td class="p-1.5"><input type="number" step="any" value="${qty}" class="ing-qty w-20 bg-slate-50 border p-1 rounded text-xs text-center font-bold font-mono"></td>
+                <td class="p-1.5"><input type="number" step="0.00001" value="${price}" class="ing-price w-24 bg-slate-50 border p-1 rounded text-xs text-center font-bold font-mono bg-purple-50" readonly></td>
+                <td class="p-1.5 text-center"><button onclick="this.closest('tr').remove()" class="text-rose-600 hover:text-rose-800 p-1"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+
+            if (!document.getElementById('pricelistOptions')) {
+                const dl = document.createElement('datalist');
+                dl.id = 'pricelistOptions';
+                dl.innerHTML = optionsHtml;
+                document.body.appendChild(dl);
+            } else {
+                document.getElementById('pricelistOptions').innerHTML = optionsHtml;
+            }
+        }
+
+        function onItemInputChanged(inputEl) {
+            const tr = inputEl.closest('tr');
+            const itemName = inputEl.value.trim();
+            const unitSelect = tr.querySelector('.ing-unit');
+            const priceInput = tr.querySelector('.ing-price');
+
+            const itemObj = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
+            if (itemObj) {
+                const unit = unitSelect.value;
+                let unitPrice = itemObj.price;
+                if (itemObj.unitPrices && itemObj.unitPrices[unit] !== undefined) {
+                    unitPrice = itemObj.unitPrices[unit];
+                }
+                priceInput.value = unitPrice;
+            }
+        }
+
+        function onUnitChanged(unitSelectEl) {
+            const tr = unitSelectEl.closest('tr');
+            const itemInput = tr.querySelector('.ing-item');
+            const priceInput = tr.querySelector('.ing-price');
+            const itemName = itemInput.value.trim();
+
+            const itemObj = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
+            if (itemObj) {
+                const unit = unitSelectEl.value;
+                let unitPrice = itemObj.price;
+                if (itemObj.unitPrices && itemObj.unitPrices[unit] !== undefined) {
+                    unitPrice = itemObj.unitPrices[unit];
+                }
+                priceInput.value = unitPrice;
+            }
+        }
+
+        function saveModalRecipeChanges() {
+            const mode = document.getElementById('modalMode').value;
+            const newName = document.getElementById('editMealName').value.trim();
+            const newPrice = parseFloat(document.getElementById('editMealPrice').value) || 0;
+
+            if (!newName) {
+                alert('يرجى إدخال اسم الوجبة');
+                return;
+            }
+
+            const rows = document.querySelectorAll('#modalIngredientsTableBody tr');
+            const newIngredients = [];
+
+            rows.forEach(tr => {
+                const item = tr.querySelector('.ing-item').value.trim();
+                const location = tr.querySelector('.ing-location').value;
+                const unit = tr.querySelector('.ing-unit').value.trim();
+                const qty = parseFloat(tr.querySelector('.ing-qty').value) || 0;
+                const price = parseFloat(tr.querySelector('.ing-price').value) || 0;
+
+                if (item) {
+                    newIngredients.push({ item, location, unit, qty, price, total: qty * price });
+                }
+            });
+
+            if (newIngredients.length === 0) {
+                alert('يرجى إضافة مكون واحد على الأقل للوجبة');
+                return;
+            }
+
+            const mealData = {
+                id: Date.now(),
+                name: newName,
+                sellingPrice: newPrice,
+                ingredients: newIngredients,
+                createdBy: currentUser
+            };
+
+            if (currentUser === 'Yasser') {
+                if (mode === 'add') {
+                    db.meals.push(mealData);
+                    addAuditLog('إضافة وجبة', `تمت إضافة وجبة جديدة [${newName}] بواسطة Yasser`);
+                } else {
+                    const index = document.getElementById('editMealIndex').value;
+                    db.meals[index] = mealData;
+                    addAuditLog('تعديل وجبة', `تم تعديل وجبة [${newName}] بواسطة Yasser`);
+                }
+                renderRecipeCards();
+            } else {
+                db.pendingMeals.push(mealData);
+                addAuditLog('طلب إضافة/تعديل وجبة', `قام ${currentUser} بإضافة وجبة [${newName}] بانتظار الاعتماد`);
+                alert('تم إرسال الوجبة بنجاح إلى قائمة (وجبات قيد الاعتماد).');
+                renderPendingMeals();
+            }
+
+            saveDatabase();
+            closeModal('recipeEditModal');
+        }
+
+        function renderPendingMeals() {
+            const container = document.getElementById('pendingContainer');
+            if (!container) return;
+
+            if (!db.pendingMeals || db.pendingMeals.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border font-bold">لا توجد وجبات قيد الاعتماد حالياً</div>`;
+                return;
+            }
+
+            container.innerHTML = db.pendingMeals.map((meal, idx) => `
+                <div class="bg-white p-4 rounded-2xl border-2 border-amber-300 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="font-black text-base text-naifPurple-900">${meal.name}</h3>
+                        <p class="text-xs text-slate-500">أُضيف بواسطة: <strong class="text-amber-700">${meal.createdBy}</strong> | سعر البيع: ${formatPrice(meal.sellingPrice, 3)}</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        ${currentUser === 'Yasser' ? `
+                            <button onclick="approvePendingMeal(${idx})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
+                                <i class="fa-solid fa-check"></i> اعتماد الوجبة
+                            </button>
+                        ` : '<span class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg">قيد الانتظار</span>'}
+                        <button onclick="rejectPendingMeal(${idx})" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
+                            <i class="fa-solid fa-xmark"></i> رفض وحذف
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approvePendingMeal(idx) {
+            if (currentUser !== 'Yasser') return;
+            const meal = db.pendingMeals.splice(idx, 1)[0];
+            db.meals.push(meal);
+            saveDatabase();
+            addAuditLog('اعتماد وجبة', `تم اعتماد وجبة [${meal.name}] رسمياً بواسطة Yasser`);
+            renderPendingMeals();
+            renderRecipeCards();
+            alert('تم اعتماد الوجبة وإضافتها للرئيسية بنجاح!');
+        }
+
+        function rejectPendingMeal(idx) {
+            const meal = db.pendingMeals.splice(idx, 1)[0];
+            saveDatabase();
+            addAuditLog('رفض وجبة', `تم رفض وجبة [${meal.name}] بواسطة ${currentUser}`);
+            renderPendingMeals();
+            alert('تم رفض وحذف الوجبة.');
+        }
+
+        function requestCancelMeal(index) {
+            const meal = db.meals[index];
+            if (!confirm(`هل أنت متأكد من رغبتك في إلغاء وجبة [${meal.name}] وترحيلها؟`)) return;
+
+            db.meals.splice(index, 1);
+            db.cancelledMeals.push({
+                ...meal,
+                cancelledBy: currentUser,
+                cancelDate: new Date().toLocaleDateString('en-GB')
+            });
+
+            saveDatabase();
+            addAuditLog('طلب إلغاء وجبة', `قام ${currentUser} بطلب إلغاء وجبة [${meal.name}] وترحيلها لقائمة الملغية`);
+            renderRecipeCards();
+            renderCancelledMeals();
+            alert('تم ترحيل الوجبة إلى شاشة (الوجبات الملغية).');
+        }
+
+        function renderCancelledMeals() {
+            const container = document.getElementById('cancelledContainer');
+            if (!container) return;
+
+            if (!db.cancelledMeals || db.cancelledMeals.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border font-bold">لا توجد وجبات ملغية</div>`;
+                return;
+            }
+
+            container.innerHTML = db.cancelledMeals.map((meal, idx) => `
+                <div class="bg-white p-4 rounded-2xl border-2 border-rose-300 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="font-black text-base text-rose-800">${meal.name}</h3>
+                        <p class="text-xs text-slate-500">تم الإلغاء بواسطة: <strong class="text-rose-700">${meal.cancelledBy}</strong> في ${meal.cancelDate}</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        ${currentUser === 'Yasser' ? `
+                            <button onclick="restoreCancelledMeal(${idx})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
+                                <i class="fa-solid fa-rotate-left"></i> استعادة
+                            </button>
+                            <button onclick="permanentDeleteCancelledMeal(${idx})" class="bg-rose-900 hover:bg-black text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
+                                <i class="fa-solid fa-trash"></i> حذف نهائي
+                            </button>
+                        ` : '<span class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-lg">قيد الانتظار</span>'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function restoreCancelledMeal(idx) {
+            if (currentUser !== 'Yasser') return;
+            const meal = db.cancelledMeals.splice(idx, 1)[0];
+            db.meals.push(meal);
+            saveDatabase();
+            addAuditLog('استعادة وجبة ملغية', `تم استعادة وجبة [${meal.name}] إلى الشاشة الرئيسية بواسطة Yasser`);
+            renderCancelledMeals();
+            renderRecipeCards();
+            alert('تمت استعادة الوجبة للرئيسية بنجاح!');
+        }
+
+        function permanentDeleteCancelledMeal(idx) {
+            if (currentUser !== 'Yasser') return;
+            const meal = db.cancelledMeals.splice(idx, 1)[0];
+            saveDatabase();
+            addAuditLog('حذف نهائي', `تم الحذف النهائي لالوجبة [${meal.name}] بواسطة Yasser`);
+            renderCancelledMeals();
+            alert('تم حذف الوجبة نهائياً من النظام.');
+        }
+
+        function renderPricelistTable() {
+            const tbody = document.getElementById('pricelistTableBody');
+            const q = (document.getElementById('priceSearchInput').value || '').trim().toLowerCase();
+
+            let filtered = db.pricelist || [];
+            if (q) {
+                filtered = db.pricelist.filter(p => p.item.toLowerCase().includes(q));
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="14" class="p-6 text-center text-slate-400 font-bold">لا توجد أصناف مسجلة في دليل الأسعار</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((p) => {
+                const up = p.unitPrices || {};
+                return `
+                <tr class="hover:bg-purple-50 border-b border-slate-100">
+                    <td class="p-3 font-bold text-slate-800">${p.item}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['حبة'] !== undefined ? formatPrice(up['حبة'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['جرام'] !== undefined ? formatPrice(up['جرام'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['علبة'] !== undefined ? formatPrice(up['علبة'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['شريحة'] !== undefined ? formatPrice(up['شريحة'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['جالون'] !== undefined ? formatPrice(up['جالون'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['ماعون'] !== undefined ? formatPrice(up['ماعون'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['باكت'] !== undefined ? formatPrice(up['باكت'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['بطل'] !== undefined ? formatPrice(up['بطل'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['قطعة'] !== undefined ? formatPrice(up['قطعة'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['اونس'] !== undefined ? formatPrice(up['اونس'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['مل لتر'] !== undefined ? formatPrice(up['مل لتر'], 5) : '--'}</td>
+                    <td class="p-3 text-center font-mono font-bold">${up['الشد'] !== undefined ? formatPrice(up['الشد'], 5) : '--'}</td>
+                    <td class="p-3 text-center no-print">
+                        <button onclick="openPriceEditModal('${p.item}', ${p.price})" class="text-naifPurple-900 hover:text-black font-bold p-1"><i class="fa-solid fa-pen"></i></button>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+        }
+
+        function openPriceEditModal(itemName, currentPrice) {
+            if (currentUser !== 'Yasser') {
+                alert('لا تمتلك صلاحية تعديل الأسعار');
+                return;
+            }
+            document.getElementById('editPriceItemName').value = itemName;
+            document.getElementById('lblEditItemName').innerText = `الصنف: ${itemName}`;
+            document.getElementById('editItemPriceValue').value = currentPrice;
+            document.getElementById('priceEditModal').classList.remove('hidden');
+        }
+
+        function saveItemPriceChange() {
+            const itemName = document.getElementById('editPriceItemName').value;
+            const newPrice = parseFloat(document.getElementById('editItemPriceValue').value) || 0;
+
+            const item = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
+            if (item) {
+                item.price = newPrice;
+                if (!item.unitPrices) item.unitPrices = {};
+                item.unitPrices[item.unit || 'حبة'] = newPrice;
+                
+                if (db.meals) {
+                    db.meals.forEach(m => {
+                        m.ingredients.forEach(ing => {
+                            if (ing.item === itemName) {
+                                ing.price = newPrice;
+                                ing.total = ing.qty * newPrice;
+                            }
+                        });
+                    });
+                }
+
+                saveDatabase();
+                addAuditLog('تعديل سعر صنف', `تم تعديل سعر الصنف [${itemName}] إلى [${newPrice}] بواسطة ${currentUser}`);
+                closeModal('priceEditModal');
+                renderPricelistTable();
+                renderRecipeCards();
+                renderReportsTable();
+            }
+        }
+
+        function renderReportsTable() {
+            const tbody = document.getElementById('reportsTableBody');
+            document.getElementById('reportDateBadge').innerText = 'التاريخ: ' + new Date().toLocaleDateString('en-GB');
+
+            if (!db.meals || db.meals.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-bold">لا توجد بيانات للتقرير</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = db.meals.map(meal => {
+                let mainCost = 0;
+                meal.ingredients.forEach(ing => {
+                    if (ing.location === 'ALL' || !ing.location) {
+                        mainCost += (ing.qty || 0) * (ing.price || 0);
+                    }
+                });
+                const sp = meal.sellingPrice || 0;
+                const profit = sp > 0 ? sp - mainCost : 0;
+                const profitPct = sp > 0 ? (profit / sp * 100) : 0;
+                const costPct = sp > 0 ? (mainCost / sp * 100) : 0;
+
+                return `
+                    <tr class="hover:bg-slate-50 border-b">
+                        <td class="p-3 font-bold text-slate-800">${meal.name}</td>
+                        <td class="p-3 text-center font-mono font-bold text-emerald-700">${formatPrice(sp, 3)}</td>
+                        <td class="p-3 text-center font-mono font-bold text-rose-700">${formatPrice(mainCost, 3)}</td>
+                        <td class="p-3 text-center font-mono font-bold text-amber-600">${sp > 0 ? formatPrice(profit, 3) : '-'}</td>
+                        <td class="p-3 text-center font-mono font-bold text-emerald-600">${sp > 0 ? profitPct.toFixed(2) + '%' : '-'}</td>
+                        <td class="p-3 text-center font-mono font-bold text-rose-600">${sp > 0 ? costPct.toFixed(2) + '%' : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function exportReportPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'pt', 'a4');
+            const rowsPerPage = 18;
+            const totalPages = Math.ceil((db.meals ? db.meals.length : 0) / rowsPerPage) || 1;
+
+            for (let page = 0; page < totalPages; page++) {
+                if (page > 0) pdf.addPage();
+
+                const printWrapper = document.createElement('div');
+                printWrapper.style.position = 'fixed';
+                printWrapper.style.top = '0';
+                printWrapper.style.left = '-9999px';
+                printWrapper.style.width = '794px';
+                printWrapper.style.background = '#ffffff';
+                printWrapper.style.direction = 'rtl';
+                printWrapper.style.padding = '20px';
+
+                const slicedMeals = db.meals ? db.meals.slice(page * rowsPerPage, (page + 1) * rowsPerPage) : [];
+
+                let rowsHtml = slicedMeals.map(meal => {
+                    let mainCost = 0;
+                    meal.ingredients.forEach(ing => {
+                        if (ing.location === 'ALL' || !ing.location) mainCost += (ing.qty || 0) * (ing.price || 0);
+                    });
+                    const sp = meal.sellingPrice || 0;
+                    const profit = sp > 0 ? sp - mainCost : 0;
+                    const profitStr = sp > 0 ? formatPrice(profit, 3) : '-';
+                    const profitPct = sp > 0 ? (profit / sp * 100).toFixed(2) + '%' : '-';
+                    const costPct = sp > 0 ? (mainCost / sp * 100).toFixed(2) + '%' : '-';
+
+                    return `
+                        <tr style="border-bottom:1px solid #ddd; font-size:11px;">
+                            <td style="padding:8px; font-weight:bold;">${meal.name}</td>
+                            <td style="padding:8px; text-align:center;">${formatPrice(sp, 3)}</td>
+                            <td style="padding:8px; text-align:center;">${formatPrice(mainCost, 3)}</td>
+                            <td style="padding:8px; text-align:center;">${profitStr}</td>
+                            <td style="padding:8px; text-align:center;">${profitPct}</td>
+                            <td style="padding:8px; text-align:center;">${costPct}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                printWrapper.innerHTML = `
+                    <div style="text-align:center; border-bottom:3px solid #6d4370; padding-bottom:10px; margin-bottom:14px;">
+                        <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #6d4370;display:inline-block;">
+                        <h2 style="color:#6d4370; font-weight:900; margin:4px 0 2px 0; font-size:16px;">شركة نايف للأغذية</h2>
+                        <p style="font-size:11px; color:#555; margin:0;">تقرير ربحية وتكاليف الوجبات الشامل - صفحة ${page + 1} من ${totalPages}</p>
+                    </div>
+                    <table style="width:100%; border-collapse:collapse; text-align:right;">
+                        <thead>
+                            <tr style="background:#6d4370; color:#fff; font-size:11px;">
+                                <th style="padding:8px;">اسم الوجبة</th>
+                                <th style="padding:8px; text-align:center;">سعر البيع</th>
+                                <th style="padding:8px; text-align:center;">التكلفة الرئيسية</th>
+                                <th style="padding:8px; text-align:center;">الربح المالي</th>
+                                <th style="padding:8px; text-align:center;">نسبة الربح %</th>
+                                <th style="padding:8px; text-align:center;">نسبة التكلفة %</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                    <div style="margin-top:20px; padding-top:8px; border-top:2px solid #6d4370; display:flex; justify-content:space-between; font-size:9px; color:#6d4370; font-weight:bold;">
+                        <div>تاريخ التصدير: ${new Date().toLocaleDateString('en-GB')}</div>
+                        <div>Yasser Elkhateeb - 67011143</div>
+                    </div>
+                `;
+
+                document.body.appendChild(printWrapper);
+
+                html2canvas(printWrapper, { scale: 2, useCORS: true }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const imgWidth = pdf.internal.pageSize.getWidth();
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+
+                    document.body.removeChild(printWrapper);
+                    if (page === totalPages - 1) {
+                        pdf.save('تقرير_ربحية_الوجبات_الشامل.pdf');
+                    }
+                });
+            }
+        }
+
+        function exportReportExcel() {
+            if (!db.meals) return;
+            let dataToExport = db.meals.map(m => {
+                let mainCost = 0;
+                m.ingredients.forEach(i => { if (i.location === 'ALL' || !i.location) mainCost += (i.qty || 0) * (i.price || 0); });
+                const sp = m.sellingPrice || 0;
+                const profit = sp > 0 ? sp - mainCost : 0;
+                return {
+                    "اسم الوجبة": m.name,
+                    "سعر البيع": sp > 0 ? sp : "-",
+                    "التكلفة الرئيسية": parseFloat(mainCost.toFixed(3)),
+                    "الربح المالي": sp > 0 ? parseFloat(profit.toFixed(3)) : "-",
+                    "نسبة الربح %": sp > 0 ? parseFloat((profit / sp * 100).toFixed(2)) + '%' : "-"
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "التقارير التحليلية");
+            XLSX.writeFile(workbook, "Naif_Foods_Reports.xlsx");
+        }
+
+        function importExcelFile(event) {
+            if (currentUser === 'مستخدم') {
+                alert('عذراً! لا تمتلك صلاحية سحب ملف الإكسل');
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            window.isFirebaseSaving = true;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    let importedPricelist = [];
+                    let importedMeals = [];
+
+                    const unitsList = ['حبة', 'جرام', 'علبة', 'شريحة', 'جالون', 'ماعون', 'باكت', 'بطل', 'قطعة', 'اونس', 'مل لتر', 'الشد'];
+
+                    try {
+                        const priceSheetName = workbook.SheetNames.find(s => s.toLowerCase().trim() === 'pricelist' || s.toLowerCase().trim() === 'price');
+                        if (priceSheetName) {
+                            const priceSheet = workbook.Sheets[priceSheetName];
+                            const priceJson = XLSX.utils.sheet_to_json(priceSheet, { header: 1, raw: true });
+                            for (let i = 3; i < priceJson.length; i++) {
+                                const row = priceJson[i];
+                                if (row && row[0]) {
+                                    const itemName = String(row[0]).trim();
+                                    let defaultPrice = 0;
+                                    let unitPrices = {};
+
+                                    for (let col = 1; col < row.length; col++) {
+                                        const val = parseFloat(row[col]);
+                                        if (!isNaN(val) && val > 0) {
+                                            const unitName = unitsList[col - 1] || ('وحدة_' + col);
+                                            unitPrices[unitName] = val;
+                                            if (defaultPrice === 0) defaultPrice = val;
+                                        }
+                                    }
+
+                                    if (itemName) {
+                                        importedPricelist.push({
+                                            item: itemName,
+                                            unit: 'حبة',
+                                            price: defaultPrice,
+                                            unitPrices: unitPrices
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    } catch (priceErr) {
+                        console.warn("Notice reading pricelist:", priceErr);
+                    }
+
+                    workbook.SheetNames.forEach(sheetName => {
+                        try {
+                            const sNameClean = sheetName.toLowerCase().trim();
+                            if (sNameClean !== 'pricelist' && sNameClean !== 'price') {
+                                const sheet = workbook.Sheets[sheetName];
+                                if (!sheet) return;
+                                
+                                const b2Cell = sheet['B2'] || sheet['b2'];
+                                const mealName = b2Cell && b2Cell.v !== undefined ? String(b2Cell.v).trim() : sheetName;
+
+                                const c41Cell = sheet['C41'] || sheet['c41'];
+                                const sellingPrice = c41Cell && c41Cell.v !== undefined ? (parseFloat(c41Cell.v) || 0) : 0;
+
+                                const sheetJson = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
+                                const ingredients = [];
+
+                                for (let r = 4; r <= Math.min(34, sheetJson.length - 1); r++) {
+                                    const row = sheetJson[r];
+                                    if (row && row[0] && String(row[0]).trim() !== '') {
+                                        const itemName = String(row[0]).trim();
+                                        const location = row[1] ? String(row[1]).trim() : 'ALL';
+                                        const unit = row[2] ? String(row[2]).trim() : 'حبة';
+                                        const qty = row[3] ? (parseFloat(row[3]) || 0) : 0;
+                                        const price = row[4] ? (parseFloat(row[4]) || 0) : 0;
+                                        const total = row[5] ? (parseFloat(row[5]) || 0) : (qty * price);
+
+                                        ingredients.push({
+                                            item: itemName,
+                                            location: location,
+                                            unit: unit,
+                                            qty: qty,
+                                            price: price,
+                                            total: total
+                                        });
+                                    }
+                                }
+
+                                if (ingredients.length > 0) {
+                                    importedMeals.push({
+                                        name: mealName,
+                                        sellingPrice: sellingPrice,
+                                        ingredients: ingredients
+                                    });
+                                }
+                            }
+                        } catch (singleSheetErr) {
+                            console.warn(`Skipped sheet due to format issue: ${sheetName}`);
+                        }
+                    });
+
+                    if (importedPricelist.length > 0) db.pricelist = importedPricelist;
+                    if (importedMeals.length > 0) db.meals = importedMeals;
+
+                    addAuditLog('سحب إكسل', `تم سحب ملف إكسل بنجاح (${importedMeals.length} وجبة) بواسطة ${currentUser}`);
+                    saveDatabase();
+                    
+                    if (typeof window.syncToFirebase === 'function') {
+                        window.syncToFirebase();
+                    }
+
+                    alert(`تم سحب الملف بنجاح! تم استيراد ${importedMeals.length} وجبة من أصل ${workbook.SheetNames.length} شيت.`);
+                    renderRecipeCards();
+                    renderPricelistTable();
+                    renderReportsTable();
+
+                } catch (err) {
+                    console.error(err);
+                    window.isFirebaseSaving = false;
+                    alert('حدث خطأ أثناء قراءة ملف الإكسل. يرجى التأكد من أن الملف بصيغة xlsx أو xlsm سليمة.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function renderAuditLogs() {
+            const tbody = document.getElementById('auditLogTableBody');
+            if (!db.auditLogs || db.auditLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">لا توجد حركات مسجلة حتى الآن</td></tr>`;
+                return;
+            }
+
+            const isYasser = currentUser === 'Yasser';
+
+            tbody.innerHTML = db.auditLogs.map(log => `
+                <tr class="hover:bg-slate-50 border-b border-slate-100">
+                    <td class="p-3 text-center ${isYasser ? '' : 'hidden'}"><input type="checkbox" class="log-checkbox" data-id="${log.id}"></td>
+                    <td class="p-3 font-mono text-slate-500 font-bold">${log.date}</td>
+                    <td class="p-3 font-bold text-naifPurple-900">${log.user}</td>
+                    <td class="p-3 font-bold text-slate-700">${log.type}</td>
+                    <td class="p-3 text-slate-600">${log.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleSelectAllLogs(master) {
+            document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = master.checked);
+        }
+
+        function deleteSelectedLogs() {
+            if (currentUser !== 'Yasser') return;
+            const checked = document.querySelectorAll('.log-checkbox:checked');
+            if (checked.length === 0) {
+                alert('يرجى تحديد حركات لمسحها');
+                return;
+            }
+
+            if (!confirm(`هل أنت متأكد من مسح ${checked.length} حركة محددة؟`)) return;
+
+            const idsToDelete = Array.from(checked).map(cb => parseFloat(cb.getAttribute('data-id')));
+            db.auditLogs = db.auditLogs.filter(log => !idsToDelete.includes(log.id));
+
+            saveDatabase();
+            renderAuditLogs();
+        }
+
+        function downloadBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", `naif_foods_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            addAuditLog('تنزيل نسخة احتياطية', `تم تنزيل النسخة الاحتياطية للبيانات بواسطة ${currentUser}`);
+        }
+
+        function restoreBackup(event) {
+            if (currentUser !== 'Yasser') {
+                alert('استعادة النسخة الاحتياطية مقتصرة حصرياً على Yasser');
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const text = e.target.result;
+                    const imported = JSON.parse(text);
+                    if (imported) {
+                        if (Array.isArray(imported)) {
+                            db.meals = imported;
+                        } else {
+                            db.meals = imported.meals || [];
+                            db.pricelist = imported.pricelist || [];
+                            db.auditLogs = imported.auditLogs || [];
+                            db.pendingMeals = imported.pendingMeals || [];
+                            db.cancelledMeals = imported.cancelledMeals || [];
+                        }
+                        saveDatabase();
+                        addAuditLog('استعادة نسخة احتياطية', `تمت استعادة البيانات بنجاح بواسطة ${currentUser}`);
+                        alert('تمت استعادة البيانات بنجاح!');
+                        location.reload();
+                    } else {
+                        alert('ملف النسخة الاحتياطية فارغ أو غير صالح!');
+                    }
+                } catch (err) {
+                    console.error("Restore error:", err);
+                    alert('خطأ في قراءة ملف النسخة الاحتياطية: تأكد من أن الملف بصيغة JSON سليمة.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function exportSingleRecipePDF(mealIndex) {
+            const meal = db.meals[mealIndex];
+            if (!meal) return;
+
+            const cardEls = document.querySelectorAll('.recipe-card-box');
+            const targetEl = cardEls[mealIndex];
+            if (!targetEl) return;
+
+            const clone = targetEl.cloneNode(true);
+            clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+            const printWrapper = document.createElement('div');
+            printWrapper.style.position = 'fixed';
+            printWrapper.style.top = '0';
+            printWrapper.style.left = '-9999px';
+            printWrapper.style.width = '794px';
+            printWrapper.style.background = '#ffffff';
+            printWrapper.style.direction = 'rtl';
+            printWrapper.style.padding = '20px';
+
+            const headerHtml = `
+                <div style="text-align:center; border-bottom:3px solid #6d4370; padding-bottom:10px; margin-bottom:14px;">
+                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #6d4370; display:inline-block;">
+                    <h2 style="color:#6d4370; font-weight:900; margin:4px 0 2px 0; font-size:16px;">شركة نايف للأغذية</h2>
+                    <p style="font-size:11px; color:#555; margin:0;">بطاقة ريسبي الوجبة: ${meal.name}</p>
+                </div>
+            `;
+            const headerDiv = document.createElement('div');
+            headerDiv.innerHTML = headerHtml;
+            printWrapper.appendChild(headerDiv);
+
+            printWrapper.appendChild(clone);
+
+            const exportTime = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB');
+            const footerHtml = `
+                <div style="margin-top:15px; padding-top:8px; border-top:2px solid #6d4370; display:flex; justify-content:space-between; align-items:center; font-size:9px; color:#6d4370; font-weight:bold;">
+                    <div>تاريخ ووقت التصدير: ${exportTime}</div>
+                    <div>Yasser Elkhateeb - 67011143</div>
+                </div>
+            `;
+            const footerDiv = document.createElement('div');
+            footerDiv.innerHTML = footerHtml;
+            printWrapper.appendChild(footerDiv);
+
+            document.body.appendChild(printWrapper);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const canvas = await html2canvas(printWrapper, { scale: 2, useCORS: true });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`وجبة_${meal.name}.pdf`);
+
+                addAuditLog('تصدير PDF', `تم تصدير وجبة [${meal.name}] إلى ملف PDF`);
+            } catch (err) {
+                console.error(err);
+                alert('حدث خطأ أثناء تصدير PDF');
+            } finally {
+                document.body.removeChild(printWrapper);
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
