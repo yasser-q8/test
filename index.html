@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
@@ -46,6 +46,7 @@
             margin-bottom: 5px;
             font-weight: bold;
             font-size: 14px;
+            color: #555;
         }
 
         .input-group input {
@@ -66,6 +67,7 @@
             font-size: 18px;
             font-weight: bold;
             transition: background 0.3s;
+            margin-top: 10px;
         }
 
         .print-btn:hover {
@@ -77,79 +79,34 @@
             background-color: white;
             width: 210mm; /* مقاس A4 */
             min-height: 297mm;
-            padding: 20mm 15mm;
+            /* ترك مساحة علوية وسفلية فارغة إذا أردت الطباعة على ورق الشركة */
+            padding: 40mm 15mm 20mm 15mm; 
             box-sizing: border-box;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             position: relative;
-            font-family: 'Times New Roman', Times, serif;
             color: #000;
-        }
-
-        /* الترويسة */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid transparent; /* للحفاظ على المساحة */
-            margin-bottom: 30px;
-        }
-
-        .header .eng-name {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: left;
-            width: 35%;
-        }
-
-        .header .logo {
-            width: 80px;
-            height: 80px;
-            background-color: #d9a99e; /* لون مقارب للوجو الأصلي */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
-            font-family: serif;
-            font-style: italic;
-            border-radius: 5px;
-        }
-
-        .header .ar-name {
-            text-align: right;
-            width: 35%;
-        }
-
-        .header .ar-name h1 {
-            font-size: 22px;
-            margin: 0 0 5px 0;
-            font-weight: bold;
-        }
-
-        .header .ar-name p {
-            font-size: 14px;
-            margin: 0;
         }
 
         /* التاريخ */
         .date-section {
-            text-align: left;
+            text-align: left; /* محاذاة لليسار */
             font-size: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
             font-weight: bold;
+            font-family: 'Times New Roman', serif;
         }
 
         /* العنوان الرئيسي */
         .title-section {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .title-section h2 {
             font-size: 26px;
             margin: 0 0 5px 0;
             font-weight: bold;
+            font-family: Arial, sans-serif;
         }
 
         .title-section h3 {
@@ -163,24 +120,58 @@
         .details-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             font-size: 16px;
         }
 
         .details-table td {
-            padding: 8px 5px;
+            padding: 10px 5px;
             vertical-align: top;
         }
 
-        /* تنسيق الأعمدة الإنجليزية */
-        .col-eng-label { text-align: left; width: 20%; font-weight: bold; font-family: Arial, sans-serif;}
-        .col-eng-colon { text-align: center; width: 2%; font-weight: bold; }
-        .col-eng-value { text-align: left; width: 28%; font-weight: bold; font-family: Arial, sans-serif; text-transform: uppercase;}
+        /* تنسيق الأعمدة الإنجليزية (محاذاة يسار) */
+        .col-eng-label { 
+            text-align: left; 
+            width: 20%; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif;
+            direction: ltr;
+        }
+        .col-eng-colon { 
+            text-align: center; 
+            width: 2%; 
+            font-weight: bold; 
+        }
+        .col-eng-value { 
+            text-align: left; 
+            width: 28%; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            text-transform: uppercase;
+            direction: ltr;
+        }
 
-        /* تنسيق الأعمدة العربية */
-        .col-ar-label { text-align: right; width: 20%; font-weight: bold; font-family: Arial, sans-serif; }
-        .col-ar-colon { text-align: center; width: 2%; font-weight: bold; }
-        .col-ar-value { text-align: right; width: 28%; font-weight: bold; font-family: Arial, sans-serif; text-transform: uppercase;}
+        /* تنسيق الأعمدة العربية (محاذاة يمين) */
+        .col-ar-label { 
+            text-align: right; 
+            width: 20%; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            direction: rtl;
+        }
+        .col-ar-colon { 
+            text-align: center; 
+            width: 2%; 
+            font-weight: bold; 
+        }
+        .col-ar-value { 
+            text-align: right; 
+            width: 28%; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            text-transform: uppercase;
+            direction: rtl;
+        }
 
         /* النص الختامي */
         .footer-text {
@@ -189,26 +180,28 @@
             align-items: flex-start;
             font-size: 15px;
             line-height: 1.5;
-            margin-top: 50px;
+            margin-top: 60px;
         }
 
         .footer-text .eng-text {
-            width: 45%;
+            width: 48%;
             text-align: left;
             font-family: Arial, sans-serif;
+            direction: ltr;
         }
 
         .footer-text .ar-text {
-            width: 45%;
+            width: 48%;
             text-align: right;
             font-family: Arial, sans-serif;
+            direction: rtl;
         }
 
         /* إعدادات الطباعة */
         @media print {
             @page {
                 size: A4;
-                margin: 0; /* إزالة الهوامش الافتراضية للمتصفح */
+                margin: 0; 
             }
             body {
                 background-color: white;
@@ -223,7 +216,8 @@
                 box-shadow: none;
                 width: 100%;
                 height: 100%;
-                padding: 20mm 15mm; /* إعادة الهامش الداخلي للشهادة */
+                /* يمكنك تعديل الهامش العلوي هنا ليناسب المساحة الفارغة في ورق الشركة */
+                padding: 40mm 20mm 20mm 20mm; 
             }
         }
     </style>
@@ -234,17 +228,10 @@
     <div class="input-panel">
         <h3>أدخل بيانات الموظف هنا</h3>
         
+        <!-- الحقول الرقمية والتواريخ (مربع واحد) -->
         <div class="input-group">
             <label>التاريخ (Date):</label>
             <input type="text" id="inp-date" value="11/11/2026" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>اسم الموظف (Name):</label>
-            <input type="text" id="inp-name" value="MD LURUL HUSEN" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الجنسية (Nationality):</label>
-            <input type="text" id="inp-nationality" value="NIPAL" oninput="updateCert()">
         </div>
         <div class="input-group">
             <label>الرقم المدني (Civil ID No):</label>
@@ -255,10 +242,6 @@
             <input type="text" id="inp-passport" value="PA4674439" oninput="updateCert()">
         </div>
         <div class="input-group">
-            <label>الوظيفة (Job Title):</label>
-            <input type="text" id="inp-job" value="Pastry Baker" oninput="updateCert()">
-        </div>
-        <div class="input-group">
             <label>تاريخ التعيين (Joining Date):</label>
             <input type="text" id="inp-joining" value="14/10/2024" oninput="updateCert()">
         </div>
@@ -267,28 +250,40 @@
             <input type="text" id="inp-salary" value="120" oninput="updateCert()">
         </div>
 
+        <!-- الحقول النصية (مربعين منفصلين عربي وإنجليزي) -->
+        <div class="input-group">
+            <label>الاسم (English Name):</label>
+            <input type="text" id="inp-name-en" value="MD LURUL HUSEN" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الاسم (الاسم بالعربي):</label>
+            <input type="text" id="inp-name-ar" value="ام دي لورول حسين" oninput="updateCert()">
+        </div>
+
+        <div class="input-group">
+            <label>الجنسية (English Nationality):</label>
+            <input type="text" id="inp-nat-en" value="NIPAL" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الجنسية (الجنسية بالعربي):</label>
+            <input type="text" id="inp-nat-ar" value="النيبال" oninput="updateCert()">
+        </div>
+
+        <div class="input-group">
+            <label>الوظيفة (English Job Title):</label>
+            <input type="text" id="inp-job-en" value="Pastry Baker" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الوظيفة (الوظيفة بالعربي):</label>
+            <input type="text" id="inp-job-ar" value="صانع كعك" oninput="updateCert()">
+        </div>
+
         <button class="print-btn" onclick="window.print()">طباعة / حفظ PDF</button>
     </div>
 
-    <!-- الشهادة -->
+    <!-- الشهادة (تبدأ من التاريخ) -->
     <div class="certificate-container">
         
-        <!-- الترويسة -->
-        <div class="header">
-            <div class="eng-name">
-                Nayef Food Company
-            </div>
-            
-            <div class="logo">
-                NF
-            </div>
-            
-            <div class="ar-name">
-                <h1>شركة نايف للأغذية</h1>
-                <p>لصناعة الحلويات والفطائر بأنواعها</p>
-            </div>
-        </div>
-
         <!-- التاريخ -->
         <div class="date-section">
             Date : <span id="out-date">11/11/2026</span>
@@ -313,7 +308,7 @@
             <tr>
                 <td class="col-eng-label">Mr.</td>
                 <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-name">MD LURUL HUSEN</span></td>
+                <td class="col-eng-value"><span id="out-name-en">MD LURUL HUSEN</span></td>
                 <td class="col-ar-value"><span id="out-name-ar">ام دي لورول حسين</span> :</td>
                 <td class="col-ar-colon"></td>
                 <td class="col-ar-label">السيد /</td>
@@ -321,8 +316,8 @@
             <tr>
                 <td class="col-eng-label">Nationality</td>
                 <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-nationality">NIPAL</span></td>
-                <td class="col-ar-value"><span id="out-nationality-ar">النيبال</span> :</td>
+                <td class="col-eng-value"><span id="out-nat-en">NIPAL</span></td>
+                <td class="col-ar-value"><span id="out-nat-ar">النيبال</span> :</td>
                 <td class="col-ar-colon"></td>
                 <td class="col-ar-label">الجنسية</td>
             </tr>
@@ -345,7 +340,7 @@
             <tr>
                 <td class="col-eng-label">Job Title</td>
                 <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-job">Pastry Baker</span></td>
+                <td class="col-eng-value"><span id="out-job-en">Pastry Baker</span></td>
                 <td class="col-ar-value"><span id="out-job-ar">صانع كعك</span> :</td>
                 <td class="col-ar-colon"></td>
                 <td class="col-ar-label">الوظيفة</td>
@@ -368,7 +363,7 @@
             </tr>
         </table>
 
-        <!-- النص الختامي (تم إزالة الجزء السفلي الخاص بالعنوان واللوجو) -->
+        <!-- النص الختامي -->
         <div class="footer-text">
             <div class="eng-text">
                 <strong>He is still working and given this certificate upon his request without any liability towards the company.</strong>
@@ -383,40 +378,37 @@
     <!-- كود JavaScript لتحديث البيانات فورياً -->
     <script>
         function updateCert() {
-            // جلب القيم من الحقول
+            // جلب القيم الرقمية والتواريخ
             let date = document.getElementById('inp-date').value;
-            let name = document.getElementById('inp-name').value;
-            let nationality = document.getElementById('inp-nationality').value;
             let civil = document.getElementById('inp-civil').value;
             let passport = document.getElementById('inp-passport').value;
-            let job = document.getElementById('inp-job').value;
             let joining = document.getElementById('inp-joining').value;
             let salary = document.getElementById('inp-salary').value;
 
+            // جلب القيم النصية (العربية والإنجليزية)
+            let nameEn = document.getElementById('inp-name-en').value;
+            let nameAr = document.getElementById('inp-name-ar').value;
+            let natEn = document.getElementById('inp-nat-en').value;
+            let natAr = document.getElementById('inp-nat-ar').value;
+            let jobEn = document.getElementById('inp-job-en').value;
+            let jobAr = document.getElementById('inp-job-ar').value;
+
             // تحديث النصوص في الشهادة (الإنجليزية)
             document.getElementById('out-date').innerText = date;
-            document.getElementById('out-name').innerText = name;
-            document.getElementById('out-nationality').innerText = nationality;
+            document.getElementById('out-name-en').innerText = nameEn;
+            document.getElementById('out-nat-en').innerText = natEn;
             document.getElementById('out-civil').innerText = civil;
             document.getElementById('out-passport').innerText = passport;
-            document.getElementById('out-job').innerText = job;
+            document.getElementById('out-job-en').innerText = jobEn;
             document.getElementById('out-joining').innerText = joining;
             document.getElementById('out-salary').innerText = salary;
 
             // تحديث النصوص في الشهادة (العربية)
-            // ملاحظة: الأسماء والجنسيات تحتاج ترجمة يدوية، لذلك تم وضعها كحقول نصية.
-            // هنا نقوم بنسخ نفس النص الإنجليزي للعربي كحل مبدئي، 
-            // يمكنك تعديل الحقول العربية يدوياً في الكود إذا لزم الأمر.
-            document.getElementById('out-name-ar').innerText = name; 
-            document.getElementById('out-nationality-ar').innerText = nationality; 
+            document.getElementById('out-name-ar').innerText = nameAr;
+            document.getElementById('out-nat-ar').innerText = natAr;
             document.getElementById('out-civil-ar').innerText = civil;
             document.getElementById('out-passport-ar').innerText = passport;
-            
-            // ترجمة افتراضية بسيطة للوظائف (يمكنك إزالتها أو زيادتها)
-            let jobAr = job;
-            if(job.toLowerCase() === 'pastry baker') jobAr = 'صانع كعك';
             document.getElementById('out-job-ar').innerText = jobAr;
-
             document.getElementById('out-joining-ar').innerText = joining;
             document.getElementById('out-salary-ar').innerText = salary;
         }
