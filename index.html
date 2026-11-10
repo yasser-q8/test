@@ -2,1863 +2,427 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>شركة نايف للأغذية - نظام إدارة الوجبات والريسبي</title>
-
-    <link rel="icon" href="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" type="image/jpeg">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        naifPurple: {
-                            800: '#58325a',
-                            900: '#6d4370',
-                            950: '#3d203f'
-                        },
-                        naifPink: {
-                            500: '#c95574'
-                        }
-                    },
-                    fontFamily: { sans: ['Segoe UI', 'Tahoma', 'Cairo', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شهادة راتب - شركة نايف للأغذية</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
-        body { 
-            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; 
-            background-color: #f7f3f8;
-            -webkit-tap-highlight-color: transparent;
+        /* إعدادات عامة */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #9d68a0; border-radius: 4px; }
-
-        .signature-card {
-            position: fixed;
-            bottom: 12px;
-            left: 12px;
-            background: #ffffff;
-            color: #1e3a8a;
-            padding: 6px 12px;
+        /* تنسيق لوحة الإدخال (لا تظهر عند الطباعة) */
+        .input-panel {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(109, 67, 112, 0.25);
-            font-size: 0.68rem;
-            font-weight: 700;
-            z-index: 99;
-            animation: floatSignature 5s ease-in-out infinite;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-panel h3 {
+            grid-column: span 2;
+            text-align: center;
+            margin-top: 0;
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .print-btn {
+            grid-column: span 2;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            border: 2px solid #ef4444;
-            text-decoration: none;
-            display: inline-block;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
         }
 
-        .signature-card:hover { transform: scale(1.05); }
-
-        @keyframes floatSignature { 
-            0% { transform: translateY(0px); } 
-            50% { transform: translateY(-8px); } 
-            100% { transform: translateY(0px); } 
+        .print-btn:hover {
+            background-color: #218838;
         }
 
-        .signature-card .name { font-size: 0.78rem; font-weight: 800; color: #1e3a8a; }
-        .signature-card .title { font-size: 0.58rem; color: #2563eb; font-weight: 600; }
+        /* تنسيق ورقة الشهادة */
+        .certificate-container {
+            background-color: white;
+            width: 210mm; /* مقاس A4 */
+            min-height: 297mm;
+            padding: 20mm 15mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+            color: #000;
+        }
 
+        /* الترويسة */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid transparent; /* للحفاظ على المساحة */
+            margin-bottom: 30px;
+        }
+
+        .header .eng-name {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            width: 35%;
+        }
+
+        .header .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #d9a99e; /* لون مقارب للوجو الأصلي */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            font-family: serif;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        .header .ar-name {
+            text-align: right;
+            width: 35%;
+        }
+
+        .header .ar-name h1 {
+            font-size: 22px;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+        }
+
+        .header .ar-name p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* التاريخ */
+        .date-section {
+            text-align: left;
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* العنوان الرئيسي */
+        .title-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title-section h2 {
+            font-size: 26px;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+        }
+
+        .title-section h3 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+        }
+
+        /* جدول البيانات */
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .details-table td {
+            padding: 8px 5px;
+            vertical-align: top;
+        }
+
+        /* تنسيق الأعمدة الإنجليزية */
+        .col-eng-label { text-align: left; width: 20%; font-weight: bold; font-family: Arial, sans-serif;}
+        .col-eng-colon { text-align: center; width: 2%; font-weight: bold; }
+        .col-eng-value { text-align: left; width: 28%; font-weight: bold; font-family: Arial, sans-serif; text-transform: uppercase;}
+
+        /* تنسيق الأعمدة العربية */
+        .col-ar-label { text-align: right; width: 20%; font-weight: bold; font-family: Arial, sans-serif; }
+        .col-ar-colon { text-align: center; width: 2%; font-weight: bold; }
+        .col-ar-value { text-align: right; width: 28%; font-weight: bold; font-family: Arial, sans-serif; text-transform: uppercase;}
+
+        /* النص الختامي */
+        .footer-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-top: 50px;
+        }
+
+        .footer-text .eng-text {
+            width: 45%;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        .footer-text .ar-text {
+            width: 45%;
+            text-align: right;
+            font-family: Arial, sans-serif;
+        }
+
+        /* إعدادات الطباعة */
         @media print {
-            .no-print { display: none !important; }
-            .signature-card { display: none !important; }
-        }
-
-        .sticky-search-holder {
-            position: sticky;
-            top: 72px;
-            z-index: 30;
-            background-color: rgba(247, 243, 248, 0.95);
-            backdrop-filter: blur(8px);
-        }
-
-        @media (max-width: 768px) {
-            .sticky-search-holder { top: 64px; }
-            input, select, button { font-size: 14px !important; }
+            @page {
+                size: A4;
+                margin: 0; /* إزالة الهوامش الافتراضية للمتصفح */
+            }
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+            .input-panel {
+                display: none; /* إخفاء لوحة الإدخال */
+            }
+            .certificate-container {
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                padding: 20mm 15mm; /* إعادة الهامش الداخلي للشهادة */
+            }
         }
     </style>
 </head>
-<body class="bg-purple-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-purple-200">
+<body>
 
-    <!-- شاشة تسجيل الدخول -->
-    <div id="loginScreen" class="fixed inset-0 bg-naifPurple-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 border border-naifPurple-900">
-            <div class="text-center mb-6">
-                <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/80?text=NAIF';" alt="شركة نايف للأغذية" class="w-20 h-20 mx-auto rounded-full shadow-lg border-2 border-naifPurple-900 object-cover mb-3">
-                <h2 class="text-2xl font-black text-naifPurple-900">شركة نايف للأغذية</h2>
-                <p class="text-xs text-slate-500 font-bold mt-1">نظام إدارة الأصناف وتكاليف الريسبي</p>
+    <!-- لوحة إدخال البيانات -->
+    <div class="input-panel">
+        <h3>أدخل بيانات الموظف هنا</h3>
+        
+        <div class="input-group">
+            <label>التاريخ (Date):</label>
+            <input type="text" id="inp-date" value="11/11/2026" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>اسم الموظف (Name):</label>
+            <input type="text" id="inp-name" value="MD LURUL HUSEN" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الجنسية (Nationality):</label>
+            <input type="text" id="inp-nationality" value="NIPAL" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الرقم المدني (Civil ID No):</label>
+            <input type="text" id="inp-civil" value="297091004989" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>رقم الجواز (Passport No):</label>
+            <input type="text" id="inp-passport" value="PA4674439" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الوظيفة (Job Title):</label>
+            <input type="text" id="inp-job" value="Pastry Baker" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>تاريخ التعيين (Joining Date):</label>
+            <input type="text" id="inp-joining" value="14/10/2024" oninput="updateCert()">
+        </div>
+        <div class="input-group">
+            <label>الراتب (Salary):</label>
+            <input type="text" id="inp-salary" value="120" oninput="updateCert()">
+        </div>
+
+        <button class="print-btn" onclick="window.print()">طباعة / حفظ PDF</button>
+    </div>
+
+    <!-- الشهادة -->
+    <div class="certificate-container">
+        
+        <!-- الترويسة -->
+        <div class="header">
+            <div class="eng-name">
+                Nayef Food Company
             </div>
             
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم</label>
-                    <select id="loginUserSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-naifPurple-900 outline-none">
-                        <option value="الادارة" selected>الادارة</option>
-                        <option value="مستخدم">مستخدم</option>
-                        <option value="Yasser">Yasser</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" required placeholder="أدخل كلمة المرور" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none">
-                </div>
-                <button type="submit" class="w-full bg-naifPurple-900 hover:bg-naifPurple-800 active:scale-[0.98] text-white font-black py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
-                    <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- الهيدر الرئيسي -->
-    <header class="bg-naifPurple-900 text-white shadow-xl sticky top-0 z-40 border-b-4 border-naifPink-500">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 sm:h-20">
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <button onclick="toggleMobileSidebar()" class="md:hidden text-white p-2 rounded-lg hover:bg-naifPurple-800 text-xl flex items-center justify-center">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                    <div class="text-right">
-                        <h1 class="text-base sm:text-xl font-black tracking-wide leading-tight">شركة نايف للأغذية</h1>
-                        <p class="text-[10px] sm:text-xs text-purple-200">إدارة الريسبي والتكاليف</p>
-                    </div>
-                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/50?text=NAIF';" alt="شركة نايف للأغذية" class="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-2 border-white object-cover shadow-md">
-                </div>
-
-                <div class="flex items-center gap-1.5 sm:gap-3">
-                    <div class="bg-naifPurple-950/60 px-2.5 py-1.5 rounded-xl border border-purple-700/50 flex items-center gap-1.5 text-[11px] sm:text-xs">
-                        <i class="fa-solid fa-user-gear text-purple-300"></i>
-                        <span class="hidden sm:inline">المستخدم:</span> <strong id="currentUserDisplay" class="text-white">--</strong>
-                    </div>
-
-                    <label id="btnImportExcel" title="سحب من ملف الإكسل" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md">
-                        <i class="fa-solid fa-file-excel"></i>
-                        <span class="hidden sm:inline">سحب إكسل</span>
-                        <input type="file" id="excelFileInput" accept=".xlsx, .xlsm, .xls" onchange="importExcelFile(event)" class="hidden">
-                    </label>
-
-                    <button onclick="downloadBackup()" title="تنزيل نسخة احتياطية" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md">
-                        <i class="fa-solid fa-download"></i>
-                        <span class="hidden md:inline">نسخة احتياطية</span>
-                    </button>
-
-                    <label id="btnRestoreBackup" title="استعادة نسخة احتياطية" class="bg-amber-600 hover:bg-amber-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-md">
-                        <i class="fa-solid fa-upload"></i>
-                        <span class="hidden md:inline">استعادة</span>
-                        <input type="file" id="restoreFileInput" accept=".json" onchange="restoreBackup(event)" class="hidden">
-                    </label>
-
-                    <button onclick="logout()" title="تسجيل الخروج" class="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition shadow-md">
-                        <i class="fa-solid fa-power-off"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- مؤشر حالة المزامنة السحابية Firebase -->
-    <div id="cloudSyncStatus" class="bg-purple-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-purple-700">
-        <i class="fa-solid fa-cloud-arrow-up text-emerald-400 animate-pulse"></i>
-        <span>جاري المزامنة مع السحابة (Firebase)...</span>
-    </div>
-
-    <!-- خلفية معتمة لإغلاق القائمة الجانبية على الموبايل -->
-    <div id="mobileSidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden transition-opacity"></div>
-
-    <!-- الحاوية الرئيسية -->
-    <div class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col md:flex-row gap-4 sm:gap-6">
-
-        <!-- القائمة الجانبية -->
-        <aside id="mainSidebar" class="w-full md:w-64 bg-white rounded-2xl shadow-lg border border-purple-100 p-3 shrink-0 self-start sticky top-20 hidden md:block z-30 transition-all duration-300">
-            <div class="text-[11px] font-black text-naifPurple-900 uppercase px-3 py-2 flex items-center justify-between">
-                <span>القائمة الرئيسية</span>
-                <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-base"></i></button>
-            </div>
-            <nav class="space-y-1">
-                <button onclick="switchTab('recipes')" id="nav-recipes" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-utensils text-naifPurple-900 text-base w-5"></i>
-                    <span>وصفات الوجبات (BOM)</span>
-                </button>
-                <button onclick="switchTab('pricelist')" id="nav-pricelist" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-tags text-naifPurple-900 text-base w-5"></i>
-                    <span>دليل الأسعار والأصناف</span>
-                </button>
-                <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-chart-line text-naifPurple-900 text-base w-5"></i>
-                    <span>التقارير التحليلية</span>
-                </button>
-                <button onclick="switchTab('pending')" id="nav-pending" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-hourglass-half text-amber-600 text-base w-5"></i>
-                    <span>وجبات قيد الاعتماد</span> <span id="pendingBadge" class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full mr-auto font-bold">0</span>
-                </button>
-                <button onclick="switchTab('cancelled')" id="nav-cancelled" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-ban text-rose-600 text-base w-5"></i>
-                    <span>الوجبات الملغية</span> <span id="cancelledBadge" class="bg-rose-100 text-rose-800 text-[10px] px-2 py-0.5 rounded-full mr-auto font-bold">0</span>
-                </button>
-                <button onclick="switchTab('auditlog')" id="nav-auditlog" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-purple-50 transition">
-                    <i class="fa-solid fa-clock-rotate-left text-naifPurple-900 text-base w-5"></i>
-                    <span>سجل الحركات الكامل</span>
-                </button>
-            </nav>
-        </aside>
-
-        <!-- الشاشات الرئيسية -->
-        <main class="flex-1 min-w-0">
-
-            <!-- الشاشة 1: الوصفات -->
-            <section id="view-recipes" class="tab-view space-y-4">
-                <div class="sticky-search-holder p-3 rounded-2xl border border-naifPurple-900/30 shadow-md flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-                    <div class="flex items-center gap-2 flex-1">
-                        <i class="fa-solid fa-magnifying-glass text-naifPurple-900 text-base pr-1"></i>
-                        <input type="text" id="recipeSearchInput" onkeyup="renderRecipeCards()" placeholder="ابحث باسم الوجبة بالحرف أو الكلمة..." class="w-full bg-white border border-naifPurple-900/40 rounded-xl px-3 py-2 text-xs font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none shadow-inner">
-                        <span class="text-xs font-black text-naifPurple-900 shrink-0 bg-purple-100 px-3 py-2 rounded-xl border border-naifPurple-900/20">
-                            العدد: <span id="recipesCountBadge" class="text-naifPurple-900 font-mono">0</span>
-                        </span>
-                    </div>
-                    <button onclick="openNewRecipeModal()" class="bg-naifPurple-900 hover:bg-naifPurple-800 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow">
-                        <i class="fa-solid fa-plus"></i> إضافة وجبة جديدة
-                    </button>
-                </div>
-                <div id="recipesContainer" class="space-y-4 sm:space-y-6"></div>
-            </section>
-
-            <!-- الشاشة 2: دليل الأسعار -->
-            <section id="view-pricelist" class="tab-view hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div>
-                        <h2 class="text-base font-extrabold text-naifPurple-900">دليل الأصناف والأسعار (pricelist)</h2>
-                        <p class="text-xs text-slate-500">قائمة تكاليف الأصناف بجميع الوحدات المعتمدة</p>
-                    </div>
-                    <div class="w-full sm:w-auto">
-                        <input type="text" id="priceSearchInput" onkeyup="renderPricelistTable()" placeholder="ابحث برمز أو اسم الصنف..." class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold outline-none">
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs min-w-[700px]">
-                            <thead class="bg-naifPurple-900 text-white font-bold">
-                                <tr>
-                                    <th class="p-3">اسم الصنف</th>
-                                    <th class="p-3 text-center">حبة</th>
-                                    <th class="p-3 text-center">جرام</th>
-                                    <th class="p-3 text-center">علبة</th>
-                                    <th class="p-3 text-center">شريحة</th>
-                                    <th class="p-3 text-center">جالون</th>
-                                    <th class="p-3 text-center">ماعون</th>
-                                    <th class="p-3 text-center">باكت</th>
-                                    <th class="p-3 text-center">بطل</th>
-                                    <th class="p-3 text-center">قطعة</th>
-                                    <th class="p-3 text-center">اونس</th>
-                                    <th class="p-3 text-center">مل لتر</th>
-                                    <th class="p-3 text-center">الشد</th>
-                                    <th class="p-3 text-center no-print">تعديل</th>
-                                </tr>
-                            </thead>
-                            <tbody id="pricelistTableBody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- الشاشة 3: التقارير -->
-            <section id="view-reports" class="tab-view hidden space-y-4">
-                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-purple-100 shadow-sm flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <h2 class="text-base font-extrabold text-naifPurple-900">التقارير التحليلية الشاملة لجميع الوجبات</h2>
-                        <p class="text-xs text-slate-500">استعراض أسعار البيع، التكاليف، الأرباح، ونسب الربحية الاحترافية</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <button onclick="exportReportPDF()" class="flex-1 sm:flex-initial bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow">
-                            <i class="fa-solid fa-file-pdf"></i> تصدير PDF
-                        </button>
-                        <button onclick="exportReportExcel()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow">
-                            <i class="fa-solid fa-file-excel"></i> تصدير إكسل
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden" id="reportPrintArea">
-                    <div class="p-4 bg-naifPurple-900 text-white flex justify-between items-center">
-                        <h3 class="font-bold text-sm">تقرير ربحية وتكاليف الوجبات الرئيسي</h3>
-                        <span class="text-xs text-purple-200" id="reportDateBadge">--</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs min-w-[600px]">
-                            <thead class="bg-slate-100 text-slate-700 font-bold border-b">
-                                <tr>
-                                    <th class="p-3">اسم الوجبة</th>
-                                    <th class="p-3 text-center">سعر البيع</th>
-                                    <th class="p-3 text-center">التكلفة الرئيسية</th>
-                                    <th class="p-3 text-center">الربح المالي</th>
-                                    <th class="p-3 text-center">نسبة الربح %</th>
-                                    <th class="p-3 text-center">نسبة التكلفة %</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reportsTableBody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- الشاشة 4: وجبات قيد الاعتماد -->
-            <section id="view-pending" class="tab-view hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm">
-                    <h2 class="text-base font-extrabold text-naifPurple-900">الوجبات الجديدة قيد الاعتماد</h2>
-                </div>
-                <div id="pendingContainer" class="space-y-3 sm:space-y-4"></div>
-            </section>
-
-            <!-- الشاشة 5: الوجبات الملغية -->
-            <section id="view-cancelled" class="tab-view hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm">
-                    <h2 class="text-base font-extrabold text-rose-700">الوجبات الملغية</h2>
-                </div>
-                <div id="cancelledContainer" class="space-y-3 sm:space-y-4"></div>
-            </section>
-
-            <!-- الشاشة 6: سجل الحركات -->
-            <section id="view-auditlog" class="tab-view hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between">
-                    <div>
-                        <h2 class="text-base font-extrabold text-naifPurple-900">سجل أنشطة وحركات النظام (Audit Log)</h2>
-                        <p class="text-xs text-slate-500">سجل التعديلات والعمليات في النظام</p>
-                    </div>
-                    <button id="btnDeleteLogSelection" onclick="deleteSelectedLogs()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 hidden">
-                        <i class="fa-solid fa-trash-can"></i> مسح المكتمل
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-purple-100 shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs min-w-[550px]">
-                            <thead class="bg-naifPurple-950 text-white font-bold">
-                                <tr>
-                                    <th class="p-3 text-center" id="thLogSelect"><input type="checkbox" onchange="toggleSelectAllLogs(this)"></th>
-                                    <th class="p-3">التاريخ والوقت</th>
-                                    <th class="p-3">المستخدم</th>
-                                    <th class="p-3">نوع الحركة</th>
-                                    <th class="p-3">تفاصيل الإجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody id="auditLogTableBody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- مودال إضافة / تعديل الوجبة -->
-    <div id="recipeEditModal" class="fixed inset-0 bg-naifPurple-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh]">
-            <div class="bg-naifPurple-900 text-white p-3.5 sm:p-4 flex items-center justify-between shrink-0">
-                <h3 class="font-extrabold text-xs sm:text-sm" id="modalTitle">إضافة / تعديل الوجبة</h3>
-                <button onclick="closeModal('recipeEditModal')" class="text-purple-200 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="logo">
+                NF
             </div>
             
-            <div class="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
-                <input type="hidden" id="editMealIndex">
-                <input type="hidden" id="modalMode" value="add">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">اسم الوجبة</label>
-                        <input type="text" id="editMealName" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold focus:ring-2 focus:ring-naifPurple-900 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">سعر البيع</label>
-                        <input type="number" step="any" id="editMealPrice" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-mono font-bold text-emerald-700 focus:ring-2 focus:ring-naifPurple-900 outline-none">
-                    </div>
-                </div>
-
-                <div class="border border-purple-100 rounded-xl overflow-hidden mt-2">
-                    <div class="bg-purple-50 p-2.5 sm:p-3 flex items-center justify-between">
-                        <span class="text-xs font-extrabold text-naifPurple-900">جدول المكونات والخامات (البحث بالحرف)</span>
-                        <button onclick="addIngredientRowToModal()" class="bg-naifPurple-900 hover:bg-naifPurple-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg active:scale-95">
-                            + إضافة خامة
-                        </button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right text-xs min-w-[550px]">
-                            <thead class="bg-slate-100 text-slate-600 font-bold">
-                                <tr>
-                                    <th class="p-2">اسم الصنف (بحث بالحرف)</th>
-                                    <th class="p-2">مكان الصنف</th>
-                                    <th class="p-2">الوحدة</th>
-                                    <th class="p-2">الكمية</th>
-                                    <th class="p-2">السعر التلقائي</th>
-                                    <th class="p-2 text-center">حذف</th>
-                                </tr>
-                            </thead>
-                            <tbody id="modalIngredientsTableBody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2 shrink-0">
-                <button onclick="closeModal('recipeEditModal')" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300">إلغاء</button>
-                <button onclick="saveModalRecipeChanges()" class="px-5 py-2 rounded-xl text-xs font-bold bg-naifPurple-900 hover:bg-naifPurple-800 text-white shadow-md active:scale-95">حفظ وإرسال</button>
+            <div class="ar-name">
+                <h1>شركة نايف للأغذية</h1>
+                <p>لصناعة الحلويات والفطائر بأنواعها</p>
             </div>
         </div>
-    </div>
 
-    <!-- مودال تعديل سعر الصنف المباشر -->
-    <div id="priceEditModal" class="fixed inset-0 bg-naifPurple-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-5 space-y-4">
-            <h3 class="font-extrabold text-sm text-naifPurple-900 border-b pb-2">تعديل أسعار الصنف</h3>
-            <input type="hidden" id="editPriceItemName">
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1" id="lblEditItemName">الصنف</label>
+        <!-- التاريخ -->
+        <div class="date-section">
+            Date : <span id="out-date">11/11/2026</span>
+        </div>
+
+        <!-- عنوان الشهادة -->
+        <div class="title-section">
+            <h2>شهادة راتب</h2>
+            <h3>Salary Certificate</h3>
+        </div>
+
+        <!-- تفاصيل الموظف -->
+        <table class="details-table">
+            <tr>
+                <td class="col-eng-label">NAYEF FOOD Company Certifies that..</td>
+                <td class="col-eng-colon"></td>
+                <td class="col-eng-value"></td>
+                <td class="col-ar-value">: تشهد شركة نايف للأغذية بأنه</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label"></td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Mr.</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-name">MD LURUL HUSEN</span></td>
+                <td class="col-ar-value"><span id="out-name-ar">ام دي لورول حسين</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">السيد /</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Nationality</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-nationality">NIPAL</span></td>
+                <td class="col-ar-value"><span id="out-nationality-ar">النيبال</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">الجنسية</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Civil ID No</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-civil">297091004989</span></td>
+                <td class="col-ar-value"><span id="out-civil-ar">297091004989</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">بطاقة مدنية</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Passport No.</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-passport">PA4674439</span></td>
+                <td class="col-ar-value"><span id="out-passport-ar">PA4674439</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">رقم الجواز</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Job Title</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-job">Pastry Baker</span></td>
+                <td class="col-ar-value"><span id="out-job-ar">صانع كعك</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">الوظيفة</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Joining Date</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value"><span id="out-joining">14/10/2024</span></td>
+                <td class="col-ar-value"><span id="out-joining-ar">14/10/2024</span> :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">تاريخ التعيين</td>
+            </tr>
+            <tr>
+                <td class="col-eng-label">Salary</td>
+                <td class="col-eng-colon">:</td>
+                <td class="col-eng-value">KD <span id="out-salary">120</span>/-</td>
+                <td class="col-ar-value">دينار كويتي <span id="out-salary-ar">120</span>/- :</td>
+                <td class="col-ar-colon"></td>
+                <td class="col-ar-label">الراتب</td>
+            </tr>
+        </table>
+
+        <!-- النص الختامي (تم إزالة الجزء السفلي الخاص بالعنوان واللوجو) -->
+        <div class="footer-text">
+            <div class="eng-text">
+                <strong>He is still working and given this certificate upon his request without any liability towards the company.</strong>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">سعر التكلفة (الوحدة الرئيسية)</label>
-                <input type="number" step="0.00001" id="editItemPriceValue" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-mono font-bold">
-            </div>
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="closeModal('priceEditModal')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-200">إلغاء</button>
-                <button onclick="saveItemPriceChange()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-naifPurple-900 text-white">حفظ</button>
+            <div class="ar-text">
+                <strong>إنه لا زال على رأس عمله، وقد أعطيت له هذه الشهادة بناءً على طلبه دون أدنى مسؤولية على الشركة تجاه الغير.</strong>
             </div>
         </div>
+
     </div>
 
-    <!-- التوقيع العائم -->
-    <a href="https://yasser-q8.github.io/myprofile/#" class="signature-card" target="_blank" rel="noopener noreferrer">
-        <div class="name">Yasser Elkhateeb</div>
-        <div class="title">مطور البرنامج - 67011143</div>
-    </a>
-
-    <!-- إدراج مكتبات Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBqHC3lSZgvqYvdYg5TwIPqGVCXNaXbhD8",
-            authDomain: "n-rcp-39b7c.firebaseapp.com",
-            projectId: "n-rcp-39b7c",
-            storageBucket: "n-rcp-39b7c.firebasestorage.app",
-            messagingSenderId: "159389648050",
-            appId: "1:159389648050:web:38b156903403cf887af5ab"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const dbFirestore = getFirestore(app);
-
-        // المسار السحابي الآمن والمعتمد
-        const docRef = doc(dbFirestore, 'artifacts', 'n-rcp-39b7c', 'public', 'data', 'naif_main_db', 'main_doc');
-
-        window.isFirebaseSaving = false;
-
-        // بدء تسجيل الدخول السحابي أولاً
-        async function initFirebaseConnection() {
-            try {
-                await signInAnonymously(auth);
-            } catch (authErr) {
-                console.log("Anonymous auth fallback mode");
-            }
-            setupFirestoreListener();
-        }
-
-        // استماع تلقائي ومستمر للتغييرات السحابية
-        function setupFirestoreListener() {
-            onSnapshot(docRef, (docSnap) => {
-                if (window.isFirebaseSaving) {
-                    window.isFirebaseSaving = false;
-                    return;
-                }
-
-                if (docSnap.exists()) {
-                    const remoteData = docSnap.data();
-                    if (remoteData) {
-                        window.db = {
-                            pricelist: remoteData.pricelist || [],
-                            meals: remoteData.meals || [],
-                            pendingMeals: remoteData.pendingMeals || [],
-                            cancelledMeals: remoteData.cancelledMeals || [],
-                            auditLogs: remoteData.auditLogs || []
-                        };
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(window.db));
-                        
-                        if (typeof window.refreshAllUI === 'function') {
-                            window.refreshAllUI();
-                        }
-
-                        const statusEl = document.getElementById('cloudSyncStatus');
-                        if (statusEl) {
-                            statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-400"></i> <span>المزامنة السحابية متصلة وشغالة بنجاح 100%</span>`;
-                            statusEl.className = "bg-emerald-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-emerald-700";
-                        }
-                    }
-                } else {
-                    window.syncToFirebase();
-                }
-            }, (error) => {
-                console.warn("Firestore Rules Notice:", error);
-                const statusEl = document.getElementById('cloudSyncStatus');
-                if (statusEl) {
-                    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-300"></i> <span>تنبيه: قم بلصق قواعد القراءة والكتابة في Rules بـ Firebase واضغط Publish</span>`;
-                    statusEl.className = "bg-amber-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-amber-700";
-                }
-            });
-        }
-
-        initFirebaseConnection();
-
-        window.syncToFirebase = async function() {
-            try {
-                window.isFirebaseSaving = true;
-                const statusEl = document.getElementById('cloudSyncStatus');
-                if (statusEl) {
-                    statusEl.innerHTML = `<i class="fa-solid fa-rotate text-purple-300 animate-spin"></i> <span>جاري إرسال التعديل للسحابة...</span>`;
-                }
-                
-                await setDoc(docRef, {
-                    pricelist: window.db.pricelist || [],
-                    meals: window.db.meals || [],
-                    pendingMeals: window.db.pendingMeals || [],
-                    cancelledMeals: window.db.cancelledMeals || [],
-                    auditLogs: window.db.auditLogs || [],
-                    lastUpdatedBy: window.currentUser || 'النظام',
-                    updatedAt: new Date().toISOString()
-                }, { merge: true });
-
-                setTimeout(() => {
-                    if (statusEl) {
-                        statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-400"></i> <span>تم الحفظ والمزامنة السحابية بنجاح</span>`;
-                        statusEl.className = "bg-emerald-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-emerald-700";
-                    }
-                }, 400);
-            } catch (err) {
-                console.warn("Error saving to Firebase:", err);
-                window.isFirebaseSaving = false;
-                const statusEl = document.getElementById('cloudSyncStatus');
-                if (statusEl) {
-                    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-300"></i> <span>تنبيه: اضغط Publish على Rules بـ Firebase لتأكيد تفعيل الحفظ السحابي</span>`;
-                    statusEl.className = "bg-amber-900/90 text-white text-[11px] font-bold px-4 py-1.5 text-center flex items-center justify-center gap-2 border-b border-amber-700";
-                }
-            }
-        };
-    </script>
-
+    <!-- كود JavaScript لتحديث البيانات فورياً -->
     <script>
-        const STORAGE_KEY = 'NAIF_FOODS_RECIPES_DB_V2026_MOBILE';
-        const SESSION_USER_KEY = 'NAIF_FOODS_ACTIVE_SESSION_USER';
-        let currentUser = null;
+        function updateCert() {
+            // جلب القيم من الحقول
+            let date = document.getElementById('inp-date').value;
+            let name = document.getElementById('inp-name').value;
+            let nationality = document.getElementById('inp-nationality').value;
+            let civil = document.getElementById('inp-civil').value;
+            let passport = document.getElementById('inp-passport').value;
+            let job = document.getElementById('inp-job').value;
+            let joining = document.getElementById('inp-joining').value;
+            let salary = document.getElementById('inp-salary').value;
 
-        window.db = {
-            pricelist: [],
-            meals: [],
-            pendingMeals: [],
-            cancelledMeals: [],
-            auditLogs: []
-        };
+            // تحديث النصوص في الشهادة (الإنجليزية)
+            document.getElementById('out-date').innerText = date;
+            document.getElementById('out-name').innerText = name;
+            document.getElementById('out-nationality').innerText = nationality;
+            document.getElementById('out-civil').innerText = civil;
+            document.getElementById('out-passport').innerText = passport;
+            document.getElementById('out-job').innerText = job;
+            document.getElementById('out-joining').innerText = joining;
+            document.getElementById('out-salary').innerText = salary;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadDatabase();
-            restoreActiveSession();
-            switchTab('recipes');
-        });
-
-        function restoreActiveSession() {
-            const savedUser = sessionStorage.getItem(SESSION_USER_KEY);
-            if (savedUser) {
-                currentUser = savedUser;
-                window.currentUser = savedUser;
-
-                const loginScreen = document.getElementById('loginScreen');
-                if (loginScreen) loginScreen.classList.add('hidden');
-
-                const userDisplay = document.getElementById('currentUserDisplay');
-                if (userDisplay) userDisplay.innerText = currentUser;
-
-                applyPermissions();
-            } else {
-                const loginScreen = document.getElementById('loginScreen');
-                if (loginScreen) loginScreen.classList.remove('hidden');
-            }
-        }
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const userSelect = document.getElementById('loginUserSelect');
-            const passInput = document.getElementById('loginPassword');
+            // تحديث النصوص في الشهادة (العربية)
+            // ملاحظة: الأسماء والجنسيات تحتاج ترجمة يدوية، لذلك تم وضعها كحقول نصية.
+            // هنا نقوم بنسخ نفس النص الإنجليزي للعربي كحل مبدئي، 
+            // يمكنك تعديل الحقول العربية يدوياً في الكود إذا لزم الأمر.
+            document.getElementById('out-name-ar').innerText = name; 
+            document.getElementById('out-nationality-ar').innerText = nationality; 
+            document.getElementById('out-civil-ar').innerText = civil;
+            document.getElementById('out-passport-ar').innerText = passport;
             
-            if (!userSelect || !passInput) return;
+            // ترجمة افتراضية بسيطة للوظائف (يمكنك إزالتها أو زيادتها)
+            let jobAr = job;
+            if(job.toLowerCase() === 'pastry baker') jobAr = 'صانع كعك';
+            document.getElementById('out-job-ar').innerText = jobAr;
 
-            const user = userSelect.value;
-            const rawPass = passInput.value.trim();
-
-            const validPasswords = {
-                'الادارة': '66661',
-                'مستخدم': '885522',
-                'Yasser': 'Y@sser321'
-            };
-
-            if (validPasswords[user] && validPasswords[user] === rawPass) {
-                currentUser = user;
-            } else {
-                alert('كلمة المرور غير صحيحة!');
-                return;
-            }
-
-            window.currentUser = currentUser;
-            sessionStorage.setItem(SESSION_USER_KEY, currentUser);
-            
-            const loginScreen = document.getElementById('loginScreen');
-            if (loginScreen) loginScreen.classList.add('hidden');
-            
-            const userDisplay = document.getElementById('currentUserDisplay');
-            if (userDisplay) userDisplay.innerText = currentUser;
-            
-            applyPermissions();
-            addAuditLog('تسجيل دخول', `تم تسجيل الدخول بنجاح بواسطة ${currentUser}`);
-            refreshAllUI();
+            document.getElementById('out-joining-ar').innerText = joining;
+            document.getElementById('out-salary-ar').innerText = salary;
         }
 
-        function logout() {
-            if (currentUser) addAuditLog('تسجيل خروج', `قام ${currentUser} بتسجيل الخروج`);
-            currentUser = null;
-            window.currentUser = null;
-            sessionStorage.removeItem(SESSION_USER_KEY);
-
-            const loginScreen = document.getElementById('loginScreen');
-            if (loginScreen) loginScreen.classList.remove('hidden');
-            const passInput = document.getElementById('loginPassword');
-            if (passInput) passInput.value = '';
-        }
-
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('mainSidebar');
-            const overlay = document.getElementById('mobileSidebarOverlay');
-            
-            if (sidebar.classList.contains('hidden')) {
-                sidebar.classList.remove('hidden');
-                sidebar.classList.add('fixed', 'top-16', 'right-2', 'left-2', 'z-30');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('hidden');
-                sidebar.classList.remove('fixed', 'top-16', 'right-2', 'left-2', 'z-30');
-                overlay.classList.add('hidden');
-            }
-        }
-
-        window.handleLogin = handleLogin;
-        window.logout = logout;
-        window.toggleMobileSidebar = toggleMobileSidebar;
-        window.switchTab = switchTab;
-        window.openNewRecipeModal = openNewRecipeModal;
-        window.openRecipeEditModal = openRecipeEditModal;
-        window.saveModalRecipeChanges = saveModalRecipeChanges;
-        window.addIngredientRowToModal = addIngredientRowToModal;
-        window.onItemInputChanged = onItemInputChanged;
-        window.onUnitChanged = onUnitChanged;
-        window.editMealNameDirect = editMealNameDirect;
-        window.requestCancelMeal = requestCancelMeal;
-        window.approvePendingMeal = approvePendingMeal;
-        window.rejectPendingMeal = rejectPendingMeal;
-        window.restoreCancelledMeal = restoreCancelledMeal;
-        window.permanentDeleteCancelledMeal = permanentDeleteCancelledMeal;
-        window.openPriceEditModal = openPriceEditModal;
-        window.saveItemPriceChange = saveItemPriceChange;
-        window.exportReportPDF = exportReportPDF;
-        window.exportReportExcel = exportReportExcel;
-        window.importExcelFile = importExcelFile;
-        window.exportSingleRecipePDF = exportSingleRecipePDF;
-        window.downloadBackup = downloadBackup;
-        window.restoreBackup = restoreBackup;
-        window.deleteSelectedLogs = deleteSelectedLogs;
-        window.toggleSelectAllLogs = toggleSelectAllLogs;
-        window.closeModal = closeModal;
-        window.renderRecipeCards = renderRecipeCards;
-        window.renderPricelistTable = renderPricelistTable;
-
-        function loadDatabase() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            if (data) {
-                try { 
-                    window.db = JSON.parse(data); 
-                    if (!window.db.pricelist) window.db.pricelist = [];
-                    if (!window.db.meals) window.db.meals = [];
-                    if (!window.db.pendingMeals) window.db.pendingMeals = [];
-                    if (!window.db.cancelledMeals) window.db.cancelledMeals = [];
-                    if (!window.db.auditLogs) window.db.auditLogs = [];
-                } catch (e) { initDefaultData(); }
-            } else { initDefaultData(); }
-        }
-
-        function saveDatabase() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(window.db));
-            updateBadges();
-            if (typeof window.syncToFirebase === 'function') {
-                window.syncToFirebase();
-            }
-        }
-
-        function refreshAllUI() {
-            renderRecipeCards();
-            renderPricelistTable();
-            renderReportsTable();
-            renderPendingMeals();
-            renderCancelledMeals();
-            renderAuditLogs();
-            updateBadges();
-        }
-        window.refreshAllUI = refreshAllUI;
-
-        function updateBadges() {
-            const pBadge = document.getElementById('pendingBadge');
-            const cBadge = document.getElementById('cancelledBadge');
-            if (pBadge) pBadge.innerText = window.db.pendingMeals ? window.db.pendingMeals.length : 0;
-            if (cBadge) cBadge.innerText = window.db.cancelledMeals ? window.db.cancelledMeals.length : 0;
-        }
-
-        function initDefaultData() {
-            window.db = {
-                pricelist: [],
-                meals: [],
-                pendingMeals: [],
-                cancelledMeals: [],
-                auditLogs: []
-            };
-            saveDatabase();
-        }
-
-        function applyPermissions() {
-            const btnRestore = document.getElementById('btnRestoreBackup');
-            const btnImport = document.getElementById('btnImportExcel');
-            const navPricelist = document.getElementById('nav-pricelist');
-            const navReports = document.getElementById('nav-reports');
-            const navAudit = document.getElementById('nav-auditlog');
-
-            if (currentUser === 'Yasser') {
-                if (navPricelist) navPricelist.style.display = 'flex';
-                if (navReports) navReports.style.display = 'flex';
-                if (navAudit) navAudit.style.display = 'flex';
-                btnImport.classList.remove('hidden');
-                btnRestore.classList.remove('hidden'); 
-            } else if (currentUser === 'الادارة') {
-                if (navPricelist) navPricelist.style.display = 'none';
-                if (navReports) navReports.style.display = 'flex';
-                if (navAudit) navAudit.style.display = 'flex';
-                btnImport.classList.add('hidden');
-                btnRestore.classList.add('hidden');
-            } else if (currentUser === 'مستخدم') {
-                if (navPricelist) navPricelist.style.display = 'none';
-                if (navReports) navReports.style.display = 'none';
-                if (navAudit) navAudit.style.display = 'none';
-                btnImport.classList.add('hidden');
-                btnRestore.classList.add('hidden');
-            }
-
-            const thLogSelect = document.getElementById('thLogSelect');
-            const btnDeleteLog = document.getElementById('btnDeleteLogSelection');
-            if (currentUser === 'Yasser' && thLogSelect) {
-                thLogSelect.classList.remove('hidden');
-                btnDeleteLog.classList.remove('hidden');
-            } else if (thLogSelect) {
-                thLogSelect.classList.add('hidden');
-                btnDeleteLog.classList.add('hidden');
-            }
-        }
-
-        function addAuditLog(actionType, details) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB');
-            db.auditLogs.unshift({
-                id: Date.now() + Math.random(),
-                date: dateStr,
-                user: currentUser || 'النظام',
-                type: actionType,
-                details: details
-            });
-
-            if (db.auditLogs.length > 1000) {
-                db.auditLogs = db.auditLogs.slice(0, 1000);
-            }
-            saveDatabase();
-        }
-
-        function switchTab(tabId) {
-            if ((currentUser === 'ادمن' || currentUser === 'مستخدم') && tabId === 'pricelist') {
-                alert('عذراً! لا تمتلك صلاحية الدخول لشاشة دليل الأسعار والأصناف');
-                return;
-            }
-            if (currentUser === 'مستخدم' && (tabId === 'reports' || tabId === 'auditlog')) {
-                alert('عذراً! لا تمتلك صلاحية الدخول لهذه الشاشة');
-                return;
-            }
-
-            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-purple-100', 'text-naifPurple-900'));
-            
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) activeNav.classList.add('bg-purple-100', 'text-naifPurple-900');
-
-            if (tabId === 'reports') renderReportsTable();
-            if (tabId === 'pending') renderPendingMeals();
-            if (tabId === 'cancelled') renderCancelledMeals();
-
-            const sidebar = document.getElementById('mainSidebar');
-            const overlay = document.getElementById('mobileSidebarOverlay');
-            if (!sidebar.classList.contains('hidden') && window.innerWidth < 768) {
-                sidebar.classList.add('hidden');
-                overlay.classList.add('hidden');
-            }
-        }
-
-        function formatQty(val) {
-            if (val === null || val === undefined || isNaN(val)) return '0';
-            const num = parseFloat(val);
-            if (Number.isInteger(num)) return num.toString();
-            return num.toString();
-        }
-
-        function formatPrice(val, decimals = 3) {
-            if (val === null || val === undefined || isNaN(val) || val === 0) return '-';
-            return parseFloat(val).toFixed(decimals);
-        }
-
-        function renderRecipeCards() {
-            const container = document.getElementById('recipesContainer');
-            const q = (document.getElementById('recipeSearchInput').value || '').trim().toLowerCase();
-            
-            let filtered = db.meals || [];
-            if (q) {
-                filtered = db.meals.filter(m => m.name.toLowerCase().includes(q));
-            }
-
-            document.getElementById('recipesCountBadge').innerText = filtered.length;
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-purple-100 font-bold">لا توجد وجبات مسجلة في النظام</div>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map((meal, index) => {
-                let mainCost = 0;
-                let outExtra = 0;
-                let inExtra = 0;
-
-                meal.ingredients.forEach(ing => {
-                    const lineTotal = (ing.qty || 0) * (ing.price || 0);
-                    if (ing.location === 'ALL') mainCost += lineTotal;
-                    else if (ing.location === 'OUT') outExtra += lineTotal;
-                    else if (ing.location === 'IN') inExtra += lineTotal;
-                });
-
-                const totalOutCost = mainCost + outExtra;
-                const totalInCost = mainCost + inExtra;
-                const sp = meal.sellingPrice || 0;
-
-                const mainProfit = sp > 0 ? sp - mainCost : 0;
-                const outProfit = sp > 0 ? sp - totalOutCost : 0;
-                const inProfit = sp > 0 ? sp - totalInCost : 0;
-
-                const mainProfitPct = sp > 0 ? (mainProfit / sp * 100) : 0;
-                const outProfitPct = sp > 0 ? (outProfit / sp * 100) : 0;
-                const inProfitPct = sp > 0 ? (inProfit / sp * 100) : 0;
-
-                const mainCostPct = sp > 0 ? (mainCost / sp * 100) : 0;
-                const outCostPct = sp > 0 ? (totalOutCost / sp * 100) : 0;
-                const inCostPct = sp > 0 ? (totalInCost / sp * 100) : 0;
-
-                const hidePrices = currentUser === 'مستخدم'; 
-                const canEditAll = currentUser === 'Yasser' || currentUser === 'ادمن';
-
-                const realMealIndex = db.meals.findIndex(m => (m.id && meal.id ? m.id === meal.id : m.name === meal.name));
-
-                const rowsHtml = meal.ingredients.map((ing) => `
-                    <tr class="hover:bg-purple-50/50 border-b border-slate-100 text-xs">
-                        <td class="py-2 px-1 font-bold text-slate-800 text-right text-[13px] sm:text-[13.5px]">${ing.item}</td>
-                        <td class="py-2 px-1 text-center font-bold text-naifPurple-900">${ing.location || 'ALL'}</td>
-                        <td class="py-2 px-1 text-center text-slate-600">${ing.unit}</td>
-                        <td class="py-2 px-1 text-center font-bold font-mono text-slate-900">${formatQty(ing.qty)}</td>
-                        <td class="py-2 px-1 text-center font-mono">${hidePrices ? '***' : formatPrice(ing.price, 5)}</td>
-                        <td class="py-2 px-1 text-center font-mono font-black text-naifPurple-900 text-xs sm:text-sm">${hidePrices ? '***' : formatPrice(ing.qty * ing.price, 3)}</td>
-                    </tr>
-                `).join('');
-
-                return `
-                <div class="bg-white rounded-2xl border-2 border-purple-200 shadow-md overflow-hidden flex flex-col recipe-card-box">
-                    
-                    <div class="bg-naifPurple-900 text-white p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2.5">
-                        <div class="flex items-center gap-2.5">
-                            <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" onError="this.onerror=null;this.src='https://via.placeholder.com/40?text=NAIF';" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white object-cover">
-                            <div>
-                                <h3 class="font-extrabold text-base sm:text-lg text-white flex items-center gap-2">
-                                    <span>${meal.name}</span>
-                                    <button onclick="editMealNameDirect('${meal.name}', ${realMealIndex})" class="text-[11px] bg-naifPurple-800 hover:bg-naifPurple-950 px-2 py-0.5 rounded text-purple-200 no-print active:scale-95">
-                                        <i class="fa-solid fa-pen"></i> <span class="hidden sm:inline">تعديل الاسم</span>
-                                    </button>
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div class="bg-naifPurple-950/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-purple-600/50 text-left mr-auto sm:mr-0">
-                            <span class="text-[9px] sm:text-[10px] text-purple-200 block font-bold">سعر البيع</span>
-                            <span class="text-lg sm:text-xl font-black font-mono text-emerald-400">${formatPrice(sp, 3)}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-3 sm:p-4 bg-purple-50/20 overflow-x-auto">
-                        <table class="w-full text-right border-collapse min-w-[500px]">
-                            <thead>
-                                <tr class="bg-naifPurple-900 text-white text-xs">
-                                    <th class="py-2 px-1">الصنف</th>
-                                    <th class="py-2 px-1 text-center">مكان الصنف</th>
-                                    <th class="py-2 px-1 text-center">الوحدة</th>
-                                    <th class="py-2 px-1 text-center">الكمية</th>
-                                    <th class="py-2 px-1 text-center">الأسعار</th>
-                                    <th class="py-2 px-1 text-center">القيمة</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rowsHtml}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    ${hidePrices ? '' : `
-                    <div class="p-3 sm:p-4 bg-naifPurple-800 text-white space-y-3 border-t-2 border-purple-300">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            
-                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
-                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">الوجبة الأصلية</h4>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>سعر البيع:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
-                                    <span>التكلفة:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(mainCost, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>الربح المالي:</span>
-                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(mainProfit, 3) : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
-                                    <span>نسبة الربح %:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? mainProfitPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>نسبة التكلفة %:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? mainCostPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                            </div>
-
-                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
-                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">توصيل خارجي</h4>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>سعر البيع:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
-                                    <span>التكلفة:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(totalOutCost, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>الربح المالي:</span>
-                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(outProfit, 3) : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
-                                    <span>نسبة الربح %:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? outProfitPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>نسبة التكلفة %:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? outCostPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                            </div>
-
-                            <div class="bg-naifPurple-900/80 p-3.5 rounded-xl border border-purple-600 space-y-2 shadow">
-                                <h4 class="text-xs font-black text-purple-200 border-b border-purple-700 pb-1">داخل المطعم (داين إن)</h4>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>سعر البيع:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${formatPrice(sp, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold bg-naifPurple-950/50 p-1.5 rounded">
-                                    <span>التكلفة:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${formatPrice(totalInCost, 3)}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>الربح المالي:</span>
-                                    <span class="font-mono text-amber-300 text-base font-black">${sp > 0 ? formatPrice(inProfit, 3) : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold pt-1 border-t border-purple-700/50">
-                                    <span>نسبة الربح %:</span>
-                                    <span class="font-mono text-emerald-300 text-base font-black">${sp > 0 ? inProfitPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm font-bold">
-                                    <span>نسبة التكلفة %:</span>
-                                    <span class="font-mono text-rose-300 text-base font-black">${sp > 0 ? inCostPct.toFixed(2) + '%' : '-'}</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    `}
-
-                    <div class="p-3 bg-purple-50 border-t border-purple-200 flex flex-wrap items-center justify-between gap-2 no-print">
-                        ${canEditAll ? `
-                            <button onclick="openRecipeEditModal(${realMealIndex})" class="bg-naifPurple-900 hover:bg-naifPurple-800 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                                <i class="fa-solid fa-pen-to-square"></i> تعديل المكونات
-                            </button>
-                        ` : '<span class="text-xs text-slate-400 font-bold">عرض فقط</span>'}
-
-                        <div class="flex items-center gap-2 mr-auto">
-                            <button onclick="requestCancelMeal(${realMealIndex})" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                                <i class="fa-solid fa-ban"></i> إلغاء الوجبة
-                            </button>
-                            <button onclick="exportSingleRecipePDF(${realMealIndex})" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                                <i class="fa-solid fa-file-pdf"></i> PDF
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-                `;
-            }).join('');
-        }
-
-        function editMealNameDirect(currentName, index) {
-            const newName = prompt('أدخل اسم الوجبة الجديد:', currentName);
-            if (!newName || !newName.trim()) return;
-            const trimmed = newName.trim();
-            db.meals[index].name = trimmed;
-            saveDatabase();
-            addAuditLog('تعديل مسمى وجبة', `تغير الاسم من [${currentName}] إلى [${trimmed}] بواسطة ${currentUser}`);
-            renderRecipeCards();
-        }
-
-        function openNewRecipeModal() {
-            document.getElementById('modalTitle').innerText = 'إضافة وجبة جديدة';
-            document.getElementById('modalMode').value = 'add';
-            document.getElementById('editMealIndex').value = '';
-            document.getElementById('editMealName').value = '';
-            document.getElementById('editMealPrice').value = '';
-
-            const tbody = document.getElementById('modalIngredientsTableBody');
-            tbody.innerHTML = '';
-            addIngredientRowToModal();
-            document.getElementById('recipeEditModal').classList.remove('hidden');
-        }
-
-        function openRecipeEditModal(index) {
-            if (currentUser === 'مستخدم') {
-                alert('عذراً! لا تمتلك صلاحية تعديل مكونات الوجبة');
-                return;
-            }
-            const meal = db.meals[index];
-            if (!meal) return;
-
-            document.getElementById('modalTitle').innerText = 'تعديل مكونات الوجبة والتكاليف';
-            document.getElementById('modalMode').value = 'edit';
-            document.getElementById('editMealIndex').value = index;
-            document.getElementById('editMealName').value = meal.name;
-            document.getElementById('editMealPrice').value = meal.sellingPrice || 0;
-
-            const tbody = document.getElementById('modalIngredientsTableBody');
-            tbody.innerHTML = '';
-
-            meal.ingredients.forEach((ing) => {
-                addIngredientRowToModal(ing.item, ing.location, ing.unit, ing.qty, ing.price);
-            });
-
-            document.getElementById('recipeEditModal').classList.remove('hidden');
-        }
-
-        function addIngredientRowToModal(item = '', location = 'ALL', unit = 'حبة', qty = 1, price = 0) {
-            const tbody = document.getElementById('modalIngredientsTableBody');
-            const tr = document.createElement('tr');
-            tr.className = 'border-b border-slate-100';
-
-            let optionsHtml = db.pricelist ? db.pricelist.map(p => `<option value="${p.item}" ${p.item === item ? 'selected' : ''}>${p.item}</option>`).join('') : '';
-
-            tr.innerHTML = `
-                <td class="p-1.5">
-                    <input type="text" list="pricelistOptions" value="${item}" onchange="onItemInputChanged(this)" placeholder="اكتب للبحث بالحرف..." class="ing-item w-full bg-slate-50 border p-1.5 rounded text-xs font-bold">
-                </td>
-                <td class="p-1.5">
-                    <select class="ing-location bg-slate-50 border p-1 rounded text-xs font-bold">
-                        <option value="ALL" ${location === 'ALL' ? 'selected' : ''}>ALL</option>
-                        <option value="OUT" ${location === 'OUT' ? 'selected' : ''}>OUT</option>
-                        <option value="IN" ${location === 'IN' ? 'selected' : ''}>IN</option>
-                    </select>
-                </td>
-                <td class="p-1.5">
-                    <select onchange="onUnitChanged(this)" class="ing-unit bg-slate-50 border p-1 rounded text-xs text-center font-bold">
-                        <option value="حبة" ${unit === 'حبة' ? 'selected' : ''}>حبة</option>
-                        <option value="جرام" ${unit === 'جرام' ? 'selected' : ''}>جرام</option>
-                        <option value="علبة" ${unit === 'علبة' ? 'selected' : ''}>علبة</option>
-                        <option value="شريحة" ${unit === 'شريحة' ? 'selected' : ''}>شريحة</option>
-                        <option value="جالون" ${unit === 'جالون' ? 'selected' : ''}>جالون</option>
-                        <option value="ماعون" ${unit === 'ماعون' ? 'selected' : ''}>ماعون</option>
-                        <option value="باكت" ${unit === 'باكت' ? 'selected' : ''}>باكت</option>
-                        <option value="بطل" ${unit === 'بطل' ? 'selected' : ''}>بطل</option>
-                        <option value="قطعة" ${unit === 'قطعة' ? 'selected' : ''}>قطعة</option>
-                        <option value="اونس" ${unit === 'اونس' ? 'selected' : ''}>اونس</option>
-                        <option value="مل لتر" ${unit === 'مل لتر' ? 'selected' : ''}>مل لتر</option>
-                        <option value="الشد" ${unit === 'الشد' ? 'selected' : ''}>الشد</option>
-                    </select>
-                </td>
-                <td class="p-1.5"><input type="number" step="any" value="${qty}" class="ing-qty w-20 bg-slate-50 border p-1 rounded text-xs text-center font-bold font-mono"></td>
-                <td class="p-1.5"><input type="number" step="0.00001" value="${price}" class="ing-price w-24 bg-slate-50 border p-1 rounded text-xs text-center font-bold font-mono bg-purple-50" readonly></td>
-                <td class="p-1.5 text-center"><button onclick="this.closest('tr').remove()" class="text-rose-600 hover:text-rose-800 p-1"><i class="fa-solid fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-
-            if (!document.getElementById('pricelistOptions')) {
-                const dl = document.createElement('datalist');
-                dl.id = 'pricelistOptions';
-                dl.innerHTML = optionsHtml;
-                document.body.appendChild(dl);
-            } else {
-                document.getElementById('pricelistOptions').innerHTML = optionsHtml;
-            }
-        }
-
-        function onItemInputChanged(inputEl) {
-            const tr = inputEl.closest('tr');
-            const itemName = inputEl.value.trim();
-            const unitSelect = tr.querySelector('.ing-unit');
-            const priceInput = tr.querySelector('.ing-price');
-
-            const itemObj = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
-            if (itemObj) {
-                const unit = unitSelect.value;
-                let unitPrice = itemObj.price;
-                if (itemObj.unitPrices && itemObj.unitPrices[unit] !== undefined) {
-                    unitPrice = itemObj.unitPrices[unit];
-                }
-                priceInput.value = unitPrice;
-            }
-        }
-
-        function onUnitChanged(unitSelectEl) {
-            const tr = unitSelectEl.closest('tr');
-            const itemInput = tr.querySelector('.ing-item');
-            const priceInput = tr.querySelector('.ing-price');
-            const itemName = itemInput.value.trim();
-
-            const itemObj = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
-            if (itemObj) {
-                const unit = unitSelectEl.value;
-                let unitPrice = itemObj.price;
-                if (itemObj.unitPrices && itemObj.unitPrices[unit] !== undefined) {
-                    unitPrice = itemObj.unitPrices[unit];
-                }
-                priceInput.value = unitPrice;
-            }
-        }
-
-        function saveModalRecipeChanges() {
-            const mode = document.getElementById('modalMode').value;
-            const newName = document.getElementById('editMealName').value.trim();
-            const newPrice = parseFloat(document.getElementById('editMealPrice').value) || 0;
-
-            if (!newName) {
-                alert('يرجى إدخال اسم الوجبة');
-                return;
-            }
-
-            const rows = document.querySelectorAll('#modalIngredientsTableBody tr');
-            const newIngredients = [];
-
-            rows.forEach(tr => {
-                const item = tr.querySelector('.ing-item').value.trim();
-                const location = tr.querySelector('.ing-location').value;
-                const unit = tr.querySelector('.ing-unit').value.trim();
-                const qty = parseFloat(tr.querySelector('.ing-qty').value) || 0;
-                const price = parseFloat(tr.querySelector('.ing-price').value) || 0;
-
-                if (item) {
-                    newIngredients.push({ item, location, unit, qty, price, total: qty * price });
-                }
-            });
-
-            if (newIngredients.length === 0) {
-                alert('يرجى إضافة مكون واحد على الأقل للوجبة');
-                return;
-            }
-
-            const mealData = {
-                id: Date.now(),
-                name: newName,
-                sellingPrice: newPrice,
-                ingredients: newIngredients,
-                createdBy: currentUser
-            };
-
-            if (currentUser === 'Yasser') {
-                if (mode === 'add') {
-                    db.meals.push(mealData);
-                    addAuditLog('إضافة وجبة', `تمت إضافة وجبة جديدة [${newName}] بواسطة Yasser`);
-                } else {
-                    const index = document.getElementById('editMealIndex').value;
-                    db.meals[index] = mealData;
-                    addAuditLog('تعديل وجبة', `تم تعديل وجبة [${newName}] بواسطة Yasser`);
-                }
-                renderRecipeCards();
-            } else {
-                db.pendingMeals.push(mealData);
-                addAuditLog('طلب إضافة/تعديل وجبة', `قام ${currentUser} بإضافة وجبة [${newName}] بانتظار الاعتماد`);
-                alert('تم إرسال الوجبة بنجاح إلى قائمة (وجبات قيد الاعتماد).');
-                renderPendingMeals();
-            }
-
-            saveDatabase();
-            closeModal('recipeEditModal');
-        }
-
-        function renderPendingMeals() {
-            const container = document.getElementById('pendingContainer');
-            if (!container) return;
-
-            if (!db.pendingMeals || db.pendingMeals.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border font-bold">لا توجد وجبات قيد الاعتماد حالياً</div>`;
-                return;
-            }
-
-            container.innerHTML = db.pendingMeals.map((meal, idx) => `
-                <div class="bg-white p-4 rounded-2xl border-2 border-amber-300 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div>
-                        <h3 class="font-black text-base text-naifPurple-900">${meal.name}</h3>
-                        <p class="text-xs text-slate-500">أُضيف بواسطة: <strong class="text-amber-700">${meal.createdBy}</strong> | سعر البيع: ${formatPrice(meal.sellingPrice, 3)}</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        ${currentUser === 'Yasser' ? `
-                            <button onclick="approvePendingMeal(${idx})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
-                                <i class="fa-solid fa-check"></i> اعتماد الوجبة
-                            </button>
-                        ` : '<span class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg">قيد الانتظار</span>'}
-                        <button onclick="rejectPendingMeal(${idx})" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
-                            <i class="fa-solid fa-xmark"></i> رفض وحذف
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function approvePendingMeal(idx) {
-            if (currentUser !== 'Yasser') return;
-            const meal = db.pendingMeals.splice(idx, 1)[0];
-            db.meals.push(meal);
-            saveDatabase();
-            addAuditLog('اعتماد وجبة', `تم اعتماد وجبة [${meal.name}] رسمياً بواسطة Yasser`);
-            renderPendingMeals();
-            renderRecipeCards();
-            alert('تم اعتماد الوجبة وإضافتها للرئيسية بنجاح!');
-        }
-
-        function rejectPendingMeal(idx) {
-            const meal = db.pendingMeals.splice(idx, 1)[0];
-            saveDatabase();
-            addAuditLog('رفض وجبة', `تم رفض وجبة [${meal.name}] بواسطة ${currentUser}`);
-            renderPendingMeals();
-            alert('تم رفض وحذف الوجبة.');
-        }
-
-        function requestCancelMeal(index) {
-            const meal = db.meals[index];
-            if (!confirm(`هل أنت متأكد من رغبتك في إلغاء وجبة [${meal.name}] وترحيلها؟`)) return;
-
-            db.meals.splice(index, 1);
-            db.cancelledMeals.push({
-                ...meal,
-                cancelledBy: currentUser,
-                cancelDate: new Date().toLocaleDateString('en-GB')
-            });
-
-            saveDatabase();
-            addAuditLog('طلب إلغاء وجبة', `قام ${currentUser} بطلب إلغاء وجبة [${meal.name}] وترحيلها لقائمة الملغية`);
-            renderRecipeCards();
-            renderCancelledMeals();
-            alert('تم ترحيل الوجبة إلى شاشة (الوجبات الملغية).');
-        }
-
-        function renderCancelledMeals() {
-            const container = document.getElementById('cancelledContainer');
-            if (!container) return;
-
-            if (!db.cancelledMeals || db.cancelledMeals.length === 0) {
-                container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border font-bold">لا توجد وجبات ملغية</div>`;
-                return;
-            }
-
-            container.innerHTML = db.cancelledMeals.map((meal, idx) => `
-                <div class="bg-white p-4 rounded-2xl border-2 border-rose-300 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div>
-                        <h3 class="font-black text-base text-rose-800">${meal.name}</h3>
-                        <p class="text-xs text-slate-500">تم الإلغاء بواسطة: <strong class="text-rose-700">${meal.cancelledBy}</strong> في ${meal.cancelDate}</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        ${currentUser === 'Yasser' ? `
-                            <button onclick="restoreCancelledMeal(${idx})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
-                                <i class="fa-solid fa-rotate-left"></i> استعادة
-                            </button>
-                            <button onclick="permanentDeleteCancelledMeal(${idx})" class="bg-rose-900 hover:bg-black text-white text-xs font-bold px-3 py-2 rounded-xl shadow active:scale-95">
-                                <i class="fa-solid fa-trash"></i> حذف نهائي
-                            </button>
-                        ` : '<span class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-lg">قيد الانتظار</span>'}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function restoreCancelledMeal(idx) {
-            if (currentUser !== 'Yasser') return;
-            const meal = db.cancelledMeals.splice(idx, 1)[0];
-            db.meals.push(meal);
-            saveDatabase();
-            addAuditLog('استعادة وجبة ملغية', `تم استعادة وجبة [${meal.name}] إلى الشاشة الرئيسية بواسطة Yasser`);
-            renderCancelledMeals();
-            renderRecipeCards();
-            alert('تمت استعادة الوجبة للرئيسية بنجاح!');
-        }
-
-        function permanentDeleteCancelledMeal(idx) {
-            if (currentUser !== 'Yasser') return;
-            const meal = db.cancelledMeals.splice(idx, 1)[0];
-            saveDatabase();
-            addAuditLog('حذف نهائي', `تم الحذف النهائي لالوجبة [${meal.name}] بواسطة Yasser`);
-            renderCancelledMeals();
-            alert('تم حذف الوجبة نهائياً من النظام.');
-        }
-
-        function renderPricelistTable() {
-            const tbody = document.getElementById('pricelistTableBody');
-            const q = (document.getElementById('priceSearchInput').value || '').trim().toLowerCase();
-
-            let filtered = db.pricelist || [];
-            if (q) {
-                filtered = db.pricelist.filter(p => p.item.toLowerCase().includes(q));
-            }
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="14" class="p-6 text-center text-slate-400 font-bold">لا توجد أصناف مسجلة في دليل الأسعار</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = filtered.map((p) => {
-                const up = p.unitPrices || {};
-                return `
-                <tr class="hover:bg-purple-50 border-b border-slate-100">
-                    <td class="p-3 font-bold text-slate-800">${p.item}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['حبة'] !== undefined ? formatPrice(up['حبة'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['جرام'] !== undefined ? formatPrice(up['جرام'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['علبة'] !== undefined ? formatPrice(up['علبة'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['شريحة'] !== undefined ? formatPrice(up['شريحة'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['جالون'] !== undefined ? formatPrice(up['جالون'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['ماعون'] !== undefined ? formatPrice(up['ماعون'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['باكت'] !== undefined ? formatPrice(up['باكت'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['بطل'] !== undefined ? formatPrice(up['بطل'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['قطعة'] !== undefined ? formatPrice(up['قطعة'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['اونس'] !== undefined ? formatPrice(up['اونس'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['مل لتر'] !== undefined ? formatPrice(up['مل لتر'], 5) : '--'}</td>
-                    <td class="p-3 text-center font-mono font-bold">${up['الشد'] !== undefined ? formatPrice(up['الشد'], 5) : '--'}</td>
-                    <td class="p-3 text-center no-print">
-                        <button onclick="openPriceEditModal('${p.item}', ${p.price})" class="text-naifPurple-900 hover:text-black font-bold p-1"><i class="fa-solid fa-pen"></i></button>
-                    </td>
-                </tr>
-            `;
-            }).join('');
-        }
-
-        function openPriceEditModal(itemName, currentPrice) {
-            if (currentUser !== 'Yasser') {
-                alert('لا تمتلك صلاحية تعديل الأسعار');
-                return;
-            }
-            document.getElementById('editPriceItemName').value = itemName;
-            document.getElementById('lblEditItemName').innerText = `الصنف: ${itemName}`;
-            document.getElementById('editItemPriceValue').value = currentPrice;
-            document.getElementById('priceEditModal').classList.remove('hidden');
-        }
-
-        function saveItemPriceChange() {
-            const itemName = document.getElementById('editPriceItemName').value;
-            const newPrice = parseFloat(document.getElementById('editItemPriceValue').value) || 0;
-
-            const item = db.pricelist ? db.pricelist.find(p => p.item === itemName) : null;
-            if (item) {
-                item.price = newPrice;
-                if (!item.unitPrices) item.unitPrices = {};
-                item.unitPrices[item.unit || 'حبة'] = newPrice;
-                
-                if (db.meals) {
-                    db.meals.forEach(m => {
-                        m.ingredients.forEach(ing => {
-                            if (ing.item === itemName) {
-                                ing.price = newPrice;
-                                ing.total = ing.qty * newPrice;
-                            }
-                        });
-                    });
-                }
-
-                saveDatabase();
-                addAuditLog('تعديل سعر صنف', `تم تعديل سعر الصنف [${itemName}] إلى [${newPrice}] بواسطة ${currentUser}`);
-                closeModal('priceEditModal');
-                renderPricelistTable();
-                renderRecipeCards();
-                renderReportsTable();
-            }
-        }
-
-        function renderReportsTable() {
-            const tbody = document.getElementById('reportsTableBody');
-            document.getElementById('reportDateBadge').innerText = 'التاريخ: ' + new Date().toLocaleDateString('en-GB');
-
-            if (!db.meals || db.meals.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-bold">لا توجد بيانات للتقرير</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = db.meals.map(meal => {
-                let mainCost = 0;
-                meal.ingredients.forEach(ing => {
-                    if (ing.location === 'ALL' || !ing.location) {
-                        mainCost += (ing.qty || 0) * (ing.price || 0);
-                    }
-                });
-                const sp = meal.sellingPrice || 0;
-                const profit = sp > 0 ? sp - mainCost : 0;
-                const profitPct = sp > 0 ? (profit / sp * 100) : 0;
-                const costPct = sp > 0 ? (mainCost / sp * 100) : 0;
-
-                return `
-                    <tr class="hover:bg-slate-50 border-b">
-                        <td class="p-3 font-bold text-slate-800">${meal.name}</td>
-                        <td class="p-3 text-center font-mono font-bold text-emerald-700">${formatPrice(sp, 3)}</td>
-                        <td class="p-3 text-center font-mono font-bold text-rose-700">${formatPrice(mainCost, 3)}</td>
-                        <td class="p-3 text-center font-mono font-bold text-amber-600">${sp > 0 ? formatPrice(profit, 3) : '-'}</td>
-                        <td class="p-3 text-center font-mono font-bold text-emerald-600">${sp > 0 ? profitPct.toFixed(2) + '%' : '-'}</td>
-                        <td class="p-3 text-center font-mono font-bold text-rose-600">${sp > 0 ? costPct.toFixed(2) + '%' : '-'}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function exportReportPDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'pt', 'a4');
-            const rowsPerPage = 18;
-            const totalPages = Math.ceil((db.meals ? db.meals.length : 0) / rowsPerPage) || 1;
-
-            for (let page = 0; page < totalPages; page++) {
-                if (page > 0) pdf.addPage();
-
-                const printWrapper = document.createElement('div');
-                printWrapper.style.position = 'fixed';
-                printWrapper.style.top = '0';
-                printWrapper.style.left = '-9999px';
-                printWrapper.style.width = '794px';
-                printWrapper.style.background = '#ffffff';
-                printWrapper.style.direction = 'rtl';
-                printWrapper.style.padding = '20px';
-
-                const slicedMeals = db.meals ? db.meals.slice(page * rowsPerPage, (page + 1) * rowsPerPage) : [];
-
-                let rowsHtml = slicedMeals.map(meal => {
-                    let mainCost = 0;
-                    meal.ingredients.forEach(ing => {
-                        if (ing.location === 'ALL' || !ing.location) mainCost += (ing.qty || 0) * (ing.price || 0);
-                    });
-                    const sp = meal.sellingPrice || 0;
-                    const profit = sp > 0 ? sp - mainCost : 0;
-                    const profitStr = sp > 0 ? formatPrice(profit, 3) : '-';
-                    const profitPct = sp > 0 ? (profit / sp * 100).toFixed(2) + '%' : '-';
-                    const costPct = sp > 0 ? (mainCost / sp * 100).toFixed(2) + '%' : '-';
-
-                    return `
-                        <tr style="border-bottom:1px solid #ddd; font-size:11px;">
-                            <td style="padding:8px; font-weight:bold;">${meal.name}</td>
-                            <td style="padding:8px; text-align:center;">${formatPrice(sp, 3)}</td>
-                            <td style="padding:8px; text-align:center;">${formatPrice(mainCost, 3)}</td>
-                            <td style="padding:8px; text-align:center;">${profitStr}</td>
-                            <td style="padding:8px; text-align:center;">${profitPct}</td>
-                            <td style="padding:8px; text-align:center;">${costPct}</td>
-                        </tr>
-                    `;
-                }).join('');
-
-                printWrapper.innerHTML = `
-                    <div style="text-align:center; border-bottom:3px solid #6d4370; padding-bottom:10px; margin-bottom:14px;">
-                        <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #6d4370;display:inline-block;">
-                        <h2 style="color:#6d4370; font-weight:900; margin:4px 0 2px 0; font-size:16px;">شركة نايف للأغذية</h2>
-                        <p style="font-size:11px; color:#555; margin:0;">تقرير ربحية وتكاليف الوجبات الشامل - صفحة ${page + 1} من ${totalPages}</p>
-                    </div>
-                    <table style="width:100%; border-collapse:collapse; text-align:right;">
-                        <thead>
-                            <tr style="background:#6d4370; color:#fff; font-size:11px;">
-                                <th style="padding:8px;">اسم الوجبة</th>
-                                <th style="padding:8px; text-align:center;">سعر البيع</th>
-                                <th style="padding:8px; text-align:center;">التكلفة الرئيسية</th>
-                                <th style="padding:8px; text-align:center;">الربح المالي</th>
-                                <th style="padding:8px; text-align:center;">نسبة الربح %</th>
-                                <th style="padding:8px; text-align:center;">نسبة التكلفة %</th>
-                            </tr>
-                        </thead>
-                        <tbody>${rowsHtml}</tbody>
-                    </table>
-                    <div style="margin-top:20px; padding-top:8px; border-top:2px solid #6d4370; display:flex; justify-content:space-between; font-size:9px; color:#6d4370; font-weight:bold;">
-                        <div>تاريخ التصدير: ${new Date().toLocaleDateString('en-GB')}</div>
-                        <div>Yasser Elkhateeb - 67011143</div>
-                    </div>
-                `;
-
-                document.body.appendChild(printWrapper);
-
-                html2canvas(printWrapper, { scale: 2, useCORS: true }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    const imgWidth = pdf.internal.pageSize.getWidth();
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-
-                    document.body.removeChild(printWrapper);
-                    if (page === totalPages - 1) {
-                        pdf.save('تقرير_ربحية_الوجبات_الشامل.pdf');
-                    }
-                });
-            }
-        }
-
-        function exportReportExcel() {
-            if (!db.meals) return;
-            let dataToExport = db.meals.map(m => {
-                let mainCost = 0;
-                m.ingredients.forEach(i => { if (i.location === 'ALL' || !i.location) mainCost += (i.qty || 0) * (i.price || 0); });
-                const sp = m.sellingPrice || 0;
-                const profit = sp > 0 ? sp - mainCost : 0;
-                return {
-                    "اسم الوجبة": m.name,
-                    "سعر البيع": sp > 0 ? sp : "-",
-                    "التكلفة الرئيسية": parseFloat(mainCost.toFixed(3)),
-                    "الربح المالي": sp > 0 ? parseFloat(profit.toFixed(3)) : "-",
-                    "نسبة الربح %": sp > 0 ? parseFloat((profit / sp * 100).toFixed(2)) + '%' : "-"
-                };
-            });
-
-            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "التقارير التحليلية");
-            XLSX.writeFile(workbook, "Naif_Foods_Reports.xlsx");
-        }
-
-        function importExcelFile(event) {
-            if (currentUser === 'مستخدم') {
-                alert('عذراً! لا تمتلك صلاحية سحب ملف الإكسل');
-                return;
-            }
-
-            const file = event.target.files[0];
-            if (!file) return;
-
-            window.isFirebaseSaving = true;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-
-                    let importedPricelist = [];
-                    let importedMeals = [];
-
-                    const unitsList = ['حبة', 'جرام', 'علبة', 'شريحة', 'جالون', 'ماعون', 'باكت', 'بطل', 'قطعة', 'اونس', 'مل لتر', 'الشد'];
-
-                    try {
-                        const priceSheetName = workbook.SheetNames.find(s => s.toLowerCase().trim() === 'pricelist' || s.toLowerCase().trim() === 'price');
-                        if (priceSheetName) {
-                            const priceSheet = workbook.Sheets[priceSheetName];
-                            const priceJson = XLSX.utils.sheet_to_json(priceSheet, { header: 1, raw: true });
-                            for (let i = 3; i < priceJson.length; i++) {
-                                const row = priceJson[i];
-                                if (row && row[0]) {
-                                    const itemName = String(row[0]).trim();
-                                    let defaultPrice = 0;
-                                    let unitPrices = {};
-
-                                    for (let col = 1; col < row.length; col++) {
-                                        const val = parseFloat(row[col]);
-                                        if (!isNaN(val) && val > 0) {
-                                            const unitName = unitsList[col - 1] || ('وحدة_' + col);
-                                            unitPrices[unitName] = val;
-                                            if (defaultPrice === 0) defaultPrice = val;
-                                        }
-                                    }
-
-                                    if (itemName) {
-                                        importedPricelist.push({
-                                            item: itemName,
-                                            unit: 'حبة',
-                                            price: defaultPrice,
-                                            unitPrices: unitPrices
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    } catch (priceErr) {
-                        console.warn("Notice reading pricelist:", priceErr);
-                    }
-
-                    workbook.SheetNames.forEach(sheetName => {
-                        try {
-                            const sNameClean = sheetName.toLowerCase().trim();
-                            if (sNameClean !== 'pricelist' && sNameClean !== 'price') {
-                                const sheet = workbook.Sheets[sheetName];
-                                if (!sheet) return;
-                                
-                                const b2Cell = sheet['B2'] || sheet['b2'];
-                                const mealName = b2Cell && b2Cell.v !== undefined ? String(b2Cell.v).trim() : sheetName;
-
-                                const c41Cell = sheet['C41'] || sheet['c41'];
-                                const sellingPrice = c41Cell && c41Cell.v !== undefined ? (parseFloat(c41Cell.v) || 0) : 0;
-
-                                const sheetJson = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
-                                const ingredients = [];
-
-                                for (let r = 4; r <= Math.min(34, sheetJson.length - 1); r++) {
-                                    const row = sheetJson[r];
-                                    if (row && row[0] && String(row[0]).trim() !== '') {
-                                        const itemName = String(row[0]).trim();
-                                        const location = row[1] ? String(row[1]).trim() : 'ALL';
-                                        const unit = row[2] ? String(row[2]).trim() : 'حبة';
-                                        const qty = row[3] ? (parseFloat(row[3]) || 0) : 0;
-                                        const price = row[4] ? (parseFloat(row[4]) || 0) : 0;
-                                        const total = row[5] ? (parseFloat(row[5]) || 0) : (qty * price);
-
-                                        ingredients.push({
-                                            item: itemName,
-                                            location: location,
-                                            unit: unit,
-                                            qty: qty,
-                                            price: price,
-                                            total: total
-                                        });
-                                    }
-                                }
-
-                                if (ingredients.length > 0) {
-                                    importedMeals.push({
-                                        name: mealName,
-                                        sellingPrice: sellingPrice,
-                                        ingredients: ingredients
-                                    });
-                                }
-                            }
-                        } catch (singleSheetErr) {
-                            console.warn(`Skipped sheet due to format issue: ${sheetName}`);
-                        }
-                    });
-
-                    if (importedPricelist.length > 0) db.pricelist = importedPricelist;
-                    if (importedMeals.length > 0) db.meals = importedMeals;
-
-                    addAuditLog('سحب إكسل', `تم سحب ملف إكسل بنجاح (${importedMeals.length} وجبة) بواسطة ${currentUser}`);
-                    saveDatabase();
-                    
-                    if (typeof window.syncToFirebase === 'function') {
-                        window.syncToFirebase();
-                    }
-
-                    alert(`تم سحب الملف بنجاح! تم استيراد ${importedMeals.length} وجبة من أصل ${workbook.SheetNames.length} شيت.`);
-                    renderRecipeCards();
-                    renderPricelistTable();
-                    renderReportsTable();
-
-                } catch (err) {
-                    console.error(err);
-                    window.isFirebaseSaving = false;
-                    alert('حدث خطأ أثناء قراءة ملف الإكسل. يرجى التأكد من أن الملف بصيغة xlsx أو xlsm سليمة.');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        function renderAuditLogs() {
-            const tbody = document.getElementById('auditLogTableBody');
-            if (!db.auditLogs || db.auditLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-bold">لا توجد حركات مسجلة حتى الآن</td></tr>`;
-                return;
-            }
-
-            const isYasser = currentUser === 'Yasser';
-
-            tbody.innerHTML = db.auditLogs.map(log => `
-                <tr class="hover:bg-slate-50 border-b border-slate-100">
-                    <td class="p-3 text-center ${isYasser ? '' : 'hidden'}"><input type="checkbox" class="log-checkbox" data-id="${log.id}"></td>
-                    <td class="p-3 font-mono text-slate-500 font-bold">${log.date}</td>
-                    <td class="p-3 font-bold text-naifPurple-900">${log.user}</td>
-                    <td class="p-3 font-bold text-slate-700">${log.type}</td>
-                    <td class="p-3 text-slate-600">${log.details}</td>
-                </tr>
-            `).join('');
-        }
-
-        function toggleSelectAllLogs(master) {
-            document.querySelectorAll('.log-checkbox').forEach(cb => cb.checked = master.checked);
-        }
-
-        function deleteSelectedLogs() {
-            if (currentUser !== 'Yasser') return;
-            const checked = document.querySelectorAll('.log-checkbox:checked');
-            if (checked.length === 0) {
-                alert('يرجى تحديد حركات لمسحها');
-                return;
-            }
-
-            if (!confirm(`هل أنت متأكد من مسح ${checked.length} حركة محددة؟`)) return;
-
-            const idsToDelete = Array.from(checked).map(cb => parseFloat(cb.getAttribute('data-id')));
-            db.auditLogs = db.auditLogs.filter(log => !idsToDelete.includes(log.id));
-
-            saveDatabase();
-            renderAuditLogs();
-        }
-
-        function downloadBackup() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-            const a = document.createElement('a');
-            a.setAttribute("href", dataStr);
-            a.setAttribute("download", `naif_foods_backup_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            addAuditLog('تنزيل نسخة احتياطية', `تم تنزيل النسخة الاحتياطية للبيانات بواسطة ${currentUser}`);
-        }
-
-        function restoreBackup(event) {
-            if (currentUser !== 'Yasser') {
-                alert('استعادة النسخة الاحتياطية مقتصرة حصرياً على Yasser');
-                return;
-            }
-
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const text = e.target.result;
-                    const imported = JSON.parse(text);
-                    if (imported) {
-                        if (Array.isArray(imported)) {
-                            db.meals = imported;
-                        } else {
-                            db.meals = imported.meals || [];
-                            db.pricelist = imported.pricelist || [];
-                            db.auditLogs = imported.auditLogs || [];
-                            db.pendingMeals = imported.pendingMeals || [];
-                            db.cancelledMeals = imported.cancelledMeals || [];
-                        }
-                        saveDatabase();
-                        addAuditLog('استعادة نسخة احتياطية', `تمت استعادة البيانات بنجاح بواسطة ${currentUser}`);
-                        alert('تمت استعادة البيانات بنجاح!');
-                        location.reload();
-                    } else {
-                        alert('ملف النسخة الاحتياطية فارغ أو غير صالح!');
-                    }
-                } catch (err) {
-                    console.error("Restore error:", err);
-                    alert('خطأ في قراءة ملف النسخة الاحتياطية: تأكد من أن الملف بصيغة JSON سليمة.');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        async function exportSingleRecipePDF(mealIndex) {
-            const meal = db.meals[mealIndex];
-            if (!meal) return;
-
-            const cardEls = document.querySelectorAll('.recipe-card-box');
-            const targetEl = cardEls[mealIndex];
-            if (!targetEl) return;
-
-            const clone = targetEl.cloneNode(true);
-            clone.querySelectorAll('.no-print').forEach(el => el.remove());
-
-            const printWrapper = document.createElement('div');
-            printWrapper.style.position = 'fixed';
-            printWrapper.style.top = '0';
-            printWrapper.style.left = '-9999px';
-            printWrapper.style.width = '794px';
-            printWrapper.style.background = '#ffffff';
-            printWrapper.style.direction = 'rtl';
-            printWrapper.style.padding = '20px';
-
-            const headerHtml = `
-                <div style="text-align:center; border-bottom:3px solid #6d4370; padding-bottom:10px; margin-bottom:14px;">
-                    <img src="https://i.postimg.cc/NM2zJWZD/NAIF-LOGO.jpg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #6d4370; display:inline-block;">
-                    <h2 style="color:#6d4370; font-weight:900; margin:4px 0 2px 0; font-size:16px;">شركة نايف للأغذية</h2>
-                    <p style="font-size:11px; color:#555; margin:0;">بطاقة ريسبي الوجبة: ${meal.name}</p>
-                </div>
-            `;
-            const headerDiv = document.createElement('div');
-            headerDiv.innerHTML = headerHtml;
-            printWrapper.appendChild(headerDiv);
-
-            printWrapper.appendChild(clone);
-
-            const exportTime = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB');
-            const footerHtml = `
-                <div style="margin-top:15px; padding-top:8px; border-top:2px solid #6d4370; display:flex; justify-content:space-between; align-items:center; font-size:9px; color:#6d4370; font-weight:bold;">
-                    <div>تاريخ ووقت التصدير: ${exportTime}</div>
-                    <div>Yasser Elkhateeb - 67011143</div>
-                </div>
-            `;
-            const footerDiv = document.createElement('div');
-            footerDiv.innerHTML = footerHtml;
-            printWrapper.appendChild(footerDiv);
-
-            document.body.appendChild(printWrapper);
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const canvas = await html2canvas(printWrapper, { scale: 2, useCORS: true });
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-
-                const pdf = new jsPDF('p', 'pt', 'a4');
-                const imgWidth = pdf.internal.pageSize.getWidth();
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
-                pdf.save(`وجبة_${meal.name}.pdf`);
-
-                addAuditLog('تصدير PDF', `تم تصدير وجبة [${meal.name}] إلى ملف PDF`);
-            } catch (err) {
-                console.error(err);
-                alert('حدث خطأ أثناء تصدير PDF');
-            } finally {
-                document.body.removeChild(printWrapper);
-            }
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
+        // تشغيل الدالة عند فتح الصفحة لتعبئة البيانات الأولية
+        window.onload = updateCert;
     </script>
 </body>
 </html>
