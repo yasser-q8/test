@@ -19,6 +19,9 @@ button.secondary,.tab{background:#fff;color:var(--navy);border:1px solid #94a3b8
 
 .btn-tomorrow-pdf{background:#d97706;color:#fff;font-size:14px;padding:11px 16px;font-weight:800;border-radius:9px;box-shadow:0 4px 10px rgba(217,119,6,0.3);transition:transform 0.2s, background-color 0.2s;display:flex;align-items:center;gap:6px;}
 .btn-tomorrow-pdf:hover{background:#b45309;transform:scale(1.02);}
+.top-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.btn-photos-archive{background:#0f766e!important;color:#fff!important;border:1px solid #0b5f59!important;font-size:14px;font-weight:800;padding:12px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 10px rgba(15,118,110,.22);transition:transform .2s,background-color .2s}
+.btn-photos-archive:hover,.btn-photos-archive.active{background:#115e59!important;transform:translateY(-1px)}
 
 .tab.active{background:var(--navy);color:#fff}
 .tab.orders-tab{background:var(--green);color:#fff;}
@@ -82,11 +85,25 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-ca
 .return-photo-card-wrap{display:flex;flex-direction:column;gap:6px;width:124px}
 .return-photo-delete{width:100%;padding:7px 8px;background:#fff!important;color:#b83232!important;border:1px solid #b83232!important;font-size:12px;border-radius:7px}
 .return-photo-delete:hover{background:#b83232!important;color:#fff!important}
+.archive-summary{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.archive-summary span{background:#edf4fa;border:1px solid #c8d9e8;color:#1a4a6e;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700}
+.archive-hospital-card{border:1px solid #cbd5e1;border-radius:12px;background:#fff;margin:0 0 13px;padding:13px;box-shadow:0 2px 8px #1a4a6e0b}
+.archive-hospital-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e2e8f0;padding-bottom:9px;margin-bottom:10px}
+.archive-hospital-head strong{font-size:16px;color:#1a4a6e}
+.archive-photo-count{font-size:12px;font-weight:700;color:#b83232;background:#fdf0f0;border-radius:20px;padding:5px 10px}
+.archive-photo-grid{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.archive-empty{font-size:13px;color:#94a3b8;padding:7px 2px}
+.archive-photo-card{display:flex;flex-direction:column;gap:6px;width:138px}
+.archive-photo-card a{display:block;color:#334155;text-decoration:none;font-size:12px;font-weight:700}
+.archive-photo-card img{width:132px;height:106px;object-fit:cover;border:2px solid #cbd5e1;border-radius:9px;background:#f8fafc}
+.archive-photo-card a:hover img{border-color:#256596;box-shadow:0 3px 10px #25659625}
+.archive-photo-delete{width:132px;padding:7px 8px;background:#fff!important;color:#b83232!important;border:1px solid #b83232!important;font-size:12px;border-radius:7px}
+.archive-photo-delete:hover{background:#b83232!important;color:#fff!important}
 .master-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:1px solid #e2e8f0}
 .master-row-name{flex:1;min-width:180px;font-weight:700}
 .master-action{padding:7px 11px;font-size:12px}
 .master-edit{background:#256596!important;color:#fff!important}
-@media(max-width:768px){.return-photo-card{width:108px}.return-photo-card img{width:104px;height:92px}.return-photo-actions{align-items:stretch}.return-photo-button{width:100%}}
+@media(max-width:768px){.top-actions{width:100%;justify-content:stretch}.top-actions button{flex:1;justify-content:center}.return-photo-card{width:108px}.return-photo-card img{width:104px;height:92px}.return-photo-actions{align-items:stretch}.return-photo-button{width:100%}}
 
 @media(max-width:768px){
   header h1{font-size:18px}.panel{padding:12px}.table-scroll{overflow-x:auto}
@@ -114,7 +131,10 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-ca
    <button class="tab" data-tab="master">Master Data</button>
    <button class="tab returns-tab" data-tab="returns">Wastage</button>
   </div>
-  <button class="btn-tomorrow-pdf" id="downloadTomorrowPdfTop">📥Download Tomorrow's Orders PDF Directly</button>
+  <div class="top-actions">
+   <button class="btn-tomorrow-pdf" id="downloadTomorrowPdfTop">📥 Download Tomorrow's Orders PDF</button>
+   <button type="button" class="btn-photos-archive" id="photosArchiveTop">🖼️ Returns Photos Archive</button>
+  </div>
  </div>
 
  <section id="orders" class="section">
@@ -171,6 +191,19 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-ca
   </div>
  </section>
 
+ <section id="photosArchive" class="section hidden">
+  <div class="panel">
+   <h2>Returns Photos Archive</h2>
+   <p class="muted" style="margin-top:-7px;margin-bottom:14px">Choose a date to display all registered hospitals and the return photos saved for each hospital on that day.</p>
+   <div class="row no-print" style="align-items:end;margin-bottom:16px">
+    <div class="field date-field"><label>Select Return Date</label><input id="photosArchiveDate" type="date" class="date-big"></div>
+    <button id="refreshPhotosArchive">Show Photos</button>
+    <span id="photosArchiveState" class="muted">Select a date to load the archive.</span>
+   </div>
+   <div id="photosArchiveResults"><p class="muted">Choose a date to view the hospitals and their saved photos.</p></div>
+  </div>
+ </section>
+
  <section id="summary" class="section hidden">
   <div class="panel no-print">
     <h2>Daily Consolidated Summary</h2>
@@ -187,7 +220,7 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-ca
 
  <section id="history" class="section hidden">
   <div class="panel">
-    <h2>Recent Orders History</h2>
+    <h2>Orders &amp; Returns History</h2>
     <div class="row no-print">
       <div class="field"><label>From Date</label><input id="historyFromDate" type="date"></div>
       <div class="field"><label>To Date</label><input id="historyDate" type="date"></div>
@@ -195,8 +228,8 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-ca
       <button id="searchHistory">Search</button>
     </div>
     <div class="row no-print" style="margin:12px 0">
-      <button class="danger" id="deleteOrders">Delete Selected Orders Records</button>
-      <span class="muted">Password required for order deletion.</span>
+      <button class="danger" id="deleteOrders">Delete Selected Records</button>
+      <span class="muted">Select order or return records. A password is required before deletion. Return photos remain in the photo archive.</span>
     </div>
     <div id="historyResults" class="table-scroll"></div>
   </div>
@@ -591,6 +624,127 @@ async function loadReturnImages(){
  }
 }
 
+let archivePhotoObjectUrls=[];
+let archivePhotoEntries=[];
+
+function clearArchivePhotoObjectUrls(){
+ archivePhotoObjectUrls.forEach(url=>{try{URL.revokeObjectURL(url)}catch(_){}});
+ archivePhotoObjectUrls=[];
+ archivePhotoEntries=[];
+}
+
+async function loadPhotoArchive(){
+ const dateInput=$("photosArchiveDate"),results=$("photosArchiveResults"),state=$("photosArchiveState");
+ if(!dateInput||!results||!state)return;
+ const date=dateInput.value;
+ clearArchivePhotoObjectUrls();
+ if(!date){state.textContent="Please select a date.";results.innerHTML='<p class="muted">Choose a date to view the hospitals and their saved photos.</p>';return;}
+ if(!firestore){state.textContent="Database is not connected yet.";results.innerHTML='<p class="muted">Please wait for the database connection, then try again.</p>';return;}
+ state.textContent="Loading saved photos...";
+ results.innerHTML='<p class="muted">Loading hospitals and photos...</p>';
+ try{
+  const [photoSnap,returnSnap]=await Promise.all([
+   getDocs(query(collection(firestore,"returnPhotos"),where("date","==",date))),
+   getDocs(query(collection(firestore,"returns"),where("date","==",date)))
+  ]);
+  const byHospital=new Map();
+  (hospitals||[]).forEach(h=>byHospital.set(h,[]));
+  const seenByHospital=new Map();
+  (hospitals||[]).forEach(h=>seenByHospital.set(h,new Set()));
+
+  // The dedicated returnPhotos collection is the source of truth for Firestore-stored images.
+  // Keeping images here means deleting a return transaction does not erase its photo evidence.
+  photoSnap.docs.forEach(photoDoc=>{
+   const photo={id:photoDoc.id,...photoDoc.data()};
+   const hospital=String(photo.hospital||"").trim();
+   if(!hospital)return;
+   if(!byHospital.has(hospital)){byHospital.set(hospital,[]);seenByHospital.set(hospital,new Set());}
+   byHospital.get(hospital).push({photo,returnDocId:docKey(date,hospital),photoDocId:photoDoc.id});
+   seenByHospital.get(hospital).add(photo.id);
+  });
+
+  // Preserve compatibility with older photo links embedded in return documents.
+  returnSnap.docs.forEach(returnDoc=>{
+   const data=returnDoc.data()||{};
+   const hospital=String(data.hospital||"").trim();
+   if(!hospital)return;
+   if(!byHospital.has(hospital)){byHospital.set(hospital,[]);seenByHospital.set(hospital,new Set());}
+   const images=Array.isArray(data.images)?data.images:[];
+   images.forEach(photo=>{
+    if(photo?.id && seenByHospital.get(hospital).has(photo.id))return;
+    const key=photo?.id || `${photo?.url||""}|${photo?.name||""}`;
+    if(seenByHospital.get(hospital).has(key))return;
+    byHospital.get(hospital).push({photo,returnDocId:returnDoc.id,photoDocId:photo?.id||null});
+    seenByHospital.get(hospital).add(key);
+   });
+  });
+
+  const hospitalRows=[];
+  let photoCount=0,hospitalsWithPhotos=0;
+  archivePhotoEntries=[];
+  for(const [hospital,entries] of byHospital.entries()){
+   const cards=[];
+   if(entries.length)hospitalsWithPhotos++;
+   for(const entry of entries){
+    const photo=entry.photo||{};
+    let url="";
+    try{
+     if(photo.id&&photo.storageType==="firestore"){
+      const blob=await loadPhotoBlobFromFirestore(photo);
+      url=URL.createObjectURL(blob);
+      archivePhotoObjectUrls.push(url);
+     }else if(photo.url){
+      url=photo.url;
+     }
+    }catch(photoErr){
+     console.warn("Could not load an archived return photo",hospital,photoErr);
+    }
+    if(!url){
+     cards.push(`<div class="archive-photo-card"><span class="archive-empty">${safe(photo.name||"Saved photo")} — image data unavailable</span></div>`);
+     continue;
+    }
+    const index=archivePhotoEntries.length;
+    archivePhotoEntries.push({hospital,date,photo,returnDocId:entry.returnDocId,photoDocId:entry.photoDocId});
+    photoCount++;
+    cards.push(`<div class="archive-photo-card"><a href="${safe(url)}" target="_blank" rel="noopener"><img src="${safe(url)}" alt="${safe(hospital)} return photo" loading="lazy"><span>${safe(photo.name||"Return photo")} · Open full size</span></a><button type="button" class="archive-photo-delete" data-delete-archive-photo="${index}">Delete photo</button></div>`);
+   }
+   hospitalRows.push(`<section class="archive-hospital-card"><div class="archive-hospital-head"><strong>${safe(hospital)}</strong><span class="archive-photo-count">${entries.length} photo(s)</span></div><div class="archive-photo-grid">${cards.length?cards.join(""):'<span class="archive-empty">No photos saved for this hospital on this date.</span>'}</div></section>`);
+  }
+
+  results.innerHTML=`<div class="archive-summary"><span>Date: ${safe(date)}</span><span>Hospitals: ${byHospital.size}</span><span>Hospitals with photos: ${hospitalsWithPhotos}</span><span>Photos loaded: ${photoCount}</span></div>${hospitalRows.join("")||'<p class="muted">No hospitals are registered in Master Data.</p>'}`;
+  results.querySelectorAll("[data-delete-archive-photo]").forEach(button=>{
+   button.onclick=()=>deleteArchivedReturnPhoto(Number(button.dataset.deleteArchivePhoto)).catch(err=>{console.error(err);alert("Could not delete photo: "+(err?.message||err));});
+  });
+  state.textContent=`Archive loaded for ${date}.`;
+ }catch(err){
+  console.error("Returns photos archive error",err);
+  state.textContent="Could not load archive.";
+  results.innerHTML='<p class="muted">Could not load the archive. Please check the internet connection and Firestore permissions.</p>';
+ }
+}
+
+async function deleteArchivedReturnPhoto(displayIndex){
+ const entry=archivePhotoEntries[displayIndex];
+ if(!entry)return;
+ if(!confirm(`Delete this photo for ${entry.hospital} on ${entry.date}?`))return;
+ const returnRef=doc(firestore,"returns",docKey(entry.date,entry.hospital));
+ const returnSnap=await getDoc(returnRef);
+ if(returnSnap.exists()){
+  const images=Array.isArray(returnSnap.data().images)?returnSnap.data().images:[];
+  const filtered=images.filter(img=>entry.photo.id?img.id!==entry.photo.id:!(img.url===entry.photo.url&&img.name===entry.photo.name));
+  if(filtered.length!==images.length){
+   await setDoc(returnRef,{images:filtered,updatedAt:serverTimestamp()},{merge:true});
+  }
+ }
+ if(entry.photo.id){
+  const chunksSnap=await getDocs(collection(firestore,"returnPhotos",entry.photo.id,"chunks"));
+  for(const chunk of chunksSnap.docs)await deleteDoc(chunk.ref);
+  await deleteDoc(doc(firestore,"returnPhotos",entry.photo.id));
+ }
+ await logAction("Delete Return Photo",`Deleted return photo from archive: ${entry.photo.name||entry.photo.id||"Photo"}`,entry.hospital);
+ await loadPhotoArchive();
+}
+
 async function deleteReturnPhoto(displayIndex){
  const entry=returnPhotoEntries[displayIndex];
  if(!entry)return;
@@ -623,8 +777,13 @@ async function uploadReturnPhotos(fileList){
  const returnRef=doc(firestore,"returns",docKey(date,hospital));
  const currentSnap=await getDoc(returnRef);
  const currentImages=currentSnap.exists()&&Array.isArray(currentSnap.data().images)?currentSnap.data().images:[];
- if(currentImages.length+files.length>MAX_RETURN_PHOTOS){
-  alert(`You can save up to ${MAX_RETURN_PHOTOS} photos for this hospital on this date. There are already ${currentImages.length} photo(s).`);
+ const storedPhotoSnap=await getDocs(query(collection(firestore,"returnPhotos"),where("date","==",date)));
+ const storedPhotoDocs=storedPhotoSnap.docs.filter(d=>d.data().hospital===hospital);
+ const storedPhotoIds=new Set(storedPhotoDocs.map(d=>d.id));
+ const legacyOnlyImages=currentImages.filter(img=>!img.id||!storedPhotoIds.has(img.id));
+ const currentPhotoCount=storedPhotoDocs.length+legacyOnlyImages.length;
+ if(currentPhotoCount+files.length>MAX_RETURN_PHOTOS){
+  alert(`You can save up to ${MAX_RETURN_PHOTOS} photos for this hospital on this date. There are already ${currentPhotoCount} photo(s).`);
   $("returnPhotoInput").value="";
   return;
  }
@@ -641,7 +800,7 @@ async function uploadReturnPhotos(fileList){
    uploaded.push(metadata);
   }
   await logAction("Upload Return Photos",`Saved ${uploaded.length} return photo(s) in Firestore`,hospital);
-  $("returnPhotoUploadState").textContent=`${currentImages.length+uploaded.length} of 2 photos saved`;
+  $("returnPhotoUploadState").textContent=`${currentPhotoCount+uploaded.length} of 2 photos saved`;
   await loadReturnImages();
   alert("Return photo(s) saved successfully.");
  }catch(err){
@@ -695,30 +854,76 @@ async function loadSummary(collectionName="orders", targetContainerId="summaryCo
 
 async function searchHistory(){
  const hosp=$("historyHospital").value.trim(),fromDate=$("historyFromDate").value,toDate=$("historyDate").value;
- let snaps=await getDocs(collection(firestore,"orders"));
- let rows=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(o=>{
-   const matchHosp = !hosp || (o.hospital && o.hospital.toLowerCase().includes(hosp.toLowerCase()));
-   const matchFrom = !fromDate || o.date >= fromDate;
-   const matchTo = !toDate || o.date <= toDate;
-   return matchHosp && matchFrom && matchTo;
- }).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ const [ordersSnap,returnsSnap]=await Promise.all([
+  getDocs(collection(firestore,"orders")),
+  getDocs(collection(firestore,"returns"))
+ ]);
+ const matches=record=>{
+  const matchHosp=!hosp||(record.hospital&&record.hospital.toLowerCase().includes(hosp.toLowerCase()));
+  const matchFrom=!fromDate||record.date>=fromDate;
+  const matchTo=!toDate||record.date<=toDate;
+  return matchHosp&&matchFrom&&matchTo;
+ };
+ const rows=[
+  ...ordersSnap.docs.map(d=>({id:d.id,type:"orders",...d.data()})).filter(matches),
+  ...returnsSnap.docs.map(d=>({id:d.id,type:"returns",...d.data()})).filter(matches)
+ ].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.type.localeCompare(b.type));
 
- $("historyResults").innerHTML=`<table><thead><tr><th style="width:38px"><input type="checkbox" id="selectAllOrdersCheck"></th><th>Date</th><th>Hospital</th><th>Items</th><th>Last Update</th><th>Action</th></tr></thead><tbody>${rows.map(o=>`<tr><td style="text-align:center"><input type="checkbox" class="order-check" value="${safe(o.id)}"></td><td>${safe(o.date)}</td><td>${safe(o.hospital)}</td><td>${Object.keys(o.quantities||{}).length}</td><td>${o.updatedAt?.toDate?o.updatedAt.toDate().toLocaleString():""}</td><td><button class="secondary" data-open="${safe(o.id)}">Open</button></td></tr>`).join("")}</tbody></table>`;
- const all=$("selectAllOrdersCheck");if(all)all.onchange=()=>document.querySelectorAll(".order-check").forEach(c=>c.checked=all.checked);
- $("historyResults").querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{
-  const o=rows.find(x=>x.id===b.dataset.open);
-  $("orderDate").value=o.date; $("hospitalSearch").value=o.hospital; showTab("orders"); await loadOrder();
+ if(!rows.length){
+  $("historyResults").innerHTML='<p class="muted">No orders or returns found for the selected filters.</p>';
+  return;
+ }
+ $("historyResults").innerHTML=`<table><thead><tr><th style="width:38px"><input type="checkbox" id="selectAllHistoryCheck"></th><th style="width:105px">Date</th><th>Hospital</th><th style="width:85px">Type</th><th style="width:65px">Items</th><th style="width:165px">Last Update</th><th style="width:90px">Action</th></tr></thead><tbody>${rows.map(record=>{
+  const itemCount=Object.keys(record.quantities||{}).filter(key=>String(record.quantities[key]??"").trim()!=="").length;
+  const typeLabel=record.type==="returns"?"RETURN":"ORDER";
+  const typeColor=record.type==="returns"?"#b83232":"#16865b";
+  return `<tr><td style="text-align:center"><input type="checkbox" class="history-check" value="${safe(JSON.stringify({type:record.type,id:record.id}))}"></td><td>${safe(record.date||"")}</td><td>${safe(record.hospital||"")}</td><td><span style="font-weight:800;color:${typeColor}">${typeLabel}</span></td><td style="text-align:center">${itemCount}</td><td>${record.updatedAt?.toDate?record.updatedAt.toDate().toLocaleString():""}</td><td><button class="secondary" data-open-history="${safe(JSON.stringify({type:record.type,id:record.id}))}">View</button></td></tr>`;
+ }).join("")}</tbody></table>`;
+ const all=$("selectAllHistoryCheck");
+ if(all)all.onchange=()=>document.querySelectorAll(".history-check").forEach(c=>c.checked=all.checked);
+ $("historyResults").querySelectorAll("[data-open-history]").forEach(button=>button.onclick=async()=>{
+  const key=JSON.parse(button.dataset.openHistory);
+  const record=rows.find(item=>item.id===key.id&&item.type===key.type);
+  if(!record)return;
+  if(record.type==="orders"){
+   $("orderDate").value=record.date||todayLocal();
+   $("hospitalSearch").value=record.hospital||"";
+   showTab("orders");
+   await loadOrder();
+  }else{
+   $("returnDate").value=record.date||todayLocal();
+   $("returnHospitalSearch").value=record.hospital||"";
+   showTab("returns");
+   await loadReturn();
+  }
  });
 }
 
 async function deleteOrders(){
- const ids=[...document.querySelectorAll(".order-check:checked")].map(x=>x.value);
- if(!ids.length){alert("Please select at least one order record to delete.");return}
- const pass=prompt("Enter order deletion password:"); if(pass===null)return;
- if(pass!=="123321"){alert("Incorrect password.");return}
- if(!confirm(`Permanently delete ${ids.length} selected orders?`))return;
- for(const id of ids) await deleteDoc(doc(firestore,"orders",id));
- alert("Selected order records permanently deleted."); await searchHistory();
+ const selected=[...document.querySelectorAll(".history-check:checked")].map(input=>{
+  try{return JSON.parse(input.value)}catch(_){return null;}
+ }).filter(Boolean);
+ if(!selected.length){alert("Please select at least one order or return record to delete.");return;}
+ const pass=prompt("Enter order/return deletion password:");
+ if(pass===null)return;
+ if(pass!=="123321"){alert("Incorrect password.");return;}
+ const returnCount=selected.filter(x=>x.type==="returns").length;
+ const orderCount=selected.length-returnCount;
+ const description=[orderCount?`${orderCount} order(s)`:"",returnCount?`${returnCount} return(s)`:""].filter(Boolean).join(" and ");
+ if(!confirm(`Permanently delete ${description}?\n\nReturn photos will remain available in Returns Photos Archive.`))return;
+ let deleted=0;
+ for(const entry of selected){
+  const collectionName=entry.type==="returns"?"returns":"orders";
+  const recordRef=doc(firestore,collectionName,entry.id);
+  const recordSnap=await getDoc(recordRef);
+  if(!recordSnap.exists())continue;
+  const record=recordSnap.data()||{};
+  await deleteDoc(recordRef);
+  await logAction(entry.type==="returns"?"Delete Return":"Delete Order",`Deleted ${entry.type==="returns"?"return":"order"} record dated ${record.date||""}`,record.hospital||"Administration");
+  deleted++;
+ }
+ alert(`${deleted} selected record(s) deleted successfully.`);
+ await searchHistory();
 }
 
 async function searchLogs(){
@@ -996,11 +1201,14 @@ async function addItem(){
 }
 
 function showTab(id){
+ if(id!=="photosArchive")clearArchivePhotoObjectUrls();
  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("hidden",s.id!==id));
  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
  if(id==="master")renderMaster();
  if(id==="activity")searchLogs().catch(console.error);
  if(id==="history")searchHistory().catch(console.error);
+ if(id==="photosArchive")loadPhotoArchive().catch(err=>{console.error(err);alert("Could not load photos archive: "+err.message);});
+ const archiveButton=$("photosArchiveTop");if(archiveButton)archiveButton.classList.toggle("active",id==="photosArchive");
 }
 
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
@@ -1062,8 +1270,10 @@ $("clearFormTop").onclick=()=>$("clearForm").click();
 
 const downloadTomorrowDirect = () => generatePdfReport("orders", "DAILY HOSPITAL ORDERS", tomorrow()).catch(e=>alert("PDF error: "+e.message));
 $("downloadTomorrowPdfTop").onclick = downloadTomorrowDirect;
+$("photosArchiveTop").onclick = () => showTab("photosArchive");
 
 $("orderDate").value=tomorrow(); $("returnDate").value=todayLocal(); $("summaryDate").value=tomorrow();
+$("photosArchiveDate").value=todayLocal();
 $("historyFromDate").value=addDays(todayLocal(),-1); $("historyDate").value=tomorrow();
 
 // Render immediately with defaults before Firebase fetches
@@ -1077,9 +1287,28 @@ $("saveOrder").onclick=()=>saveOrder().catch(e=>alert(e.message));
 $("loadOrder").onclick=()=>loadOrder().catch(e=>alert(e.message));
 $("clearForm").onclick=()=>{ $("hospitalSearch").value = ""; if($("itemSearchInput")) $("itemSearchInput").value = ""; renderRows(); };
 
-$("saveReturn").onclick=()=>saveReturn().catch(e=>alert(e.message));
+// Both visible Save buttons must run the same save operation.
+// The upper action bar was previously missing these event handlers.
+async function handleSaveReturnClick(){
+ const saveButtons=[$("saveReturn"),$("saveReturnTop")].filter(Boolean);
+ saveButtons.forEach(button=>button.disabled=true);
+ status("Saving return...", "returnSaveState");
+ try{
+  await saveReturn();
+ }catch(e){
+  console.error("Save return error",e);
+  status("Save failed", "returnSaveState");
+  alert("Could not save the return document.\n\n"+(e?.message||String(e)));
+ }finally{
+  saveButtons.forEach(button=>button.disabled=false);
+ }
+}
+$("saveReturn").onclick=handleSaveReturnClick;
+$("saveReturnTop").onclick=handleSaveReturnClick;
 $("loadReturn").onclick=()=>loadReturn().catch(e=>alert(e.message));
+$("loadReturnTop").onclick=()=>$("loadReturn").click();
 $("clearReturnForm").onclick=()=>{ $("returnHospitalSearch").value = ""; if($("returnItemSearchInput")) $("returnItemSearchInput").value = ""; renderRows({}, "returnRows", "returnItemSearchInput"); loadReturnImages(); };
+$("clearReturnFormTop").onclick=()=>$("clearReturnForm").click();
 
 $("refreshSummary").onclick=async()=>{
   const selDate = $("summaryDate").value;
@@ -1102,6 +1331,8 @@ $("exportPdf").onclick=()=>generatePdfReport("orders", "DAILY HOSPITAL ORDERS").
 $("exportReturnsPdf").onclick=()=>generatePdfReport("returns", "DAILY HOSPITAL RETURNS").catch(e=>alert("PDF error: "+e.message));
 
 $("searchHistory").onclick=()=>searchHistory().catch(e=>alert(e.message));
+$("photosArchiveDate").addEventListener("change",()=>loadPhotoArchive().catch(e=>alert("Archive error: "+e.message)));
+$("refreshPhotosArchive").onclick=()=>loadPhotoArchive().catch(e=>alert("Archive error: "+e.message));
 $("deleteOrders").onclick=()=>deleteOrders().catch(e=>alert(e.message));
 $("searchLogs").onclick=()=>searchLogs().catch(e=>alert(e.message));
 $("deleteLogs").onclick=()=>deleteLogs().catch(e=>alert(e.message));
