@@ -1,420 +1,1121 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شهادة راتب - شركة نايف للأغذية</title>
-    <style>
-        /* إعدادات عامة */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fondant Choco | Orders & Returns</title>
+<link rel="icon" href="https://i.postimg.cc/WbJw6TdV/Orig-LOGO-Square.jpg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{--navy:#1a4a6e;--blue:#256596;--gold:#e6b84a;--bg:#f4f7fb;--line:#64748b;--text:#182230;--muted:#667085;--green:#16865b;--red:#c0392b;--return-bg:#fdf3f4;--return-border:#d98293}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+header{background:linear-gradient(110deg,#10314a,#1a4a6e);color:white;padding:16px 22px;display:flex;align-items:center;gap:14px;box-shadow:0 3px 14px #1a4a6e30}
+header img{width:58px;height:58px;object-fit:contain;border-radius:10px;background:white;padding:3px}header h1{font-size:22px;margin:0}header p{margin:4px 0 0;color:#d1e3f3;font-size:13px}
+.wrap{max-width:1178px;width:100%;margin:16px auto;padding:0 12px}
+.top-nav-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0}
+button,.tab{border:0;border-radius:9px;padding:11px 16px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+button.secondary,.tab{background:#fff;color:var(--navy);border:1px solid #94a3b8}button.danger{background:var(--red)}button:disabled{opacity:.45;cursor:not-allowed}
 
-        /* تنسيق لوحة الإدخال (لا تظهر عند الطباعة) */
-        .input-panel {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+.btn-tomorrow-pdf{background:#d97706;color:#fff;font-size:14px;padding:11px 16px;font-weight:800;border-radius:9px;box-shadow:0 4px 10px rgba(217,119,6,0.3);transition:transform 0.2s, background-color 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-tomorrow-pdf:hover{background:#b45309;transform:scale(1.02);}
 
-        .input-panel h3 {
-            grid-column: span 2;
-            text-align: center;
-            margin-top: 0;
-            color: #333;
-        }
+.tab.active{background:var(--navy);color:#fff}
+.tab.orders-tab{background:var(--green);color:#fff;}
+.tab.orders-tab.active{background:#0f5c3b;color:#fff;}
+.panel{background:#fff;border:1px solid #94a3b8;border-radius:14px;padding:18px;box-shadow:0 5px 20px #1a4a6e10;margin-bottom:16px}
+h2{font-size:19px;margin:0 0 15px;color:var(--navy)}.row{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:6px;min-width:150px;flex:1}
+.field.hospital-field{flex:2.2;min-width:240px}
+.field.date-field{flex:0.8;max-width:190px;min-width:140px}
+label{font-size:12px;color:var(--muted);font-weight:700}
+input,select{padding:11px 12px;border:1.5px solid #64748b;border-radius:8px;font-size:16px;min-width:0;background:white;color:var(--text)}
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
+.hospitalSearchInput{font-size:22px!important;font-weight:700;color:var(--navy);padding:12px 14px;}
+input:focus,select:focus{outline:2px solid #8ab4f8;border-color:var(--blue)}.date-big{font-size:16px;font-weight:700;color:var(--navy)}
 
-        .input-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #555;
-        }
+table{width:100%;border-collapse:collapse;table-layout:fixed;border:2px solid #334155}
+th{background:#cbd5e1;color:#0f172a;font-size:13px;text-align:left;padding:11px;border:1.5px solid #475569;font-weight:bold}
+td{padding:6px 8px;border:1.5px solid #475569}
+#orderRows tr:nth-child(even){background:#ffffff}
+#orderRows tr:nth-child(odd){background:#cbd5e1}
+#orderRows tr:hover{background:#94a3b8}
 
-        .input-group input {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
-        }
+#returnRows tr:nth-child(even){background:#ffffff}
+#returnRows tr:nth-child(odd){background:#fce8e6}
+#returnRows tr:hover{background:#f8d7da}
+td input{width:112px;max-width:100%;text-align:center;font-size:18px;font-weight:700;padding:6px 5px;margin:0 auto;display:block;border:1.5px solid #475569;border-radius:6px}
+.item-name{font-weight:700;font-size:14px;padding-left:10px}.total{font-weight:800;color:var(--navy);font-size:17px;text-align:center}.muted{color:var(--muted);font-size:13px}.status{font-weight:700}.open{color:var(--green)}.closed{color:var(--red)}
 
-        .print-btn {
-            grid-column: span 2;
-            padding: 12px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
+.log-table th:first-child, .log-table td:first-child{width:38px;text-align:center}
+.log-table th:last-child, .log-table td:last-child{width:300px;word-break:break-word;font-size:11.5px;color:#2d3748}
 
-        .print-btn:hover {
-            background-color: #218838;
-        }
+.tab.returns-tab{background:#b83232;color:#fff}
+.tab.returns-tab.active{background:#7a1d1d;color:#fff;border:2px solid var(--gold)}
+.returns-panel{background:var(--return-bg);border:2px dashed var(--return-border)}
+.returns-panel h2{color:#b83232;display:flex;align-items:center;gap:8px}
+.returns-panel h2::before{content:"🔄";font-size:18px}
+.returns-header-badge{background:#b83232;color:white;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:bold;margin-left:auto}
 
-        /* تنسيق ورقة الشهادة */
-        .certificate-container {
-            background-color: white;
-            width: 210mm; /* مقاس A4 */
-            min-height: 297mm;
-            /* ترك مساحة علوية وسفلية فارغة إذا أردت الطباعة على ورق الشركة */
-            padding: 40mm 15mm 20mm 15mm; 
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            position: relative;
-            color: #000;
-        }
+.hidden{display:none!important}.notice{padding:11px 13px;background:#fff8e6;border:1px solid #f1d58b;border-radius:8px;color:#72520a;margin:10px 0;font-size:13px}
+footer{text-align:center;color:#64748b;font-size:12px;padding:18px}.signature-card{position:fixed;bottom:14px;left:14px;background:#fff;color:#1a4a6e;border:1.5px solid #1a4a6e;border-radius:7px;padding:7px 11px;box-shadow:0 5px 16px #0002;z-index:10;text-decoration:none;font-size:10px;font-weight:700;animation:float 6s ease-in-out infinite}
+.signature-card .sub{font-size:9px;font-weight:500}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.qty:disabled{background:#f2f4f7;color:#667085}
+.order-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
 
-        /* التاريخ */
-        .date-section {
-            text-align: left; /* محاذاة لليسار */
-            font-size: 16px;
-            margin-bottom: 50px;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-        }
+.autocomplete-wrap{position:relative}
+.suggestions{position:absolute;z-index:30;left:0;right:0;top:100%;background:#fffdf6;border:2px solid var(--gold);border-radius:8px;max-height:280px;overflow:auto;box-shadow:0 8px 24px rgba(26,74,110,0.2)}
+.suggestions button{display:block;width:100%;text-align:left;border-radius:0;background:#fffdf6;color:var(--navy);font-weight:700;padding:14px 18px;border-bottom:1px solid #f2e3b8;font-size:18px!important;}
+.suggestions button:hover{background:#e5f0fb;color:#10314a}
 
-        /* العنوان الرئيسي */
-        .title-section {
-            text-align: center;
-            margin-bottom: 50px;
-        }
 
-        .title-section h2 {
-            font-size: 26px;
-            margin: 0 0 5px 0;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
-        }
+.return-photo-box{margin-top:14px;padding:16px;background:#fff;border:2px solid #d98293;border-radius:12px;box-shadow:0 3px 12px #b8323210}
+.return-photo-box h3{margin:0 0 7px;color:#9f2525;font-size:18px}
+.return-photo-help{margin:0 0 12px;color:#667085;font-size:13px;line-height:1.6}
+.return-photo-actions{display:flex;flex-direction:column;align-items:stretch;gap:9px}
+.return-photo-button{background:#b83232!important;color:#fff!important;min-height:60px;width:100%;font-size:18px;padding:16px 20px;border-radius:10px;box-shadow:0 3px 9px #b8323230}
+.return-photo-button:hover{background:#922626!important}
+.return-photo-state{font-size:13px;color:#667085;font-weight:700;min-height:18px}
+.return-photo-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.return-photo-card{display:flex;flex-direction:column;gap:5px;width:122px;text-decoration:none;color:#334155;font-size:12px;font-weight:700}
+.return-photo-card img{width:118px;height:100px;object-fit:cover;border:2px solid #d98293;border-radius:9px;background:#f8fafc}
+.return-photo-card:hover img{border-color:#b83232;box-shadow:0 3px 10px #b8323230}
+.return-photo-card-wrap{display:flex;flex-direction:column;gap:6px;width:124px}
+.return-photo-delete{width:100%;padding:7px 8px;background:#fff!important;color:#b83232!important;border:1px solid #b83232!important;font-size:12px;border-radius:7px}
+.return-photo-delete:hover{background:#b83232!important;color:#fff!important}
+.master-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:1px solid #e2e8f0}
+.master-row-name{flex:1;min-width:180px;font-weight:700}
+.master-action{padding:7px 11px;font-size:12px}
+.master-edit{background:#256596!important;color:#fff!important}
+@media(max-width:768px){.return-photo-card{width:108px}.return-photo-card img{width:104px;height:92px}.return-photo-actions{align-items:stretch}.return-photo-button{width:100%}}
 
-        .title-section h3 {
-            font-size: 22px;
-            margin: 0;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-        }
-
-        /* جدول البيانات */
-        .details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 50px;
-            font-size: 16px;
-        }
-
-        .details-table td {
-            padding: 10px 5px;
-            vertical-align: top;
-        }
-
-        /* تنسيق الأعمدة الإنجليزية (محاذاة يسار) */
-        .col-eng-label { 
-            text-align: left; 
-            width: 20%; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif;
-            direction: ltr;
-        }
-        .col-eng-colon { 
-            text-align: center; 
-            width: 2%; 
-            font-weight: bold; 
-        }
-        .col-eng-value { 
-            text-align: left; 
-            width: 28%; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            text-transform: uppercase;
-            direction: ltr;
-        }
-
-        /* تنسيق الأعمدة العربية (محاذاة يمين) */
-        .col-ar-label { 
-            text-align: right; 
-            width: 20%; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            direction: rtl;
-        }
-        .col-ar-colon { 
-            text-align: center; 
-            width: 2%; 
-            font-weight: bold; 
-        }
-        .col-ar-value { 
-            text-align: right; 
-            width: 28%; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            text-transform: uppercase;
-            direction: rtl;
-        }
-
-        /* النص الختامي */
-        .footer-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            font-size: 15px;
-            line-height: 1.5;
-            margin-top: 60px;
-        }
-
-        .footer-text .eng-text {
-            width: 48%;
-            text-align: left;
-            font-family: Arial, sans-serif;
-            direction: ltr;
-        }
-
-        .footer-text .ar-text {
-            width: 48%;
-            text-align: right;
-            font-family: Arial, sans-serif;
-            direction: rtl;
-        }
-
-        /* إعدادات الطباعة */
-        @media print {
-            @page {
-                size: A4;
-                margin: 0; 
-            }
-            body {
-                background-color: white;
-                padding: 0;
-                margin: 0;
-                display: block;
-            }
-            .input-panel {
-                display: none; /* إخفاء لوحة الإدخال */
-            }
-            .certificate-container {
-                box-shadow: none;
-                width: 100%;
-                height: 100%;
-                /* يمكنك تعديل الهامش العلوي هنا ليناسب المساحة الفارغة في ورق الشركة */
-                padding: 40mm 20mm 20mm 20mm; 
-            }
-        }
-    </style>
+@media(max-width:768px){
+  header h1{font-size:18px}.panel{padding:12px}.table-scroll{overflow-x:auto}
+  .row{flex-direction:column;align-items:stretch}.field,.field.hospital-field,.field.date-field{width:100%;max-width:none}
+}
+@media print{
+  body{background:white}.no-print,header,.tabs,footer,.signature-card{display:none!important}.wrap{max-width:none;margin:0;padding:0}.panel{box-shadow:none;border:0;padding:0}.print-title{display:block!important}
+  table{font-size:11px;border:2px solid #000!important}th,td{padding:5px;border:1.5px solid #000!important}
+  #orderRows tr:nth-child(odd){background:#d1d5db!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #returnRows tr:nth-child(odd){background:#fca5a5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  td input{border:0;font-size:14px;background:transparent!important}
+}
+.print-title{display:none}
+</style>
 </head>
 <body>
+<header><img src="https://i.postimg.cc/WbJw6TdV/Orig-LOGO-Square.jpg" alt="Company logo"><div><h1>Fondant Choco</h1><p>Daily Hospital  & Returns Management</p></div></header>
+<div class="wrap">
+ <div class="top-nav-row no-print">
+  <div class="tabs">
+   <button class="tab active" data-tab="orders">New Orders</button>
+   <button class="tab" data-tab="summary">Daily Summary</button>
+   <button class="tab" data-tab="history">Order History</button>
+   <button class="tab" data-tab="activity">Activity Log</button>
+   <button class="tab" data-tab="master">Master Data</button>
+   <button class="tab returns-tab" data-tab="returns">Wastage</button>
+  </div>
+  <button class="btn-tomorrow-pdf" id="downloadTomorrowPdfTop">📥Download Tomorrow's Orders PDF Directly</button>
+ </div>
 
-    <!-- لوحة إدخال البيانات -->
-    <div class="input-panel">
-        <h3>أدخل بيانات الموظف هنا</h3>
-        
-        <!-- الحقول الرقمية والتواريخ (مربع واحد) -->
-        <div class="input-group">
-            <label>التاريخ (Date):</label>
-            <input type="text" id="inp-date" value="11/11/2026" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الرقم المدني (Civil ID No):</label>
-            <input type="text" id="inp-civil" value="297091004989" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>رقم الجواز (Passport No):</label>
-            <input type="text" id="inp-passport" value="PA4674439" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>تاريخ التعيين (Joining Date):</label>
-            <input type="text" id="inp-joining" value="14/10/2024" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الراتب (Salary):</label>
-            <input type="text" id="inp-salary" value="120" oninput="updateCert()">
-        </div>
+ <section id="orders" class="section">
+  <div class="panel no-print">
+   <h2>Enter Hospital Order</h2>
+   <div class="row">
+    <div class="field autocomplete-wrap hospital-field"><label>Hospital Name (Type to search)</label><input id="hospitalSearch" class="hospitalSearchInput" autocomplete="off" placeholder="Type hospital name..."><div id="hospitalSuggestions" class="suggestions hidden"></div></div><datalist id="hospitalList"></datalist>
+    <div class="field date-field"><label>Order Date</label><input id="orderDate" type="date" class="date-big"></div>
+    <div class="field" style="flex:0 0 auto"><label>Order Status</label><div id="orderStatus" class="status open">Open for editing</div></div>
+   </div>
+   <div id="lockNotice" class="notice hidden">This order is closed. Editing is no longer allowed.</div>
+  </div>
+  <div class="panel">
+   <div class="print-title"><h2>FONDANT CHOCO — DAILY HOSPITAL ORDERS</h2><p id="printDate"></p></div>
+   <div class="row no-print" style="justify-content:space-between;margin-bottom:10px">
+     <h2 style="margin:0">Order Items</h2>
+     <div class="field" style="max-width:280px;margin:0;"><input id="itemSearchInput" type="text" placeholder="🔍 Search item..." style="padding:7px 10px;font-size:14px"></div>
+     <div class="muted" id="saveState">Not saved</div>
+   </div>
+   <div class="order-tools no-print"><button id="saveOrderTop">Save Order</button><button class="secondary" id="loadOrderTop">Load Saved Order</button><button class="secondary" id="clearFormTop">Clear Form</button></div>
+   <div class="table-scroll"><table><thead><tr><th style="width:65%">Item</th><th style="width:35%;text-align:center">Quantity</th></tr></thead><tbody id="orderRows"></tbody></table></div>
+   <div class="row no-print" style="margin-top:14px"><button id="saveOrder">Save Order</button><button class="secondary" id="loadOrder">Load Saved Order</button><button class="secondary" id="clearForm">Clear Form</button></div>
+  </div>
+ </section>
 
-        <!-- الحقول النصية (مربعين منفصلين عربي وإنجليزي) -->
-        <div class="input-group">
-            <label>الاسم (English Name):</label>
-            <input type="text" id="inp-name-en" value="MD LURUL HUSEN" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الاسم (الاسم بالعربي):</label>
-            <input type="text" id="inp-name-ar" value="ام دي لورول حسين" oninput="updateCert()">
-        </div>
-
-        <div class="input-group">
-            <label>الجنسية (English Nationality):</label>
-            <input type="text" id="inp-nat-en" value="NIPAL" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الجنسية (الجنسية بالعربي):</label>
-            <input type="text" id="inp-nat-ar" value="النيبال" oninput="updateCert()">
-        </div>
-
-        <div class="input-group">
-            <label>الوظيفة (English Job Title):</label>
-            <input type="text" id="inp-job-en" value="Pastry Baker" oninput="updateCert()">
-        </div>
-        <div class="input-group">
-            <label>الوظيفة (الوظيفة بالعربي):</label>
-            <input type="text" id="inp-job-ar" value="صانع كعك" oninput="updateCert()">
-        </div>
-
-        <button class="print-btn" onclick="window.print()">طباعة / حفظ PDF</button>
+ <section id="returns" class="section hidden">
+  <div class="panel returns-panel no-print">
+   <h2>Hospital Returns Recording <span class="returns-header-badge">RETURNS MODE</span></h2>
+   <div class="row">
+    <div class="field autocomplete-wrap hospital-field"><label>Hospital Name (Type to search)</label><input id="returnHospitalSearch" class="hospitalSearchInput" autocomplete="off" placeholder="Type hospital name..."><div id="returnHospitalSuggestions" class="suggestions hidden"></div></div>
+    <div class="field date-field"><label>Return Date</label><input id="returnDate" type="date" class="date-big"></div>
+   </div>
+   <div class="return-photo-box no-print">
+    <h3>Return Photos</h3>
+    <p class="return-photo-help">Select the hospital and date above, then press the large button to choose up to 2 photos. Photos of 1 MB or less are saved without changes. Only larger photos are reduced automatically. Photos are kept in the existing Firestore database until you delete them manually.</p>
+    <div class="return-photo-actions">
+     <button type="button" class="return-photo-button" id="chooseReturnPhotos">📷 CHOOSE &amp; UPLOAD RETURN PHOTOS</button>
+     <input id="returnPhotoInput" type="file" accept="image/*" multiple hidden>
+     <span id="returnPhotoUploadState" class="return-photo-state">Select a hospital and date first</span>
     </div>
+    <div id="returnPhotoGrid" class="return-photo-grid"><span class="muted">Choose a hospital to view its saved photos.</span></div>
+    <p class="return-photo-help">To remove an old photo, press the Delete button under that photo.</p>
+   </div>
+  </div>
+  <div class="panel returns-panel">
+   <div class="row no-print" style="justify-content:space-between;margin-bottom:10px">
+     <h2 style="margin:0;color:#b83232">Returned Items List</h2>
+     <div class="field" style="max-width:280px;margin:0;"><input id="returnItemSearchInput" type="text" placeholder="🔍 Search item..." style="padding:7px 10px;font-size:14px"></div>
+     <div class="muted" id="returnSaveState">Not saved</div>
+   </div>
+   <div class="order-tools no-print"><button style="background:#b83232" id="saveReturnTop">Save Return Document</button><button class="secondary" id="loadReturnTop">Load Return</button><button class="secondary" id="clearReturnFormTop">Clear</button></div>
+   <div class="table-scroll"><table><thead><tr><th style="width:65%">Item Name</th><th style="width:35%;text-align:center">Returned Qty</th></tr></thead><tbody id="returnRows"></tbody></table></div>
+   <div class="row no-print" style="margin-top:14px"><button style="background:#b83232" id="saveReturn">Save Return Document</button><button class="secondary" id="loadReturn">Load Return</button><button class="secondary" id="clearReturnForm">Clear</button></div>
+  </div>
+ </section>
 
-    <!-- الشهادة (تبدأ من التاريخ) -->
-    <div class="certificate-container">
-        
-        <!-- التاريخ -->
-        <div class="date-section">
-            Date : <span id="out-date">11/11/2026</span>
-        </div>
-
-        <!-- عنوان الشهادة -->
-        <div class="title-section">
-            <h2>شهادة راتب</h2>
-            <h3>Salary Certificate</h3>
-        </div>
-
-        <!-- تفاصيل الموظف -->
-        <table class="details-table">
-            <tr>
-                <td class="col-eng-label">NAYEF FOOD Company Certifies that..</td>
-                <td class="col-eng-colon"></td>
-                <td class="col-eng-value"></td>
-                <td class="col-ar-value">: تشهد شركة نايف للأغذية بأنه</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label"></td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Mr.</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-name-en">MD LURUL HUSEN</span></td>
-                <td class="col-ar-value"><span id="out-name-ar">ام دي لورول حسين</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">السيد /</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Nationality</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-nat-en">NIPAL</span></td>
-                <td class="col-ar-value"><span id="out-nat-ar">النيبال</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">الجنسية</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Civil ID No</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-civil">297091004989</span></td>
-                <td class="col-ar-value"><span id="out-civil-ar">297091004989</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">بطاقة مدنية</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Passport No.</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-passport">PA4674439</span></td>
-                <td class="col-ar-value"><span id="out-passport-ar">PA4674439</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">رقم الجواز</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Job Title</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-job-en">Pastry Baker</span></td>
-                <td class="col-ar-value"><span id="out-job-ar">صانع كعك</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">الوظيفة</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Joining Date</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value"><span id="out-joining">14/10/2024</span></td>
-                <td class="col-ar-value"><span id="out-joining-ar">14/10/2024</span> :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">تاريخ التعيين</td>
-            </tr>
-            <tr>
-                <td class="col-eng-label">Salary</td>
-                <td class="col-eng-colon">:</td>
-                <td class="col-eng-value">KD <span id="out-salary">120</span>/-</td>
-                <td class="col-ar-value">دينار كويتي <span id="out-salary-ar">120</span>/- :</td>
-                <td class="col-ar-colon"></td>
-                <td class="col-ar-label">الراتب</td>
-            </tr>
-        </table>
-
-        <!-- النص الختامي -->
-        <div class="footer-text">
-            <div class="eng-text">
-                <strong>He is still working and given this certificate upon his request without any liability towards the company.</strong>
-            </div>
-            <div class="ar-text">
-                <strong>إنه لا زال على رأس عمله، وقد أعطيت له هذه الشهادة بناءً على طلبه دون أدنى مسؤولية على الشركة تجاه الغير.</strong>
-            </div>
-        </div>
-
+ <section id="summary" class="section hidden">
+  <div class="panel no-print">
+    <h2>Daily Consolidated Summary</h2>
+    <div class="row">
+      <div class="field"><label>Select Date</label><input id="summaryDate" type="date"></div>
+      <button id="refreshSummary">Load Orders Summary</button>
+      <button id="exportPdf">Download Orders PDF</button>
+      <button style="background:#b83232" id="previewReturns">Review Returns 👁️</button>
+      <button style="background:#b83232" id="exportReturnsPdf">Download Returns PDF 📄</button>
     </div>
+  </div>
+  <div class="panel"><div class="print-title"><h2>FONDANT CHOCO — CONSOLIDATED REPORT</h2><p id="summaryPrintDate"></p></div><div id="summaryContent" class="table-scroll"><p class="muted">Choose a date to display summary data.</p></div></div>
+ </section>
 
-    <!-- كود JavaScript لتحديث البيانات فورياً -->
-    <script>
-        function updateCert() {
-            // جلب القيم الرقمية والتواريخ
-            let date = document.getElementById('inp-date').value;
-            let civil = document.getElementById('inp-civil').value;
-            let passport = document.getElementById('inp-passport').value;
-            let joining = document.getElementById('inp-joining').value;
-            let salary = document.getElementById('inp-salary').value;
+ <section id="history" class="section hidden">
+  <div class="panel">
+    <h2>Recent Orders History</h2>
+    <div class="row no-print">
+      <div class="field"><label>From Date</label><input id="historyFromDate" type="date"></div>
+      <div class="field"><label>To Date</label><input id="historyDate" type="date"></div>
+      <div class="field"><label>Hospital</label><input id="historyHospital" placeholder="All hospitals"></div>
+      <button id="searchHistory">Search</button>
+    </div>
+    <div class="row no-print" style="margin:12px 0">
+      <button class="danger" id="deleteOrders">Delete Selected Orders Records</button>
+      <span class="muted">Password required for order deletion.</span>
+    </div>
+    <div id="historyResults" class="table-scroll"></div>
+  </div>
+ </section>
 
-            // جلب القيم النصية (العربية والإنجليزية)
-            let nameEn = document.getElementById('inp-name-en').value;
-            let nameAr = document.getElementById('inp-name-ar').value;
-            let natEn = document.getElementById('inp-nat-en').value;
-            let natAr = document.getElementById('inp-nat-ar').value;
-            let jobEn = document.getElementById('inp-job-en').value;
-            let jobAr = document.getElementById('inp-job-ar').value;
+ <section id="activity" class="section hidden"><div class="panel"><h2>System Activity Log</h2><div class="row no-print"><div class="field"><label>From Date</label><input id="logFrom" type="date"></div><div class="field"><label>To Date</label><input id="logTo" type="date"></div><div class="field"><label>Hospital</label><input id="logHospital" list="hospitalList" placeholder="All hospitals"></div><button id="searchLogs">Refresh Log</button></div><div class="row no-print" style="margin:12px 0"><button class="danger" id="deleteLogs">Delete Selected Log Records</button><span class="muted">Deletion password required.</span></div><div id="logResults" class="table-scroll"></div></div></section>
 
-            // تحديث النصوص في الشهادة (الإنجليزية)
-            document.getElementById('out-date').innerText = date;
-            document.getElementById('out-name-en').innerText = nameEn;
-            document.getElementById('out-nat-en').innerText = natEn;
-            document.getElementById('out-civil').innerText = civil;
-            document.getElementById('out-passport').innerText = passport;
-            document.getElementById('out-job-en').innerText = jobEn;
-            document.getElementById('out-joining').innerText = joining;
-            document.getElementById('out-salary').innerText = salary;
+ <section id="master" class="section hidden">
+  <div class="panel"><h2>Hospitals Management</h2><div class="row no-print"><div class="field"><label>New Hospital Name</label><input id="newHospital" placeholder="Hospital name"></div><button id="addHospital">Add Hospital</button></div><div id="hospitalManage"></div></div>
+  <div class="panel"><h2>Items Management</h2><div class="row no-print"><div class="field"><label>New Item Name</label><input id="newItem" placeholder="Item name"></div><button id="addItem">Add Item</button></div><div id="itemManage"></div></div>
+ </section>
+ <footer>Fondant Choco · Daily Hospital Orders & Returns</footer>
+</div>
 
-            // تحديث النصوص في الشهادة (العربية)
-            document.getElementById('out-name-ar').innerText = nameAr;
-            document.getElementById('out-nat-ar').innerText = natAr;
-            document.getElementById('out-civil-ar').innerText = civil;
-            document.getElementById('out-passport-ar').innerText = passport;
-            document.getElementById('out-job-ar').innerText = jobAr;
-            document.getElementById('out-joining-ar').innerText = joining;
-            document.getElementById('out-salary-ar').innerText = salary;
-        }
+<div id="wastageModal" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;">
+  <div style="background:white;padding:24px;border-radius:12px;max-width:400px;width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <h3 style="color:#b83232;margin-top:0;">Important Notice</h3>
+    <p style="font-size:16px;color:#182230;margin:16px 0;">This screen is dedicated to recording wastes and returns only.</p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;">
+      <button id="wastageAgree" style="background:#b83232;color:white;padding:10px 20px;border-radius:8px;border:0;font-weight:bold;cursor:pointer;">Confirm</button>
+      <button id="wastageReject" class="secondary" style="padding:10px 20px;border-radius:8px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
 
-        // تشغيل الدالة عند فتح الصفحة لتعبئة البيانات الأولية
-        window.onload = updateCert;
-    </script>
+<div id="redirectToast" class="hidden" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a4a6e;color:white;padding:12px 24px;border-radius:8px;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:1100;font-size:14px;">
+  You have been redirected to the New Order page.
+</div>
+
+<a class="signature-card" href="https://yasser-q8.github.io/myprofile/#" target="_blank" rel="noopener"><div>Yasser Elkhateeb</div><div class="sub">Program Developer · 67011143</div></a>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,doc,getDoc,getDocs,setDoc,addDoc,deleteDoc,query,where,serverTimestamp,arrayUnion,writeBatch,Bytes} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyAIKt2pRi-fh1KljVKZ83aJmPOCFsaj2pk",
+ authDomain:"dailyrequest-4865e.firebaseapp.com",
+ projectId:"dailyrequest-4865e",
+ messagingSenderId:"176708576834",
+ appId:"1:176708576834:web:fb73a5002b95f4c4aaafdb"
+};
+
+const DEFAULT_HOSPITALS=["Al-Adan Hospital","Al-Jahra Hospital","Al-Razi Hospital","Hya Elhabib Hospital","Hisham Al-Sager Hospital","Hamed Al-Eissa Hospital","NBK Hospital","Physiology Hospital","Higher Institute of Energy - HIE","College of Health Sciences - Boys","College of Technological Studies - Girls","New Al-Razi Hospital","Addiction Treatment Center - ATC","Ministry of Health","Al Omooma Hospital"];
+const DEFAULT_ITEMS=["Sweet Graham","Halloum Croll Sandwich","Turkey Croll Sandwich","Chicken Croll Sandwich","Mix Fried Sandwich","Feta Sandwich","Halloum Brown Sandwich","Turkish Brown Sandwich With Sesame","Brown Chicken Sandwich With Sesame","Halloum Sandwich","Turkey Sandwich","Chicken Sandwich","Chicken Saj","Halloum Saj","Grape Leaves Lemon","Grape Leaves Roman","Mohalabiya","Brownies Cups","Saffron Cake","Tiramisu Cheesecake","Chocolate Box","Strawberry Cheesecake","Chocolate Cheesecake","Nutella Kinder","Dulcie Kinder","Crystal Baby","Regular Crystal","Wood Baby"];
+
+const $=id=>document.getElementById(id);
+let firestore,hospitals=[...DEFAULT_HOSPITALS],items=[...DEFAULT_ITEMS];
+
+const todayLocal=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const addDays=(s,n)=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const tomorrow=()=>addDays(todayLocal(),1);
+const isEditable=date=>date>=todayLocal()&&date<=addDays(todayLocal(),1);
+const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>Number(n||0).toLocaleString("en-US",{maximumFractionDigits:3});
+function status(msg, el="saveState"){$($(el)?el:"saveState").textContent=msg}
+
+function selectedHospital(isReturn=false){return $(isReturn?"returnHospitalSearch":"hospitalSearch").value.trim()}
+function docKey(date,hospital){return date+"__"+hospital}
+function setOptions(){ $("hospitalList").innerHTML=hospitals.map(x=>`<option value="${safe(x)}">`).join(""); }
+
+function isAllowedHospital(hName){
+  if(!hName) return false;
+  return hospitals.some(h => h.toLowerCase() === hName.toLowerCase());
+}
+
+function enforceValidHospital(isReturn=false){
+  const inputEl = $(isReturn ? "returnHospitalSearch" : "hospitalSearch");
+  const val = inputEl.value.trim();
+  if (val !== "" && !isAllowedHospital(val)) {
+    alert(`⚠️ Error: Hospital name "${val}" is not allowed!\nYou must choose a valid hospital from the search list.`);
+    inputEl.value = "";
+    setTimeout(() => inputEl.focus(), 50);
+    return false;
+  }
+  return true;
+}
+
+function showSuggestions(isReturn=false){
+ const inputId = isReturn?"returnHospitalSearch":"hospitalSearch";
+ const boxId = isReturn?"returnHospitalSuggestions":"hospitalSuggestions";
+ const q=$(inputId).value.trim().toLowerCase(),box=$(boxId);
+ const matches=hospitals.filter(h=>!q||h.toLowerCase().includes(q));
+ box.innerHTML=matches.map(h=>`<button type="button" data-hospital="${safe(h)}">${safe(h)}</button>`).join("");
+ box.classList.toggle("hidden",!matches.length);
+ box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+   $(inputId).value=b.dataset.hospital;
+   box.classList.add("hidden");
+   if(isReturn) loadReturn().catch(e=>alert(e.message));
+   else loadOrder().catch(e=>alert(e.message));
+ });
+}
+
+function renderRows(values={}, containerId="orderRows", inputSearchId="itemSearchInput"){
+ const query = ($(inputSearchId)?$(inputSearchId).value:"").trim().toLowerCase();
+ const targetList = (items && items.length > 0) ? items : DEFAULT_ITEMS;
+ $(containerId).innerHTML=targetList.map((item)=>{
+  const isMatch = !query || item.toLowerCase().includes(query);
+  const val = values[item] !== undefined && values[item] !== null ? values[item] : "";
+  return `<tr class="${isMatch?'':'hidden'}"><td class="item-name">${safe(item)}</td><td><input class="qty" data-item="${safe(item)}" type="text" inputmode="decimal" autocomplete="off" value="${val}" placeholder=""></td></tr>`;
+ }).join("");
+ document.querySelectorAll(`#${containerId} .qty`).forEach((el,i)=>{
+  el.addEventListener("keydown",e=>{
+   if(["ArrowDown","ArrowUp","Enter"].includes(e.key)){
+    e.preventDefault();const a=[...document.querySelectorAll(`#${containerId} .qty:not(.hidden)`)];const next=e.key==="ArrowUp"?i-1:i+1;
+    if(a[next]){a[next].focus();a[next].select();}
+   }
+  });
+  el.addEventListener("input",()=>{el.value=el.value.replace(/[^0-9.]/g,"").replace(/(\..*)\./g,"$1")});
+ });
+}
+
+async function logAction(action,details="",hospital=""){
+ if(!firestore)return;
+ try{
+  const deviceInfo = navigator.userAgent || "Unknown Device";
+  await addDoc(collection(firestore,"activityLogs"),{
+    date:todayLocal(),
+    timestamp:serverTimestamp(),
+    time:new Date().toISOString(),
+    hospital:hospital||selectedHospital()||"System",
+    action,
+    details,
+    device:deviceInfo
+  });
+  if(!$("activity").classList.contains("hidden")){ searchLogs().catch(console.error); }
+ }catch(e){console.error("Activity log error",e)}
+}
+
+async function getMaster(){
+ try {
+  const [h,i]=await Promise.all([getDoc(doc(firestore,"settings","hospitals")),getDoc(doc(firestore,"settings","items"))]);
+  if(h.exists()&&Array.isArray(h.data().values))hospitals=h.data().values;
+  if(i.exists()&&Array.isArray(i.data().values))items=i.data().values;
+ } catch(e) {
+  console.error("Master load error, using defaults", e);
+ }
+ setOptions();renderRows();renderRows({}, "returnRows", "returnItemSearchInput");renderMaster();
+}
+
+async function saveMaster(type,values){ await setDoc(doc(firestore,"settings",type),{values,updatedAt:serverTimestamp()}); }
+
+async function loadOrder(){
+ if(!enforceValidHospital(false)) return;
+ const hospital=selectedHospital(),date=$("orderDate").value;
+ if(!hospital){alert("Please select a hospital.");return}
+ const snap=await getDoc(doc(firestore,"orders",docKey(date,hospital)));
+ const values=snap.exists()?snap.data().quantities||{}:{};
+ renderRows(values);updateLock();status(snap.exists()?"Saved order loaded":"No saved order found");
+ $("orderStatus").textContent=isEditable(date)?"Open for editing":"Closed";
+ $("orderStatus").className="status "+(isEditable(date)?"open":"closed");
+ $("lockNotice").classList.toggle("hidden",isEditable(date));
+}
+
+async function saveOrder(){
+ if(!enforceValidHospital(false)) return;
+ const hospital=selectedHospital(),date=$("orderDate").value;
+ if(!hospital){alert("Please select a hospital.");return}
+ if(!isEditable(date)){alert("This order is closed for editing.");return}
+ 
+ const quantities={};
+ let hasAtLeastOneItem = false;
+
+ document.querySelectorAll("#orderRows .qty").forEach(x=>{
+   const v=x.value.trim();
+   if(v!==""){
+     const num = Number(v);
+     quantities[x.dataset.item] = num;
+     if(num > 0) {
+       hasAtLeastOneItem = true;
+     }
+   }
+ });
+ 
+ if(!hasAtLeastOneItem){
+   alert("⚠️ لا يمكن حفظ الطلبية بالكامل بقيم صفر أو فارغة!\nيجب إدخال كمية أكبر من صفر لصنف واحد على الأقل في الفاتورة.");
+   return;
+ }
+
+ await setDoc(doc(firestore,"orders",docKey(date,hospital)),{hospital,date,quantities,updatedAt:serverTimestamp()},{merge:true});
+ await logAction("Save Order",`Saved ${Object.keys(quantities).length} items`,hospital);
+ 
+ alert("Hospitals Orders Says:\nOrder Saved Successfully");
+ 
+ $("hospitalSearch").value = ""; if($("itemSearchInput")) $("itemSearchInput").value = "";
+ renderRows(); status("Form cleared");
+}
+
+async function loadReturn(){
+ if(!enforceValidHospital(true)) return;
+ const hospital=selectedHospital(true),date=$("returnDate").value;
+ if(!hospital){
+   $("returnPhotoGrid").innerHTML='<span class="muted">Choose a hospital to view its saved photos.</span>';
+   return;
+ }
+ const snap=await getDoc(doc(firestore,"returns",docKey(date,hospital)));
+ const values=snap.exists()?snap.data().quantities||{}:{};
+ renderRows(values, "returnRows", "returnItemSearchInput");
+ status(snap.exists()?"Saved return loaded":"No return document found", "returnSaveState");
+ await loadReturnImages();
+}
+
+async function saveReturn(){
+ if(!enforceValidHospital(true)) return;
+ const hospital=selectedHospital(true),date=$("returnDate").value;
+ if(!hospital){alert("Please select a hospital.");return}
+ 
+ const quantities={};
+ let hasAtLeastOneItem = false;
+
+ document.querySelectorAll("#returnRows .qty").forEach(x=>{
+   const v=x.value.trim();
+   if(v!==""){
+     const num = Number(v);
+     quantities[x.dataset.item] = num;
+     if(num > 0) {
+       hasAtLeastOneItem = true;
+     }
+   }
+ });
+ 
+ if(!hasAtLeastOneItem){
+   alert("⚠️ لا يمكن حفظ سند الراجع بقيم صفر أو فارغة بالكامل!\nيجب إدخال كمية ارجاع لصنف واحد على الأقل.");
+   return;
+ }
+
+ await setDoc(doc(firestore,"returns",docKey(date,hospital)),{hospital,date,quantities,updatedAt:serverTimestamp()},{merge:true});
+ await logAction("Save Return",`Recorded returns for ${Object.keys(quantities).length} items`,hospital);
+ alert("Return document saved successfully.");
+ $("returnHospitalSearch").value = ""; if($("returnItemSearchInput")) $("returnItemSearchInput").value = "";
+ renderRows({}, "returnRows", "returnItemSearchInput"); status("Return form cleared", "returnSaveState");
+ await loadReturnImages();
+}
+
+
+const MAX_RETURN_PHOTOS=2;
+const MAX_SOURCE_PHOTO_BYTES=20*1024*1024;
+const MAX_RETURN_PHOTO_BYTES=1024*1024;
+// Each binary chunk is kept comfortably below Firestore's 1 MiB document limit.
+const FIRESTORE_PHOTO_CHUNK_BYTES=700*1024;
+let returnPhotoObjectUrls=[];
+let returnPhotoEntries=[];
+
+function clearReturnPhotoObjectUrls(){
+ returnPhotoObjectUrls.forEach(url=>{try{URL.revokeObjectURL(url)}catch(_){}});
+ returnPhotoObjectUrls=[];
+ returnPhotoEntries=[];
+}
+
+async function prepareReturnPhoto(file){
+ if(!file || !String(file.type||"").startsWith("image/")) throw new Error(`The selected file is not an image: ${file?.name||""}`);
+ // Keep images at or below 1 MB exactly as selected.
+ if(file.size<=MAX_RETURN_PHOTO_BYTES) return file;
+ if(file.size>MAX_SOURCE_PHOTO_BYTES) throw new Error(`Photo is too large: ${file.name}. Please choose a photo smaller than 20 MB.`);
+ if(typeof createImageBitmap!=="function") throw new Error("This browser cannot resize the selected large photo. Please choose a JPG or PNG image.");
+
+ let bitmap;
+ try{
+  bitmap=await createImageBitmap(file);
+  const baseName=file.name.replace(/\.[^.]+$/,"")||"return-photo";
+  const qualities=[0.92,0.88,0.84,0.80,0.76,0.72,0.68,0.64,0.60,0.56,0.52,0.48];
+  let scale=Math.min(1,2400/Math.max(bitmap.width,bitmap.height));
+  let bestBlob=null;
+  for(let sizeTry=0;sizeTry<10;sizeTry++){
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+   canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+   const ctx=canvas.getContext("2d");
+   if(!ctx) throw new Error("Cannot prepare this photo");
+   ctx.fillStyle="#ffffff";
+   ctx.fillRect(0,0,canvas.width,canvas.height);
+   ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+   for(const quality of qualities){
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",quality));
+    if(!blob) continue;
+    if(!bestBlob || blob.size<bestBlob.size) bestBlob=blob;
+    if(blob.size<=MAX_RETURN_PHOTO_BYTES){
+     bitmap.close?.();
+     return new File([blob],`${baseName}.jpg`,{type:"image/jpeg",lastModified:Date.now()});
+    }
+   }
+   scale*=0.78;
+  }
+  bitmap.close?.();
+  if(bestBlob && bestBlob.size<=MAX_RETURN_PHOTO_BYTES){
+   return new File([bestBlob],`${baseName}.jpg`,{type:"image/jpeg",lastModified:Date.now()});
+  }
+  throw new Error("The photo could not be reduced to 1 MB. Please choose a smaller photo.");
+ }catch(err){
+  bitmap?.close?.();
+  if(String(err?.message||"").includes("1 MB")) throw err;
+  throw new Error(`Could not reduce the photo larger than 1 MB. Please choose a JPG or PNG image. (${file.name})`);
+ }
+}
+
+async function savePhotoInFirestore(file,originalName,hospital,date){
+ const photoRef=doc(collection(firestore,"returnPhotos"));
+ const photoId=photoRef.id;
+ const bytes=new Uint8Array(await file.arrayBuffer());
+ const chunkRefs=[];
+ try{
+  let index=0;
+  for(let offset=0;offset<bytes.length;offset+=FIRESTORE_PHOTO_CHUNK_BYTES){
+   const part=bytes.slice(offset,Math.min(offset+FIRESTORE_PHOTO_CHUNK_BYTES,bytes.length));
+   const chunkRef=doc(firestore,"returnPhotos",photoId,"chunks",String(index).padStart(4,"0"));
+   await setDoc(chunkRef,{index,bytes:Bytes.fromUint8Array(part)});
+   chunkRefs.push(chunkRef);
+   index++;
+  }
+  const metadata={
+   id:photoId,
+   hospital,
+   date,
+   name:originalName||file.name||"Return photo",
+   contentType:file.type||"image/jpeg",
+   size:bytes.length,
+   chunkCount:chunkRefs.length,
+   uploadedAt:Date.now(),
+   storageType:"firestore"
+  };
+  await setDoc(photoRef,metadata);
+  const returnRef=doc(firestore,"returns",docKey(date,hospital));
+  await setDoc(returnRef,{hospital,date,images:arrayUnion(metadata),updatedAt:serverTimestamp()},{merge:true});
+  return metadata;
+ }catch(err){
+  for(const ref of chunkRefs){try{await deleteDoc(ref)}catch(_){}}
+  try{await deleteDoc(photoRef)}catch(_){}
+  throw err;
+ }
+}
+
+async function loadPhotoBlobFromFirestore(photoMeta){
+ const chunksSnap=await getDocs(collection(firestore,"returnPhotos",photoMeta.id,"chunks"));
+ if(chunksSnap.empty) throw new Error("Photo data not found");
+ const chunks=chunksSnap.docs.map(d=>d.data()).sort((a,b)=>Number(a.index)-Number(b.index));
+ const arrays=chunks.map(x=>{
+  if(!x.bytes || typeof x.bytes.toUint8Array!=="function") throw new Error("Photo data is incomplete");
+  return x.bytes.toUint8Array();
+ });
+ const total=arrays.reduce((sum,x)=>sum+x.length,0);
+ const merged=new Uint8Array(total);
+ let position=0;
+ arrays.forEach(part=>{merged.set(part,position);position+=part.length;});
+ return new Blob([merged],{type:photoMeta.contentType||"image/jpeg"});
+}
+
+async function loadReturnImages(){
+ const grid=$("returnPhotoGrid");
+ if(!grid) return;
+ clearReturnPhotoObjectUrls();
+ const hospital=selectedHospital(true),date=$("returnDate").value;
+ if(!hospital || !date){
+  $("returnPhotoUploadState").textContent="Select a hospital and date first";
+  grid.innerHTML='<span class="muted">Choose a hospital and date to view saved photos.</span>';
+  return;
+ }
+ try{
+  const snap=await getDoc(doc(firestore,"returns",docKey(date,hospital)));
+  const images=snap.exists()&&Array.isArray(snap.data().images)?snap.data().images:[];
+  if(!images.length){
+   $("returnPhotoUploadState").textContent="No photos saved yet (0 of 2)";
+   grid.innerHTML='<span class="muted">No photos saved for this hospital and date.</span>';
+   return;
+  }
+  $("returnPhotoUploadState").textContent=`${images.length} of 2 photos saved`;
+  const cards=[];
+  for(let index=0;index<images.length;index++){
+   const img=images[index];
+   let url="";
+   if(img.id && img.storageType==="firestore"){
+    const blob=await loadPhotoBlobFromFirestore(img);
+    url=URL.createObjectURL(blob);
+    returnPhotoObjectUrls.push(url);
+   }else if(img.url){
+    // Compatibility with any older image links already saved in a returns record.
+    url=img.url;
+   }else{
+    continue;
+   }
+   returnPhotoEntries.push({meta:img,indexInReturn: index});
+   const displayIndex=returnPhotoEntries.length-1;
+   cards.push(`<div class="return-photo-card-wrap"><a class="return-photo-card" href="${safe(url)}" target="_blank" rel="noopener"><img src="${safe(url)}" alt="Return photo ${index+1}" loading="lazy"><span>${safe(img.name||`Photo ${index+1}`)} · Open full size</span></a><button type="button" class="return-photo-delete" data-delete-return-photo="${displayIndex}">Delete photo</button></div>`);
+  }
+  grid.innerHTML=cards.length?cards.join(""):'<span class="muted">No readable photos found.</span>';
+  grid.querySelectorAll("[data-delete-return-photo]").forEach(button=>{
+   button.onclick=()=>deleteReturnPhoto(Number(button.dataset.deleteReturnPhoto)).catch(err=>alert("Could not delete photo: "+err.message));
+  });
+ }catch(err){
+  console.error("Return photo load error",err);
+  grid.innerHTML='<span class="muted">Could not load photos. Please check the internet connection and Firestore permissions.</span>';
+  $("returnPhotoUploadState").textContent="Could not load photos";
+ }
+}
+
+async function deleteReturnPhoto(displayIndex){
+ const entry=returnPhotoEntries[displayIndex];
+ if(!entry)return;
+ const hospital=selectedHospital(true),date=$("returnDate").value;
+ if(!hospital||!date)return;
+ if(!confirm(`Delete this photo for ${hospital} on ${date}?`))return;
+ const returnRef=doc(firestore,"returns",docKey(date,hospital));
+ const returnSnap=await getDoc(returnRef);
+ if(!returnSnap.exists())return;
+ const images=Array.isArray(returnSnap.data().images)?returnSnap.data().images:[];
+ const imageToDelete=images[entry.indexInReturn];
+ if(!imageToDelete)return;
+ await setDoc(returnRef,{images:images.filter((_,index)=>index!==entry.indexInReturn),updatedAt:serverTimestamp()},{merge:true});
+ if(imageToDelete.id){
+  const chunksSnap=await getDocs(collection(firestore,"returnPhotos",imageToDelete.id,"chunks"));
+  for(const chunk of chunksSnap.docs) await deleteDoc(chunk.ref);
+  await deleteDoc(doc(firestore,"returnPhotos",imageToDelete.id));
+ }
+ await logAction("Delete Return Photo",`Deleted return photo: ${imageToDelete.name||imageToDelete.id||"Photo"}`,hospital);
+ await loadReturnImages();
+}
+
+async function uploadReturnPhotos(fileList){
+ if(!enforceValidHospital(true)) return;
+ const hospital=selectedHospital(true),date=$("returnDate").value;
+ const files=Array.from(fileList||[]);
+ if(!hospital){alert("Please select a hospital first.");return;}
+ if(!date){alert("Please select the return date first.");return;}
+ if(!files.length)return;
+ const returnRef=doc(firestore,"returns",docKey(date,hospital));
+ const currentSnap=await getDoc(returnRef);
+ const currentImages=currentSnap.exists()&&Array.isArray(currentSnap.data().images)?currentSnap.data().images:[];
+ if(currentImages.length+files.length>MAX_RETURN_PHOTOS){
+  alert(`You can save up to ${MAX_RETURN_PHOTOS} photos for this hospital on this date. There are already ${currentImages.length} photo(s).`);
+  $("returnPhotoInput").value="";
+  return;
+ }
+ if(files.length>MAX_RETURN_PHOTOS){alert("Please select no more than 2 photos at a time.");$("returnPhotoInput").value="";return;}
+ const button=$("chooseReturnPhotos");
+ button.disabled=true;
+ const uploaded=[];
+ try{
+  for(let i=0;i<files.length;i++){
+   $("returnPhotoUploadState").textContent=`Preparing photo ${i+1} of ${files.length}...`;
+   const prepared=await prepareReturnPhoto(files[i]);
+   $("returnPhotoUploadState").textContent=`Saving photo ${i+1} of ${files.length}...`;
+   const metadata=await savePhotoInFirestore(prepared,files[i].name,hospital,date);
+   uploaded.push(metadata);
+  }
+  await logAction("Upload Return Photos",`Saved ${uploaded.length} return photo(s) in Firestore`,hospital);
+  $("returnPhotoUploadState").textContent=`${currentImages.length+uploaded.length} of 2 photos saved`;
+  await loadReturnImages();
+  alert("Return photo(s) saved successfully.");
+ }catch(err){
+  console.error("Return photo save error",err);
+  $("returnPhotoUploadState").textContent="Save failed";
+  alert("Could not save the photo(s) in Firestore. Please check your Firestore security rules and internet connection.\n\n"+(err?.message||err));
+ }finally{
+  button.disabled=false;
+  $("returnPhotoInput").value="";
+ }
+}
+
+function updateLock(){
+ const date=$("orderDate").value,open=isEditable(date);
+ $("orderStatus").textContent=open?"Open for editing":"Closed";
+ $("orderStatus").className="status "+(open?"open":"closed");
+ $("lockNotice").classList.toggle("hidden",open);
+ $("saveOrder").disabled=!open;
+ document.querySelectorAll("#orderRows .qty").forEach(x=>x.disabled=!open);
+}
+
+async function loadSummary(collectionName="orders", targetContainerId="summaryContent", titleText="Orders Summary", customDate=null){
+ const date = customDate || $("summaryDate").value;
+ if(!date)return;
+ $("summaryDate").value = date;
+ const snap=await getDocs(query(collection(firestore,collectionName),where("date","==",date)));
+ const data=snap.docs.map(d=>d.data()),allHosp=[...hospitals];
+
+ const activeHospitals = collectionName==="returns" ? allHosp.filter(h => data.some(d => d.hospital === h && Object.values(d.quantities||{}).some(v=>Number(v)>0))) : allHosp;
+ const activeItems = items;
+
+ if(collectionName==="returns" && (!activeHospitals.length || !activeItems.length)){
+   $(targetContainerId).innerHTML=`<p class="muted" style="color:#b83232;font-weight:bold;">No returns recorded for ${date}.</p>`;
+   return;
+ }
+
+ let html=`<h3 style="color:${collectionName==='returns'?'#b83232':'var(--navy)'}">${titleText} (${date})</h3><table><thead><tr><th>Item</th>${activeHospitals.map(h=>`<th>${safe(h)}</th>`).join("")}<th>Total</th></tr></thead><tbody>`;
+ activeItems.forEach(item=>{
+  let total=0; html+=`<tr><td class="item-name">${safe(item)}</td>`;
+  activeHospitals.forEach(h=>{
+   const o=data.find(x=>x.hospital===h); const v=Number(o?.quantities?.[item]||0);
+   total+=v; html+=`<td class="total">${v?fmt(v):""}</td>`;
+  });
+  html+=`<td class="total">${total?fmt(total):""}</td></tr>`;
+ });
+ html+=`</tbody></table>`;
+ $(targetContainerId).innerHTML=html; 
+ $("summaryPrintDate").textContent=titleText + " Date: " + date;
+ await logAction("View Summary", `Loaded ${collectionName} for ${date}`, "Administration");
+}
+
+async function searchHistory(){
+ const hosp=$("historyHospital").value.trim(),fromDate=$("historyFromDate").value,toDate=$("historyDate").value;
+ let snaps=await getDocs(collection(firestore,"orders"));
+ let rows=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(o=>{
+   const matchHosp = !hosp || (o.hospital && o.hospital.toLowerCase().includes(hosp.toLowerCase()));
+   const matchFrom = !fromDate || o.date >= fromDate;
+   const matchTo = !toDate || o.date <= toDate;
+   return matchHosp && matchFrom && matchTo;
+ }).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+ $("historyResults").innerHTML=`<table><thead><tr><th style="width:38px"><input type="checkbox" id="selectAllOrdersCheck"></th><th>Date</th><th>Hospital</th><th>Items</th><th>Last Update</th><th>Action</th></tr></thead><tbody>${rows.map(o=>`<tr><td style="text-align:center"><input type="checkbox" class="order-check" value="${safe(o.id)}"></td><td>${safe(o.date)}</td><td>${safe(o.hospital)}</td><td>${Object.keys(o.quantities||{}).length}</td><td>${o.updatedAt?.toDate?o.updatedAt.toDate().toLocaleString():""}</td><td><button class="secondary" data-open="${safe(o.id)}">Open</button></td></tr>`).join("")}</tbody></table>`;
+ const all=$("selectAllOrdersCheck");if(all)all.onchange=()=>document.querySelectorAll(".order-check").forEach(c=>c.checked=all.checked);
+ $("historyResults").querySelectorAll("[data-open]").forEach(b=>b.onclick=async()=>{
+  const o=rows.find(x=>x.id===b.dataset.open);
+  $("orderDate").value=o.date; $("hospitalSearch").value=o.hospital; showTab("orders"); await loadOrder();
+ });
+}
+
+async function deleteOrders(){
+ const ids=[...document.querySelectorAll(".order-check:checked")].map(x=>x.value);
+ if(!ids.length){alert("Please select at least one order record to delete.");return}
+ const pass=prompt("Enter order deletion password:"); if(pass===null)return;
+ if(pass!=="123321"){alert("Incorrect password.");return}
+ if(!confirm(`Permanently delete ${ids.length} selected orders?`))return;
+ for(const id of ids) await deleteDoc(doc(firestore,"orders",id));
+ alert("Selected order records permanently deleted."); await searchHistory();
+}
+
+async function searchLogs(){
+ const from=$("logFrom").value,to=$("logTo").value,hosp=$("logHospital").value.trim();
+ const snap=await getDocs(collection(firestore,"activityLogs"));
+ let rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>(!from||x.date>=from)&&(!to||x.date<=to)&&(!hosp||x.hospital===hosp)).sort((a,b)=>(b.time||"").localeCompare(a.time||""));
+ $("logResults").innerHTML=`<table class="log-table"><thead><tr><th><input type="checkbox" id="selectAllLogs"></th><th>Date / Time</th><th>Hospital</th><th>Action</th><th>Description</th><th>Device Info</th></tr></thead><tbody>${rows.map(x=>`<tr><td><input type="checkbox" class="log-check" value="${safe(x.id)}"></td><td>${safe(x.time||"")}</td><td>${safe(x.hospital)}</td><td>${safe(x.action)}</td><td>${safe(x.details)}</td><td title="${safe(x.device)}">${safe(x.device||"Unknown")}</td></tr>`).join("")}</tbody></table>`;
+ const all=$("selectAllLogs");if(all)all.onchange=()=>document.querySelectorAll(".log-check").forEach(c=>c.checked=all.checked);
+}
+
+async function deleteLogs(){
+ const ids=[...document.querySelectorAll(".log-check:checked")].map(x=>x.value);
+ if(!ids.length){alert("Select at least one record.");return}
+ const pass=prompt("Enter activity deletion password:"); if(pass===null)return;
+ if(pass!=="123321"){alert("Incorrect password.");return}
+ if(!confirm(`Permanently delete ${ids.length} selected activity records?`))return;
+ for(const id of ids)await deleteDoc(doc(firestore,"activityLogs",id));
+ alert("Selected activity records deleted."); await searchLogs();
+}
+
+async function generatePdfReport(collectionName="orders", title="DAILY HOSPITAL ORDERS", customDate=null){
+ const date = customDate || $("summaryDate").value || tomorrow();
+ const snap=await getDocs(query(collection(firestore,collectionName),where("date","==",date)));
+ const docsData=snap.docs.map(d=>d.data());
+
+ const activeHospitals = hospitals;
+ const activeItems = items;
+
+ if(!activeHospitals.length || !activeItems.length){
+   alert(`No active ${collectionName} data recorded for ${date}.`);
+   return;
+ }
+
+ const {jsPDF}=window.jspdf;
+ const pdf=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"});
+ const pageWidth = pdf.internal.pageSize.getWidth();
+ const pageHeight = pdf.internal.pageSize.getHeight();
+ 
+ pdf.setFont("helvetica","bold");
+ pdf.setFontSize(11);
+ const headerBg = collectionName==="returns" ? [184, 50, 50] : [26, 74, 110];
+ pdf.text(`FONDANT CHOCO — ${title} | Date: ${date} | Hospitals: ${activeHospitals.length}`, pageWidth / 2, 20, {align:"center"});
+ 
+ const head=[["Item",...activeHospitals,"Total"]];
+ const body=activeItems.map(item=>{
+  let sum=0;
+  const vals=activeHospitals.map(h=>{
+   const o=docsData.find(x=>x.hospital===h); const v=Number(o?.quantities?.[item]||0);
+   sum+=v; return v?String(v):"";
+  });
+  return [item,...vals,sum?String(sum):""];
+ });
+
+ const marginSide = 51;
+ const marginBottom = 8.5; 
+ const availableWidth = pageWidth - (marginSide * 2);
+ const col0Width = activeHospitals.length > 8 ? 140 : 170; 
+ const totalColWidth = 45;
+ const remainingWidth = availableWidth - col0Width - totalColWidth;
+ const hospitalColWidth = remainingWidth / activeHospitals.length;
+
+ const availableHeight = pageHeight - 30 - marginBottom;
+ const totalRows = activeItems.length;
+ const fontSizeCalc = Math.min(10.5, Math.max(7.5, (availableHeight - 40) / (totalRows * 1.8)));
+ const paddingCalc = totalRows > 22 ? 1.5 : (totalRows > 15 ? 2.5 : 3.5);
+
+ const altRowColor = collectionName === "returns" ? [248, 200, 200] : [176, 196, 222];
+
+ const colStyles = { 
+   0: { cellWidth: col0Width, halign: "left", fontStyle: "bold" }, 
+   [activeHospitals.length + 1]: { cellWidth: totalColWidth, fontStyle: "bold", fontSize: fontSizeCalc, fillColor: [229, 240, 251] } 
+ };
+ activeHospitals.forEach((_, idx) => { 
+   colStyles[idx + 1] = { cellWidth: hospitalColWidth, halign: "center", fontStyle: "bold", fontSize: fontSizeCalc }; 
+ });
+
+ pdf.autoTable({
+  head, body, startY: 28, 
+  margin: { top: 28, left: marginSide, right: marginSide, bottom: marginBottom }, 
+  theme: "grid",
+  styles: { 
+    font: "helvetica", 
+    fontSize: fontSizeCalc, 
+    fontStyle: "bold", 
+    cellPadding: paddingCalc, 
+    halign: "center", 
+    valign: "middle", 
+    lineColor: [51, 65, 85], 
+    lineWidth: 0.65 
+  },
+  headStyles: { 
+    fillColor: headerBg, 
+    textColor: 255, 
+    fontStyle: "bold", 
+    fontSize: 8, 
+    cellPadding: 1, 
+    minCellHeight: 35, 
+    lineColor: [15, 23, 42], 
+    lineWidth: 0.8 
+  },
+  columnStyles: colStyles, 
+  alternateRowStyles: { fillColor: altRowColor },
+  didParseCell: function(data) { 
+    if (data.section === 'head' && data.column.index > 0 && data.column.index <= activeHospitals.length) {
+      data.cell.styles.valign = 'bottom'; 
+    }
+  },
+  customDrawCell: function(data) {
+   if (data.section === 'head' && data.column.index > 0 && data.column.index <= activeHospitals.length) {
+    pdf.setFillColor(headerBg[0], headerBg[1], headerBg[2]); 
+    pdf.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'F');
+    pdf.setDrawColor(15, 23, 42); 
+    pdf.setLineWidth(0.8); 
+    pdf.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'S');
+    pdf.saveGraphicsState(); 
+    pdf.setTextColor(255, 255, 255); 
+    pdf.setFont("helvetica", "bold"); 
+    pdf.setFontSize(7.5);
+    const text = data.cell.text.join(' '); 
+    pdf.text(text, data.cell.x + (data.cell.width / 2) + 2, data.cell.y + data.cell.height - 3, { angle: 90 });
+    pdf.restoreGraphicsState(); 
+    return false;
+   }
+  }
+ });
+
+ const filePrefix=collectionName==="orders"?"ORDERS":(collectionName==="returns"?"RETURNS":collectionName.toUpperCase());
+ // Keep the filename Windows-safe (Windows does not allow vertical bars or colons in filenames).
+ const name=`${filePrefix} - Date ${date} - Hospitals ${activeHospitals.length}.pdf`;
+ const blob=pdf.output("blob"),url=URL.createObjectURL(blob);
+ const preview=window.open(url,"_blank"); if(!preview){alert("Please allow pop-ups to preview PDF.");}
+ const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
+
+
+async function commitWriteOperations(operations){
+ for(let i=0;i<operations.length;i+=450){
+   const batch=writeBatch(firestore);
+   operations.slice(i,i+450).forEach(op=>{
+     if(op.type==="set") batch.set(op.ref,op.data,{merge:true});
+     else if(op.type==="update") batch.update(op.ref,op.data);
+     else if(op.type==="delete") batch.delete(op.ref);
+   });
+   await batch.commit();
+ }
+}
+
+function mergeQuantities(first={},second={}){
+ const merged={...first};
+ Object.entries(second||{}).forEach(([key,value])=>{
+   if(merged[key]!==undefined) merged[key]=Number(merged[key]||0)+Number(value||0);
+   else merged[key]=value;
+ });
+ return merged;
+}
+
+async function renameHospitalReferences(oldName,newName){
+ const operations=[];
+ for(const collectionName of ["orders","returns"]){
+   const snap=await getDocs(collection(firestore,collectionName));
+   for(const sourceSnap of snap.docs){
+     const data=sourceSnap.data();
+     if(data.hospital!==oldName) continue;
+     const newId=data.date?docKey(data.date,newName):sourceSnap.id;
+     const targetRef=doc(firestore,collectionName,newId);
+     if(newId===sourceSnap.id){
+       operations.push({type:"update",ref:sourceSnap.ref,data:{hospital:newName,updatedAt:serverTimestamp()}});
+       continue;
+     }
+     const targetSnap=await getDoc(targetRef);
+     let nextData={...data,hospital:newName,updatedAt:serverTimestamp()};
+     if(targetSnap.exists()){
+       const targetData=targetSnap.data();
+       nextData={...targetData,...nextData,quantities:mergeQuantities(targetData.quantities||{},data.quantities||{})};
+       if(collectionName==="returns"){
+         const photoList=[...(targetData.images||[]),...(data.images||[])];
+         const seenPhotos=new Set();
+         nextData.images=photoList.filter(img=>{
+           const key=img.id||img.path||JSON.stringify(img);
+           if(seenPhotos.has(key))return false;
+           seenPhotos.add(key);return true;
+         });
+       }
+     }
+     operations.push({type:"set",ref:targetRef,data:nextData});
+     operations.push({type:"delete",ref:sourceSnap.ref});
+   }
+ }
+ const photoMetadata=await getDocs(collection(firestore,"returnPhotos"));
+ photoMetadata.docs.forEach(d=>{if(d.data().hospital===oldName)operations.push({type:"update",ref:d.ref,data:{hospital:newName}});});
+ const logs=await getDocs(collection(firestore,"activityLogs"));
+ logs.docs.forEach(d=>{if(d.data().hospital===oldName)operations.push({type:"update",ref:d.ref,data:{hospital:newName}});});
+ await commitWriteOperations(operations);
+}
+
+async function renameItemReferences(oldName,newName){
+ const operations=[];
+ for(const collectionName of ["orders","returns"]){
+   const snap=await getDocs(collection(firestore,collectionName));
+   snap.docs.forEach(d=>{
+     const data=d.data(),quantities={...(data.quantities||{})};
+     if(!Object.prototype.hasOwnProperty.call(quantities,oldName))return;
+     const oldValue=quantities[oldName];
+     if(Object.prototype.hasOwnProperty.call(quantities,newName)) quantities[newName]=Number(quantities[newName]||0)+Number(oldValue||0);
+     else quantities[newName]=oldValue;
+     delete quantities[oldName];
+     operations.push({type:"update",ref:d.ref,data:{quantities,updatedAt:serverTimestamp()}});
+   });
+ }
+ await commitWriteOperations(operations);
+}
+
+function renderMaster(){
+ $("hospitalManage").innerHTML=`<div>${hospitals.map((h,i)=>`<div class="master-row"><span class="master-row-name">${safe(h)}</span><button class="master-action master-edit" data-edit-h="${i}">Edit</button><button class="master-action secondary" data-del-h="${i}">Remove</button></div>`).join("")}</div>`;
+ $("itemManage").innerHTML=`<div>${items.map((it,i)=>`<div class="master-row"><span class="master-row-name">${safe(it)}</span><button class="master-action master-edit" data-edit-i="${i}">Edit</button><button class="master-action secondary" data-del-i="${i}">Remove</button></div>`).join("")}</div>`;
+ document.querySelectorAll("[data-edit-h]").forEach(b=>b.onclick=async()=>{
+   const index=Number(b.dataset.editH),oldName=hospitals[index];
+   const entered=prompt("Enter the new hospital name:",oldName);
+   if(entered===null)return;
+   const newName=entered.trim();
+   if(!newName){alert("Hospital name cannot be empty.");return;}
+   if(hospitals.some((x,i)=>i!==index&&x.toLowerCase()===newName.toLowerCase())){alert("This hospital name already exists.");return;}
+   if(newName===oldName)return;
+   if(!confirm(`Change hospital name from "${oldName}" to "${newName}"?\nExisting orders, returns and activity records will be updated too.`))return;
+   const pw=prompt("Enter password:");if(pw!=="123321"){alert("Incorrect password.");return;}
+   b.disabled=true;
+   try{
+     await renameHospitalReferences(oldName,newName);
+     hospitals[index]=newName;
+     await saveMaster("hospitals",hospitals);
+     setOptions();renderMaster();
+     await logAction("Rename Hospital",`Changed hospital name from ${oldName} to ${newName}`,newName);
+     alert("Hospital name and its historical records were updated successfully.");
+   }catch(err){console.error(err);alert("Could not rename hospital: "+err.message);b.disabled=false;}
+ });
+ document.querySelectorAll("[data-edit-i]").forEach(b=>b.onclick=async()=>{
+   const index=Number(b.dataset.editI),oldName=items[index];
+   const entered=prompt("Enter the new item name:",oldName);
+   if(entered===null)return;
+   const newName=entered.trim();
+   if(!newName){alert("Item name cannot be empty.");return;}
+   if(items.some((x,i)=>i!==index&&x.toLowerCase()===newName.toLowerCase())){alert("This item name already exists.");return;}
+   if(newName===oldName)return;
+   if(!confirm(`Change item name from "${oldName}" to "${newName}"?\nSaved orders and returns will be updated too.`))return;
+   const pw=prompt("Enter password:");if(pw!=="123321"){alert("Incorrect password.");return;}
+   b.disabled=true;
+   try{
+     await renameItemReferences(oldName,newName);
+     items[index]=newName;
+     await saveMaster("items",items);
+     renderRows();renderRows({},"returnRows","returnItemSearchInput");renderMaster();
+     await logAction("Rename Item",`Changed item name from ${oldName} to ${newName}`,"Administration");
+     alert("Item name and its historical records were updated successfully.");
+   }catch(err){console.error(err);alert("Could not rename item: "+err.message);b.disabled=false;}
+ });
+ document.querySelectorAll("[data-del-h]").forEach(b=>b.onclick=async()=>{
+  if(!confirm("Remove hospital?"))return; const pw=prompt("Enter password:");if(pw!=="123321")return;
+  hospitals.splice(+b.dataset.delH,1); await saveMaster("hospitals",hospitals); setOptions();renderMaster();
+ });
+ document.querySelectorAll("[data-del-i]").forEach(b=>b.onclick=async()=>{
+  if(!confirm("Remove item?"))return; const pw=prompt("Enter password:");if(pw!=="123321")return;
+  items.splice(+b.dataset.delI,1); await saveMaster("items",items); renderRows();renderMaster();
+ });
+}
+
+async function addHospital(){
+ const v=$("newHospital").value.trim();if(!v||hospitals.some(x=>x.toLowerCase()===v.toLowerCase()))return;
+ hospitals.push(v);
+ await saveMaster("hospitals",hospitals); $("newHospital").value="";setOptions();renderMaster();
+}
+
+async function addItem(){
+ const v=$("newItem").value.trim();if(!v||items.some(x=>x.toLowerCase()===v.toLowerCase()))return;
+ items.push(v); await saveMaster("items",items); $("newItem").value="";renderRows();renderMaster();
+}
+
+function showTab(id){
+ document.querySelectorAll(".section").forEach(s=>s.classList.toggle("hidden",s.id!==id));
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
+ if(id==="master")renderMaster();
+ if(id==="activity")searchLogs().catch(console.error);
+ if(id==="history")searchHistory().catch(console.error);
+}
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  const tabId = b.dataset.tab;
+  if(tabId === "returns"){
+    $("wastageModal").classList.remove("hidden");
+  } else {
+    showTab(tabId);
+  }
+});
+
+$("wastageAgree").onclick = () => {
+  $("wastageModal").classList.add("hidden");
+  showTab("returns");
+};
+
+$("wastageReject").onclick = () => {
+  $("wastageModal").classList.add("hidden");
+  showTab("orders");
+  const toast = $("redirectToast");
+  toast.classList.remove("hidden");
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 3000);
+};
+
+$("hospitalSearch").addEventListener("input",()=>showSuggestions(false));
+$("hospitalSearch").addEventListener("focus",()=>showSuggestions(false));
+$("hospitalSearch").addEventListener("blur",()=>setTimeout(()=>enforceValidHospital(false), 250));
+
+$("returnHospitalSearch").addEventListener("input",()=>showSuggestions(true));
+$("returnHospitalSearch").addEventListener("focus",()=>showSuggestions(true));
+$("returnHospitalSearch").addEventListener("blur",()=>setTimeout(()=>enforceValidHospital(true), 250));
+
+$("returnDate").onchange = () => {
+  if($("returnHospitalSearch").value.trim()){
+    loadReturn().catch(e=>alert(e.message));
+  }else{
+    loadReturnImages();
+  }
+};
+
+$("chooseReturnPhotos").onclick=()=>$("returnPhotoInput").click();
+$("returnPhotoInput").addEventListener("change",e=>uploadReturnPhotos(e.target.files).catch(err=>alert(err.message)));
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".autocomplete-wrap")){
+    $("hospitalSuggestions").classList.add("hidden");
+    $("returnHospitalSuggestions").classList.add("hidden");
+  }
+});
+
+if($("itemSearchInput")) $("itemSearchInput").addEventListener("input",()=>renderRows({}, "orderRows", "itemSearchInput"));
+if($("returnItemSearchInput")) $("returnItemSearchInput").addEventListener("input",()=>renderRows({}, "returnRows", "returnItemSearchInput"));
+
+$("saveOrderTop").onclick=()=>$("saveOrder").click();
+$("loadOrderTop").onclick=()=>$("loadOrder").click();
+$("clearFormTop").onclick=()=>$("clearForm").click();
+
+const downloadTomorrowDirect = () => generatePdfReport("orders", "DAILY HOSPITAL ORDERS", tomorrow()).catch(e=>alert("PDF error: "+e.message));
+$("downloadTomorrowPdfTop").onclick = downloadTomorrowDirect;
+
+$("orderDate").value=tomorrow(); $("returnDate").value=todayLocal(); $("summaryDate").value=tomorrow();
+$("historyFromDate").value=addDays(todayLocal(),-1); $("historyDate").value=tomorrow();
+
+// Render immediately with defaults before Firebase fetches
+setOptions();
+renderRows(); 
+renderRows({}, "returnRows", "returnItemSearchInput"); 
+updateLock();
+
+$("orderDate").onchange=()=>updateLock();
+$("saveOrder").onclick=()=>saveOrder().catch(e=>alert(e.message));
+$("loadOrder").onclick=()=>loadOrder().catch(e=>alert(e.message));
+$("clearForm").onclick=()=>{ $("hospitalSearch").value = ""; if($("itemSearchInput")) $("itemSearchInput").value = ""; renderRows(); };
+
+$("saveReturn").onclick=()=>saveReturn().catch(e=>alert(e.message));
+$("loadReturn").onclick=()=>loadReturn().catch(e=>alert(e.message));
+$("clearReturnForm").onclick=()=>{ $("returnHospitalSearch").value = ""; if($("returnItemSearchInput")) $("returnItemSearchInput").value = ""; renderRows({}, "returnRows", "returnItemSearchInput"); loadReturnImages(); };
+
+$("refreshSummary").onclick=async()=>{
+  const selDate = $("summaryDate").value;
+  if(!selDate){alert("Please select a date.");return;}
+  try{
+    await loadSummary("orders", "summaryContent", "Orders Summary", selDate);
+  }catch(e){alert(e.message);}
+};
+
+$("previewReturns").onclick=async()=>{
+  $("summaryDate").value=todayLocal();
+  const selDate = todayLocal();
+  if(!selDate){alert("Please select a date.");return;}
+  try{
+    await loadSummary("returns", "summaryContent", "Returns Summary", selDate);
+  }catch(e){alert(e.message);}
+};
+
+$("exportPdf").onclick=()=>generatePdfReport("orders", "DAILY HOSPITAL ORDERS").catch(e=>alert("PDF error: "+e.message));
+$("exportReturnsPdf").onclick=()=>generatePdfReport("returns", "DAILY HOSPITAL RETURNS").catch(e=>alert("PDF error: "+e.message));
+
+$("searchHistory").onclick=()=>searchHistory().catch(e=>alert(e.message));
+$("deleteOrders").onclick=()=>deleteOrders().catch(e=>alert(e.message));
+$("searchLogs").onclick=()=>searchLogs().catch(e=>alert(e.message));
+$("deleteLogs").onclick=()=>deleteLogs().catch(e=>alert(e.message));
+$("addHospital").onclick=()=>addHospital().catch(e=>alert(e.message));
+$("addItem").onclick=()=>addItem().catch(e=>alert(e.message));
+
+async function start(){
+ const app=initializeApp(firebaseConfig);
+ firestore=getFirestore(app);
+ if(!firestore)throw new Error("Firestore was not initialized.");
+ await getMaster(); searchHistory().catch(console.error);
+}
+
+start().catch(e=>{console.error(e);status("Firebase connection error")});
+</script>
 </body>
 </html>
