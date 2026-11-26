@@ -1604,53 +1604,34 @@ async function updateDevicePresence(){
     await fsDb.collection('device_sessions').doc(cloudSessionId).set({...info,lastSeenServer:serverTime,active:!document.hidden},{merge:true});
   }catch(e){console.warn('Device heartbeat failed',e)}
 }
-async function trimCloudAuditLog(knownCount=null){
+async function trimCloudAuditLog(){
   if(!fsDb||!firebaseUser)return;
-  const metaRef=fsDb.collection('system_meta').doc('audit');
-  let count=Number.isFinite(knownCount)?knownCount:null;
-  // Read only the oldest single document when the retention counter says trimming is needed.
-  // A transaction re-checks both the counter and candidate document to avoid two devices
-  // deleting the same oldest event and corrupting the shared count.
-  for(let attempt=0;attempt<25;attempt++){
-    if(count===null){const meta=await metaRef.get();count=meta.exists?Number(meta.data().logCount)||0:0;}
-    if(count<=AUDIT_LOG_LIMIT)return;
-    const oldest=await fsDb.collection('activity_logs').orderBy('time','asc').limit(1).get();
-    if(oldest.empty){await metaRef.set({logCount:0,retentionLimit:AUDIT_LOG_LIMIT},{merge:true});return;}
-    const candidate=oldest.docs[0];
-    const result=await fsDb.runTransaction(async tx=>{
-      const [metaSnap,logSnap]=await Promise.all([tx.get(metaRef),tx.get(candidate.ref)]);
-      const current=metaSnap.exists?Number(metaSnap.data().logCount)||0:0;
-      if(current<=AUDIT_LOG_LIMIT||!logSnap.exists)return {count:current,deleted:false};
-      tx.delete(candidate.ref);
-      tx.set(metaRef,{logCount:current-1,retentionLimit:AUDIT_LOG_LIMIT,updatedAt:Date.now()},{merge:true});
-      return {count:current-1,deleted:true};
-    });
-    count=result.count;
-    if(!result.deleted&&count>AUDIT_LOG_LIMIT)count=null;
+  // Keep the newest 3,000 records without a shared counter document.
+  // A shared counter was the source of FAILED_PRECONDITION conflicts when
+  // multiple clients wrote system_meta/audit at the same time.
+  const snap=await fsDb.collection('activity_logs').orderBy('time','desc').limit(AUDIT_LOG_LIMIT+400).get();
+  if(snap.size<=AUDIT_LOG_LIMIT)return;
+  const overflow=snap.docs.slice(AUDIT_LOG_LIMIT);
+  for(let i=0;i<overflow.length;i+=400){
+    const batch=fsDb.batch();
+    overflow.slice(i,i+400).forEach(doc=>batch.delete(doc.ref));
+    await firebaseWithTimeout(batch.commit(),12000,'Audit retention cleanup timed out');
   }
 }
 async function writeAuditLogToCloud(entry){
-  const logRef=fsDb.collection('activity_logs').doc(entry.id);
-  const metaRef=fsDb.collection('system_meta').doc('audit');
-  // Read only the event document for idempotency. Reading the shared counter inside
-  // every event transaction caused concurrent devices to contend on system_meta/audit
-  // and fail with FAILED_PRECONDITION (stale updateTime) during rapid login/navigation.
-  const created=await fsDb.runTransaction(async tx=>{
-    const existingLog=await tx.get(logRef);
-    if(existingLog.exists)return false;
-    tx.set(logRef,{...entry,deviceId:entry.deviceId||cloudDeviceId,sessionId:entry.sessionId||cloudSessionId,authUid:firebaseUser.uid});
-    // Atomic server-side increment avoids the stale-document precondition on the
-    // shared metadata counter while preserving a consistent total across devices.
-    tx.set(metaRef,{
-      logCount:firebase.firestore.FieldValue.increment(1),
-      retentionLimit:AUDIT_LOG_LIMIT,
-      updatedAt:Date.now()
-    },{merge:true});
-    return true;
-  });
-  if(created){
-    // Retention is maintenance only; it must never block login or the core data sync.
-    trimCloudAuditLog().catch(err=>console.warn('Audit retention cleanup deferred',err));
+  if(!fsDb||!firebaseUser)throw new Error('Firebase is not ready for audit log writes');
+  const logRef=fsDb.collection('activity_logs').doc(String(entry.id));
+  // Use an idempotent direct set. Do not update system_meta/audit on every event:
+  // concurrent devices were contending on that single document and failing commits.
+  await firebaseWithTimeout(
+    logRef.set({...entry,deviceId:entry.deviceId||cloudDeviceId,sessionId:entry.sessionId||cloudSessionId,authUid:firebaseUser.uid}),
+    12000,
+    uiLang==='en'?'Saving an audit event timed out.':'انتهت مهلة حفظ حركة السجل.'
+  );
+  // Retention is a background task and must never delay login/navigation.
+  if(!window._chanzAuditTrimScheduled){
+    window._chanzAuditTrimScheduled=true;
+    setTimeout(()=>trimCloudAuditLog().catch(err=>console.warn('Audit retention cleanup deferred',err)).finally(()=>{window._chanzAuditTrimScheduled=false}),5000);
   }
 }
 async function flushPendingAuditQueue(){
@@ -1789,33 +1770,34 @@ async function startFirebaseBackgroundServices(pendingLocalLogs=[]){
   window.addEventListener('beforeunload',()=>{try{fsDb?.collection('device_sessions').doc(cloudSessionId).set({active:false,endedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true})}catch(e){}});
  }
  try{
-  const auditMetaRef=fsDb.collection('system_meta').doc('audit');
-  const metaBefore=await firebaseWithTimeout(auditMetaRef.get(),9000,'Audit metadata timeout');
-  let count=metaBefore.exists&&typeof metaBefore.data().logCount==='number'?Number(metaBefore.data().logCount):null;
-  if(count===null){
-   const logsSnap=await firebaseWithTimeout(fsDb.collection('activity_logs').orderBy('time','desc').limit(AUDIT_LOG_LIMIT+1).get(),10000,'Audit history timeout');
-   let existingLogs=[];
-   if(logsSnap.empty){
-    existingLogs=(pendingLocalLogs||[]).slice().sort((a,b)=>String(b.time).localeCompare(String(a.time))).slice(0,AUDIT_LOG_LIMIT);
-    const writes=existingLogs.map(l=>({ref:fsDb.collection('activity_logs').doc(l.id),data:{...l,deviceId:l.deviceId||cloudDeviceId,sessionId:l.sessionId||cloudSessionId,authUid:firebaseUser.uid}}));
-    if(writes.length)await firebaseWithTimeout(commitWrites(writes),10000,'Audit migration timeout');
-   }else existingLogs=logsSnap.docs.slice(0,AUDIT_LOG_LIMIT).map(d=>d.data());
-   count=await firebaseWithTimeout(fsDb.runTransaction(async tx=>{
-    const meta=await tx.get(auditMetaRef);
-    if(!meta.exists||typeof meta.data().logCount!=='number'){
-     tx.set(auditMetaRef,{logCount:existingLogs.length,retentionLimit:AUDIT_LOG_LIMIT,updatedAt:Date.now()},{merge:true});
-     return existingLogs.length;
+  // Audit initialization is intentionally independent of system_meta/audit.
+  // Old counter writes caused FAILED_PRECONDITION conflicts across devices.
+  const logsSnap=await firebaseWithTimeout(
+    fsDb.collection('activity_logs').orderBy('time','desc').limit(AUDIT_LOG_LIMIT).get(),
+    12000,
+    'Audit history read timed out'
+  );
+  if(logsSnap.empty){
+    const localLogs=(pendingLocalLogs||[]).slice().sort((a,b)=>String(a.time).localeCompare(String(b.time))).slice(-AUDIT_LOG_LIMIT);
+    for(let i=0;i<localLogs.length;i+=400){
+      const batch=fsDb.batch();
+      localLogs.slice(i,i+400).forEach(l=>batch.set(fsDb.collection('activity_logs').doc(String(l.id)),{...l,deviceId:l.deviceId||cloudDeviceId,sessionId:l.sessionId||cloudSessionId,authUid:firebaseUser.uid}));
+      await firebaseWithTimeout(batch.commit(),12000,'Audit history migration timed out');
     }
-    return Number(meta.data().logCount)||0;
-   }),10000,'Audit counter initialization timeout');
+  }else{
+    // Keep the newest cloud history as the authoritative shared log.
+    const cloudLogs=logsSnap.docs.map(d=>({...d.data(),id:d.id}));
+    const byId=new Map(cloudLogs.map(x=>[String(x.id),x]));
+    (state.logs||[]).forEach(x=>{if(!byId.has(String(x.id)))byId.set(String(x.id),x)});
+    state.logs=Array.from(byId.values()).sort((a,b)=>String(b.time).localeCompare(String(a.time))).slice(0,AUDIT_LOG_LIMIT);
+    persistLocalOnly();
   }
   cloudAuditReady=true;
-  const startupEvent=pendingLocalLogs[0];
-  if(startupEvent&&Date.now()-new Date(startupEvent.time).getTime()<5*60*1000&&!pendingAuditQueue.some(x=>x.id===startupEvent.id))pendingAuditQueue.push(startupEvent);
   flushPendingAuditQueue().catch(e=>console.warn('Audit queue flush pending',e));
-  trimCloudAuditLog(count).catch(e=>console.warn('Audit retention cleanup pending',e));
+  trimCloudAuditLog().catch(e=>console.warn('Audit retention cleanup pending',e));
  }catch(e){
-  cloudAuditReady=false;console.warn('Audit setup deferred; the main app remains available',e);
+  cloudAuditReady=false;
+  console.warn('Audit setup deferred; the main app remains available',e);
  }
 }
 
