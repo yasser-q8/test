@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#1686a5" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="chanz.Store" />
 <meta name="application-name" content="chanz.Store" />
 <link rel="icon" href="https://i.postimg.cc/ZK4kBD7D/klynk.jpg" />
 <link rel="apple-touch-icon" href="https://i.postimg.cc/ZK4kBD7D/klynk.jpg" />
-<title>chanz.Store | شانزليزيه</title>
+<title>champs.Store | شانزليزيه</title>
 <style>
 :root{--ink:#183536;--muted:#718181;--teal:#087f5b;--teal2:#e4f2e9;--gold:#f2d34f;--line:#e7e1d3;--paper:#fffdf6;--bg:#f5f0e3;--red:#bc4b4b;--green:#23815d;--shadow:0 12px 35px rgba(27,65,61,.09);--radius:18px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:Tahoma,Arial,sans-serif;color:var(--ink);min-height:100vh;isolation:isolate}body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:url('https://i.postimg.cc/ZK4kBD7D/klynk.jpg');background-repeat:repeat;background-size:165px 165px;opacity:.085}
@@ -195,6 +196,14 @@ input[data-numeric="1"]{-moz-appearance:textfield;appearance:textfield}
 .quick-loss{background:#fff0eb!important;border-color:#f1d0c6!important;color:#91452f!important}.quick-loss .quick-icon{background:#c96648;color:#fff}
 @media(max-width:720px){.quick-actions .quick{min-height:66px;padding:9px 8px;gap:7px}.quick-actions .quick .quick-icon{width:34px;height:34px;flex-basis:34px;font-size:19px;border-radius:10px}.quick-actions .quick .quick-copy b{font-size:10px}.quick-actions .quick .quick-copy small{font-size:9px}.quick-actions .quick .quick-arrow{font-size:13px}}
 
+
+/* Login sync diagnostics and paging progress */
+.login-status{min-height:38px;line-height:1.6;color:#173b57;font-weight:700;overflow-wrap:anywhere}
+.login-cloud-status{white-space:normal!important;line-height:1.5;max-width:100%;padding:9px 12px!important;border-radius:12px!important;background:#eaf4fb!important;border-color:#b9d9ee!important;color:#174d73!important}
+.login-cloud-status.offline{background:#fff0ee!important;border-color:#edc4bd!important;color:#9b3024!important}
+.login-cloud-status.syncing{background:#eaf4fb!important;border-color:#9ec9e3!important;color:#174d73!important}
+#loginStatus{white-space:normal;overflow-wrap:anywhere}
+
 </style>
 
 <style id="naif-card-theme-overrides">
@@ -325,7 +334,7 @@ th{background:#eaf6fa!important;color:#254052!important} .table-wrap{border-colo
     <div class="login-brand"><img src="https://i.postimg.cc/ZK4kBD7D/klynk.jpg" alt="Chanzelise Center logo" onerror="this.style.display='none'"><h1>شانزليزيه</h1><p>نظام إدارة ومتابعة المخازن الطبية</p></div>
     <h2 id="loginHeading">مرحباً بعودتك</h2>
     <p class="login-subtitle" id="loginSubtitle">اختر اسم المستخدم وأدخل كلمة المرور للدخول إلى النظام</p>
-    <div class="login-field"><label for="loginUsername" id="loginUserLabel">اختر اسم المستخدم</label><select id="loginUsername" autocomplete="username" required><option value="">— اختر المستخدم —</option><option value="admin">admin</option><option value="Hany">Hany</option><option value="User">User</option></select></div>
+    <div class="login-field"><label for="loginUsername" id="loginUserLabel">اختر اسم المستخدم</label><select id="loginUsername" autocomplete="username" required><option value="">— اختر المستخدم —</option><option value="Admin">Admin</option><option value="Hany">Hany</option><option value="User">User</option></select></div>
     <div class="login-field"><label for="loginPassword" id="loginPassLabel">كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور" required minlength="6"></div>
     <div class="login-dock" id="loginDock"><span class="login-socket" id="loginSocket"></span><button class="login-cta" id="loginCta" type="submit"><span id="loginCtaLabel">تسجيل الدخول</span><span class="login-spinner"></span></button></div>
     <div class="login-status" id="loginStatus">اختر اسم المستخدم وأدخل كلمة المرور (6 أحرف على الأقل)</div>
@@ -443,7 +452,7 @@ function defaultUserProfiles(){
  const staff={};PERMISSION_DEFINITIONS.forEach(x=>staff[x.key]=['dashboard','inventory','purchases','transfers','returns','losses','suppliers','reports','editData','exportData'].includes(x.key));
  const hany={};PERMISSION_DEFINITIONS.forEach(x=>hany[x.key]=x.key==='supplierStatements');
  return {
-  admin:{id:'admin',username:'admin',name:'admin',role:'superadmin',active:true,permissions:all},
+  admin:{id:'admin',username:'Admin',name:'Admin',role:'superadmin',active:true,permissions:all},
   hany:{id:'hany',username:'Hany',name:'Hany',role:'supplierViewer',active:true,permissions:hany},
   user:{id:'user',username:'User',name:'مستخدم عادي',role:'user',active:true,permissions:staff}
  };
@@ -568,7 +577,7 @@ function renderSettings(){
  ${!isSuper?`<a class="btn gold" href="Chanz_Store_Import_Template.xlsx" download="Chanz_Store_Import_Template.xlsx">⬇ ${L('تنزيل نموذج Excel','Download Excel Template')}</a>`:''}
  ${canImport?`<label class="btn primary" for="actualStockXlsx">⬆ ${L('استيراد بيانات Excel','Import Excel Data')}</label><input id="actualStockXlsx" type="file" accept=".xlsx,.xls" class="hidden" onchange="importActualStockXLSX(event)" />`:''}
  </div>
- <p class="tiny muted" style="margin-top:10px">${L('يتم تحديث الأصناف المطابقة حسب SKU أو الباركود. لكل صنف مستورد تُحدّث الأرصدة الافتتاحية في المواقع الموجودة بالنموذج، ولا تُحذف السندات التاريخية. إذا كانت القاعدة تحتوي بيانات تجريبية، امسحها أولاً بحساب Super admin.','Matching items are updated by SKU or Barcode. Opening balances are updated for the locations listed in the workbook. Historical vouchers are not deleted. Clear sample data first with the Super admin account if the database still contains demo records.')}</p>
+ <p class="tiny muted" style="margin-top:10px">${L('يتم تحديث الأصناف المطابقة حسب SKU أو الباركود. لكل صنف مستورد تُحدّث الأرصدة الافتتاحية في المواقع الموجودة بالنموذج، ولا تُحذف السندات التاريخية. إذا كانت القاعدة تحتوي بيانات تجريبية، امسحها أولاً بحساب Super Admin.','Matching items are updated by SKU or Barcode. Opening balances are updated for the locations listed in the workbook. Historical vouchers are not deleted. Clear sample data first with the Super Admin account if the database still contains demo records.')}</p>
  </section>
  <section class="panel settings-backup-panel ${canBackup?'':'hidden'}" style="margin-top:15px">
    <div class="panel-head"><div><h3>${L('النسخ الاحتياطي والبيانات','Backup & Data')}</h3><div class="sub">${L('نسخة تلقائية يومية الساعة 02:00 صباحًا بتوقيت الكويت مع الاحتفاظ بآخر 30 نسخة.','Daily backup at 02:00 AM Kuwait time. Latest 30 copies are retained.')}</div></div><span id="driveBackupStatus" class="drive-backup-status pending">${L('جارٍ التحقق من حالة النسخ…','Checking backup status…')}</span></div>
@@ -640,7 +649,7 @@ function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.
 function exportAuditCSV(){const en=uiLang==='en';const rows=[en?['Date & Time','User','Action','Section','Details','Device Type','Platform','Screen','Language','Time Zone']:['التاريخ والوقت','المستخدم','العملية','القسم','التفاصيل','نوع الجهاز','النظام','الشاشة','اللغة','المنطقة الزمنية'],...state.logs.map(l=>[l.time,displayName(l.user),translateString(l.action),displayName(l.entity),displayName(l.details),displayName(l.deviceType),l.platform,l.screen,l.language,l.timezone])];const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\n');downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}),`chanz-audit-${todayISO()}.csv`)}
 async function clearDemoData(){
   const L=(ar,en)=>uiLang==='en'?en:ar;
-  if(currentUser?.role!=='superadmin'){toast(L('هذه العملية متاحة لسوبر أدمن فقط','This action is available to Super admin only'));return;}
+  if(currentUser?.role!=='superadmin'){toast(L('هذه العملية متاحة لسوبر أدمن فقط','This action is available to Super Admin only'));return;}
   if(!cloudSyncReady||!fsDb){toast(L('اتصل بقاعدة البيانات أولاً قبل مسح البيانات حتى ينعكس الحذف على جميع الأجهزة.','Connect to the database before clearing sample data so the deletion reaches all devices.'));return;}
   const demoItems=new Set(Array.from({length:20},(_,i)=>`it${i+1}`));
   const demoClinics=new Set(Array.from({length:5},(_,i)=>`cl${i+1}`));
@@ -684,9 +693,9 @@ let editingTransactionId = '';
 const I18N = {
 'الأجهزة المسجلة':'Registered Devices','معلومات الأجهزة والمتصفحات المتصلة بقاعدة البيانات':'Devices and browsers connected to the database','سجل جلسات الأجهزة':'Device Sessions','آخر 100 جلسة مسجلة':'Latest 100 recorded sessions','النظام / المتصفح':'Platform / Browser','اللغة / المنطقة الزمنية':'Language / Time Zone','حالة الاتصال':'Connection Status','آخر ظهور':'Last Seen','بداية الجلسة':'Session Start','آخر نشاط':'Last Activity','الحالة':'Status','معرف الجلسة':'Session ID','متصل':'Online','غير متصل':'Offline','نشطة':'Active','غير نشطة':'Inactive','لم يتم تسجيل أجهزة بعد':'No devices have been registered yet','لم يتم تحميل سجل الأجهزة بعد':'Device records have not loaded yet','لا توجد جلسات':'No sessions found','عدد السجلات':'Record Count','يحتفظ النظام بآخر 3000 سجل':'The system retains the latest 3,000 records','شانزليزيه':'Chanzelise','مركز شانزليزيه':'Chanzelise Center','شعار شانزليزيه':'Chanzelise logo','شعار المركز':'Center logo',
 'نظام إدارة ومتابعة المخازن الطبية':'Medical Inventory Management System','إدارة المخزون الطبي':'Medical Inventory Management','إدارة المخزون الطبي · chanz.Store':'Medical Inventory Management · chanz.Store',
-'أدخل كلمة المرور':'Enter password','كلمة المرور':'Password','دخول إلى النظام':'Sign in','تسجيل الخروج':'Log out','مستخدم':'User','المستخدم العادي':'Standard User','مدير النظام':'System administrator',
-'اختر اسم المستخدم واكتب كلمة المرور':'Demo login — Standard user: 123','مدير النظام: 885522':'administrator: 885522','نسخة تجريبية':'Demo Version',
-'القائمة الرئيسية':'MAIN MENU','الإدارة والتقارير':'adminISTRATION & REPORTS','لوحة التحكم':'Dashboard','المخزون والجرد':'Inventory & Stocktake','المخزون':'Inventory','سندات المشتريات':'Purchase Vouchers','المشتريات':'Purchases','تحويلات العيادات':'Clinic Transfers','التحويل':'Transfer','مرتجعات الموردين':'Supplier Returns','المرتجع':'Returns','التوالف والمفقودات':'Damaged & Missing','التالف':'Damaged','الموردون':'Suppliers','التقارير':'Reports','حركة السجل':'Audit Log','السجل':'Audit Log','الإعدادات':'Settings','الرئيسية':'Home',
+'أدخل كلمة المرور':'Enter password','كلمة المرور':'Password','دخول إلى النظام':'Sign in','تسجيل الخروج':'Log out','مستخدم':'User','المستخدم العادي':'Standard User','مدير النظام':'System Administrator',
+'اختر اسم المستخدم واكتب كلمة المرور':'Demo login — Standard user: 123','مدير النظام: 885522':'Administrator: 885522','نسخة تجريبية':'Demo Version',
+'القائمة الرئيسية':'MAIN MENU','الإدارة والتقارير':'ADMINISTRATION & REPORTS','لوحة التحكم':'Dashboard','المخزون والجرد':'Inventory & Stocktake','المخزون':'Inventory','سندات المشتريات':'Purchase Vouchers','المشتريات':'Purchases','تحويلات العيادات':'Clinic Transfers','التحويل':'Transfer','مرتجعات الموردين':'Supplier Returns','المرتجع':'Returns','التوالف والمفقودات':'Damaged & Missing','التالف':'Damaged','الموردون':'Suppliers','التقارير':'Reports','حركة السجل':'Audit Log','السجل':'Audit Log','الإعدادات':'Settings','الرئيسية':'Home',
 'شانزليزيه · الكويت':'Chanzelise · Kuwait','العملة: الدينار الكويتي (د.ك)':'Currency: Kuwaiti Dinar (KWD)','الحفظ على هذا الجهاز':'Saved on this device','✓ محفوظ محليًا على هذا الجهاز':'✓ Saved locally on this device',
 'نسخ احتياطي':'Backup','استعادة':'Restore','Excel':'Excel','نسخة احتياطية':'Backup','تنزيل نسخة احتياطية JSON':'Download JSON Backup','استيراد نسخة احتياطية':'Restore Backup','⬇ تنزيل نسخة احتياطية JSON':'⬇ Download JSON Backup','⬆ استيراد نسخة احتياطية':'⬆ Restore Backup',
 'إجمالي الأصناف المسجلة':'Total Registered Items','صنف / مادة طبية':'Items / Medical Supplies','إجمالي الوحدات المتاحة':'Total Available Units','في جميع المخازن والعيادات':'Across All Stores and Clinics','القيمة التقديرية للمخزون':'Estimated Inventory Value','حسب متوسط تكلفة الصنف':'Based on Weighted Average Cost','أصناف عند حد إعادة الطلب':'Items at Reorder Level','من أصل':'of','صنف':'items','اختصارات العمليات':'Quick Actions','تسجيل حركة مخزنية جديدة':'Record a New Inventory Transaction','توريد تجريبي':'Demo delivery','تجهيز عيادة الأسنان':'Dental clinic supply','تجهيز عيادة الجلدية':'Dermatology clinic supply','تجهيز عيادة التجميل':'Aesthetic clinic supply','تالف':'Damaged','مرتجع تجريبي':'Demo return','مشتريات':'Purchase','تحويل':'Transfer','مرتجع مورد':'Supplier Return','تالف / مفقود':'Damaged / Missing','إضافة توريد إلى المخزون':'Add deliveries to stock','نقل الكميات بين المواقع':'Move quantities between locations','تسجيل الأصناف المرتجعة':'Record returned items','خصم الكميات التالفة':'Deduct damaged quantities','سند مشتريات جديد':'New Purchase Voucher','تحويل أصناف لعيادة':'Transfer Items to a Clinic','مرتجع إلى مورد':'Return to Supplier','تسجيل تالف أو مفقود':'Record Damaged or Missing Items','ملخص المواقع':'Location Summary','الرصيد الحالي بكل مخزن':'Current Balance by Location','عيادات':'Clinics','وحدة':'units','آخر الحركات المسجلة':'Recent Transactions','أحدث ست حركات':'Latest Six Transactions','عرض التقارير':'View Reports','رقم السند':'Voucher No.','نوع الحركة':'Transaction Type','التاريخ':'Date','التفاصيل':'Details','عدد الأصناف':'Item Count','لا توجد حركات بعد':'No transactions yet',
@@ -711,7 +720,7 @@ const I18N = {
 'توريد تجريبي':'Demo delivery','تجهيز عيادة الأسنان':'Dental clinic supplies','تجهيز عيادة الجلدية':'Dermatology clinic supplies','مستلزمات عيادة التجميل':'Aesthetic clinic supplies','تلف عبوة أثناء التخزين':'Package damaged during storage','عبوات تالفة عند الاستلام':'Packages damaged on receipt','تالف':'Damaged','مرتجع تجريبي':'Demo return',
 'تقرير الجرد':'Stocktake Report','رئيسي':'Main','اختياري':'Optional','اكتب اسم المورد للبحث':'Enter supplier name to search','اختر المخزن':'Select store','المخزن / العيادة':'Store / Clinic','العملة: الدينار الكويتي (د.ك)':'Currency: Kuwaiti Dinar (KWD)',
 'نظرة سريعة على حالة مخزون':'A quick overview of Chanzelise inventory status','د.ك':'KWD','إجمالي التكلفة':'Total Cost','العملية':'Action','الAction':'Action','الحركة':'Transaction','إجمالي (د.ك)':'Total (KWD)','Date والوقت':'Date & Time','التاريخ والوقت':'Date & Time','الUser':'User','المستخدم':'User','القسم':'Section','فتح صفحة':'Opened page: ','واجهة البرنامج':'Application Interface','بدء جلسة استخدام':'Session started','تم تسجيل الدخول من':'Signed in from ','فتح صفحة الدخول':'Login page opened','فتح صفحة تسجيل الدخول':'Opened the login page','النظام':'System','فتح صفحة Inventory & Stocktake':'Opened page: Inventory & Stocktake','فتح صفحة Dashboard':'Opened page: Dashboard','فتح صفحة Purchases':'Opened page: Purchases','فتح صفحة Transferات':'Opened page: Transfers','فتح صفحة Supplier Returns':'Opened page: Supplier Returns','فتح صفحة Damaged & Missing':'Opened page: Damaged & Missing','فتح صفحة Suppliers':'Opened page: Suppliers','فتح صفحة Reports':'Opened page: Reports','فتح صفحة Audit Log':'Opened page: Audit Log','فتح صفحة Settings':'Opened page: Settings',
-'إدارة بيانات الموردين المرتبطين بسندات المشتريات والمرتجعات':'Manage supplier records linked to purchase and return vouchers','إدارة بيانات الموردين المرتبطين بسندات المشتريات ومرتجعات الموردين':'Manage supplier records linked to purchases and supplier returns','الشويخ الصناعية':'Shuwaikh Industrial Area','الري':'Al Rai','حولي':'Hawally','الإجمالي (د.ك)':'Total (KWD)','تكلفة الوحدة (د.ك)':'Unit Cost (KWD)','قيمة الرصيد (د.ك)':'Stock Value (KWD)','المستخدم العادي: 123':'Standard user: 123','مدير النظام: 885522':'administrator: 885522','اختر اسم المستخدم واكتب كلمة المرور':'Demo Version — Standard user: 123','نسخة تجريبية — المستخدم العادي: 123\nمدير النظام: 885522':'Demo Version — Standard user: 123\nadministrator: 885522',
+'إدارة بيانات الموردين المرتبطين بسندات المشتريات والمرتجعات':'Manage supplier records linked to purchase and return vouchers','إدارة بيانات الموردين المرتبطين بسندات المشتريات ومرتجعات الموردين':'Manage supplier records linked to purchases and supplier returns','الشويخ الصناعية':'Shuwaikh Industrial Area','الري':'Al Rai','حولي':'Hawally','الإجمالي (د.ك)':'Total (KWD)','تكلفة الوحدة (د.ك)':'Unit Cost (KWD)','قيمة الرصيد (د.ك)':'Stock Value (KWD)','المستخدم العادي: 123':'Standard user: 123','مدير النظام: 885522':'Administrator: 885522','اختر اسم المستخدم واكتب كلمة المرور':'Demo Version — Standard user: 123','نسخة تجريبية — المستخدم العادي: 123\nمدير النظام: 885522':'Demo Version — Standard user: 123\nAdministrator: 885522',
 'فتح صفحة Transferات':'Opened page: Transfers','فتح صفحة Returnsات':'Opened page: Returns','Supplierين':'Suppliers','Returnsات':'Returns','Transferات':'Transfers','الموردين':'Suppliers','المرتجعات':'Returns','المشتريات':'Purchases','الإعدادات':'Settings','السجل':'Audit Log','من / إلى':'From / To','إجمالي التكلفة':'Total Cost','العملية':'Action','الAction':'Action','الفترة من':'Period from','إلى':'to','رئيسي':'Main','الرصيد الحالي بكل مخزن':'Current stock by location','إجمالي الكميات':'Total Quantity','كل العمليات':'All Actions','عملية':'Action','تعديلات':'Edits','الحذف':'Deletions','عدد الحركات':'Transaction Count','الموقع':'Location','العيادات':'Clinics','من أصل ':'out of ','مورد':'Supplier','الأرصدة الافتتاحية حسب المخزن / العيادة':'Opening balances by store / clinic','أدخل الكمية الموجودة فعليًا قبل تسجيل الحركات. يمكن تعديل رصيد كل موقع هنا لاحقًا.':'Enter the actual quantity before recording transactions. You can edit each location’s balance here later.'
 };
 const I18N_KEYS = Object.keys(I18N).sort((a,b)=>b.length-a.length);
@@ -1258,7 +1267,7 @@ function exportAllXLSX(){
   const openingBalances=state.items.flatMap(it=>state.clinics.map(c=>[String(it.sku||''),String(it.barcode||''),displayName(it.name),displayLocationName(c),numValue(it.initialStock?.[c.id]||0)]));
   const devices=(cloudDevices||[]).map(d=>[String(d.deviceId||d.id||''),String(exportDeviceType(d.deviceType||'')),String(displayName(d.user||'')),String(d.platform||''),String(d.screen||''),String(d.lastSeen||'')]);
   const sessions=(cloudSessions||[]).map(x=>[String(x.sessionId||x.id||''),String(displayName(x.user||'')),String(exportDeviceType(x.deviceType||'')),String(x.startedAt||''),String(x.lastSeen||''),x.active?L('نشطة','Active'):L('غير نشطة','Inactive')]);
-  const logRows=(state.logs||[]).map(x=>[String(x.time||''),displayName(x.user),x.role==='superadmin'?'Super admin':x.role==='manager'?L('مدير','Manager'):L('عادي','Standard User'),displayName(x.action),displayName(x.entity),displayName(x.details),exportDeviceType(x.deviceType),String(x.platform||''),String(x.screen||'')]);
+  const logRows=(state.logs||[]).map(x=>[String(x.time||''),displayName(x.user),x.role==='superadmin'?'Super Admin':x.role==='manager'?L('مدير','Manager'):L('عادي','Standard User'),displayName(x.action),displayName(x.entity),displayName(x.details),exportDeviceType(x.deviceType),String(x.platform||''),String(x.screen||'')]);
   const mk=(name,headers,data,subtitle)=>({name,rows:[headers,...data],title:center,subtitle:subtitle||name,widths:widthsByName[name]});
   const sheets=[
     mk(L('المخزون','Inventory'),stockHead,stockRows,L('الأرصدة الحالية وتقييم المخزون حسب الموقع','Current balances and inventory valuation by location')),
@@ -1371,7 +1380,7 @@ function renderAudit(){
   const sessionsHtml=cloudSessions.length?cloudSessions.slice().sort((a,b)=>String(b.lastSeen||'').localeCompare(String(a.lastSeen||''))).slice(0,100).map(x=>`<tr><td class="num">${esc(deviceTimeLabel(x.startedAt))}</td><td>${esc(displayName(x.user||'غير مسجل'))}</td><td>${esc(displayName(x.deviceType||'جهاز'))}</td><td class="num">${esc(deviceTimeLabel(x.lastSeen))}</td><td><span class="badge ${x.active?'green':'gray'}">${x.active?translateString('نشطة'):translateString('غير نشطة')}</span></td><td class="tiny">${esc(x.sessionId||'—')}</td></tr>`).join(''):`<tr><td colspan="6" class="empty">${translateString('لا توجد جلسات')}</td></tr>`;
   const logRows=(state.logs||[]).slice(0,AUDIT_LOG_LIMIT).map(l=>{
     const searchable=[l.id,l.user,l.role,l.action,l.entity,l.details,l.deviceType,l.platform,l.screen,l.language,l.timezone,l.deviceId,l.sessionId,l.device].join(' ').toLowerCase();
-    return `<tr data-search="${esc(searchable)}" data-action="${esc(l.action)}"><td class="num">${new Date(l.time).toLocaleString('en-GB')}</td><td>${esc(displayName(l.user))}<br><span class="tiny muted">${l.role==='superadmin'?'Super admin':(l.role==='manager'?translateString('مدير'):translateString('عادي'))}</span></td><td><span class="badge ${l.action==='حذف'?'red':l.action==='إضافة'?'green':l.action==='تعديل'?'orange':'blue'}">${esc(displayName(l.action))}</span></td><td>${esc(displayName(l.entity))}</td><td>${esc(displayName(l.details))}</td><td><span class="tiny">${esc(displayName(l.deviceType||'جهاز'))} · ${esc(l.platform)} · ${esc(l.screen)}</span><br><span class="tiny muted">${esc(l.language||'')} · ${esc(l.timezone||'')}<br>Device: ${esc(l.deviceId||'—')} · Session: ${esc(l.sessionId||'—')}<br>${esc(l.device||'').slice(0,115)}</span></td></tr>`;
+    return `<tr data-search="${esc(searchable)}" data-action="${esc(l.action)}"><td class="num">${new Date(l.time).toLocaleString('en-GB')}</td><td>${esc(displayName(l.user))}<br><span class="tiny muted">${l.role==='superadmin'?'Super Admin':(l.role==='manager'?translateString('مدير'):translateString('عادي'))}</span></td><td><span class="badge ${l.action==='حذف'?'red':l.action==='إضافة'?'green':l.action==='تعديل'?'orange':'blue'}">${esc(displayName(l.action))}</span></td><td>${esc(displayName(l.entity))}</td><td>${esc(displayName(l.details))}</td><td><span class="tiny">${esc(displayName(l.deviceType||'جهاز'))} · ${esc(l.platform)} · ${esc(l.screen)}</span><br><span class="tiny muted">${esc(l.language||'')} · ${esc(l.timezone||'')}<br>Device: ${esc(l.deviceId||'—')} · Session: ${esc(l.sessionId||'—')}<br>${esc(l.device||'').slice(0,115)}</span></td></tr>`;
   }).join('');
   return `${pageHead('حركة السجل','سجل تدقيق يتضمن الدخول والعمليات والتعديلات والحذف وبيانات المتصفح والجهاز',`<button class="btn" onclick="exportAuditCSV()">⬇ ${uiLang==='en'?'Export CSV':'تصدير CSV'}</button>`)}
   <section class="panel"><div class="panel-head"><div><h3>${translateString('الأجهزة المسجلة')} (${cloudDevices.length})</h3><div class="sub">${translateString('معلومات الأجهزة والمتصفحات المتصلة بقاعدة البيانات')}</div></div></div><div class="table-wrap"><table><thead><tr><th>${translateString('نوع الجهاز')}</th><th>${translateString('المستخدم')}</th><th>${translateString('النظام / المتصفح')}</th><th>${translateString('اللغة / المنطقة الزمنية')}</th><th>${translateString('الشاشة')}</th><th>${translateString('حالة الاتصال')}</th><th>${translateString('آخر ظهور')}</th></tr></thead><tbody>${devicesHtml}</tbody></table></div></section>
@@ -1418,7 +1427,7 @@ state.logs.unshift({id:uid('log'),time:new Date().toISOString(),user:'غير م�
 var firebaseApp=null, firebaseAuth=null, fsDb=null, firebaseUser=null;
 var cloudSyncReady=false, cloudInitDone=false, cloudSyncBusy=false, cloudSyncAgain=false;
 var cloudSaveTimer=null, cloudSlowSyncTimer=null, cloudBaseline={clinics:{},items:{},suppliers:{},transactions:{}};
-var cloudUnsubs=[], cloudDeviceId='', cloudSessionId='', cloudHeartbeat=null;
+var cloudUnsubs=[], cloudDeviceId='', cloudSessionId='', cloudHeartbeat=null, cloudReadStartedAt=0;
 const AUDIT_LOG_LIMIT=3000;
 var cloudAuditReady=false, pendingAuditQueue=[], cloudAuditUnsub=null;
 var cloudDevices=[], cloudSessions=[], cloudBackupStatus=null;
@@ -1535,8 +1544,13 @@ function applyRemoteRecord(collectionName,docData){
   else{const clean=stripCloudMeta(docData);if(idx>=0)arr[idx]=clean;else arr.push(clean)}
   state[collectionName]=arr;
 }
-function subscribeCoreCollection(collectionName){
-  const unsub=fsDb.collection(collectionName).onSnapshot(snapshot=>{
+function subscribeCoreCollection(collectionName,sinceMs=Date.now()-60000){
+  // Initial dataset has already been loaded in pages. Listen only to records updated
+  // around/after the initial read, avoiding a second full download of large history.
+  let query=fsDb.collection(collectionName)
+    .where('_updatedAt','>',sinceMs)
+    .orderBy('_updatedAt');
+  const unsub=query.onSnapshot(snapshot=>{
     let changed=false;
     snapshot.docChanges().forEach(change=>{
       const d=change.doc.data();const id=String(d.id||change.doc.id);
@@ -1548,6 +1562,28 @@ function subscribeCoreCollection(collectionName){
     if(changed){persistLocalOnly();if(currentUser&&document.getElementById('appShell')&&!document.getElementById('appShell').classList.contains('hidden'))renderPage();setCloudStatus(uiLang==='en'?'Connected':'تم الاتصال','online')}
   },err=>{console.error(collectionName,err);setCloudStatus(uiLang==='en'?'Update error':'تعذر تحديث البيانات','offline')});
   cloudUnsubs.push(unsub);
+}
+async function readCloudCollectionPaged(collectionName,pageSize=250){
+  const docs=[];let cursor=null,page=0;
+  while(true){
+    page++;
+    let query=fsDb.collection(collectionName)
+      .orderBy(firebase.firestore.FieldPath.documentId())
+      .limit(pageSize);
+    if(cursor)query=query.startAfter(cursor);
+    const status=document.getElementById('loginStatus');
+    if(status){
+      const label=uiLang==='en'?`Loading ${collectionName}: page ${page} (${docs.length.toLocaleString('en-US')} loaded)…`:`تحميل ${collectionName}: الصفحة ${page} (تم تحميل ${docs.length.toLocaleString('en-US')})…`;
+      status.textContent=label;
+    }
+    const snap=await firebaseWithTimeout(query.get(),20000,
+      uiLang==='en'?`Loading ${collectionName} page ${page} timed out. Check Firestore Rules and network.`:`انتهت مهلة تحميل ${collectionName} (الصفحة ${page}). تحقق من قواعد Firestore والاتصال.`);
+    docs.push(...snap.docs);
+    if(snap.size<pageSize)break;
+    cursor=snap.docs[snap.docs.length-1];
+    if(page>=500)throw new Error(uiLang==='en'?`Too many records in ${collectionName}; paged loading stopped safely.`:`عدد سجلات ${collectionName} كبير جداً؛ تم إيقاف التحميل بأمان.`);
+  }
+  return {docs,empty:docs.length===0,size:docs.length};
 }
 function deviceTypeName(){return deviceLabel()}
 function devicePayload(){
@@ -1596,15 +1632,26 @@ async function trimCloudAuditLog(knownCount=null){
 async function writeAuditLogToCloud(entry){
   const logRef=fsDb.collection('activity_logs').doc(entry.id);
   const metaRef=fsDb.collection('system_meta').doc('audit');
-  const nextCount=await fsDb.runTransaction(async tx=>{
-    const [metaSnap,existingLog]=await Promise.all([tx.get(metaRef),tx.get(logRef)]);
-    const current=metaSnap.exists?Number(metaSnap.data().logCount)||0:0;
-    if(existingLog.exists)return current; // Idempotent retry: do not count or store the same event twice.
+  // Read only the event document for idempotency. Reading the shared counter inside
+  // every event transaction caused concurrent devices to contend on system_meta/audit
+  // and fail with FAILED_PRECONDITION (stale updateTime) during rapid login/navigation.
+  const created=await fsDb.runTransaction(async tx=>{
+    const existingLog=await tx.get(logRef);
+    if(existingLog.exists)return false;
     tx.set(logRef,{...entry,deviceId:entry.deviceId||cloudDeviceId,sessionId:entry.sessionId||cloudSessionId,authUid:firebaseUser.uid});
-    tx.set(metaRef,{logCount:current+1,retentionLimit:AUDIT_LOG_LIMIT,updatedAt:Date.now()},{merge:true});
-    return current+1;
+    // Atomic server-side increment avoids the stale-document precondition on the
+    // shared metadata counter while preserving a consistent total across devices.
+    tx.set(metaRef,{
+      logCount:firebase.firestore.FieldValue.increment(1),
+      retentionLimit:AUDIT_LOG_LIMIT,
+      updatedAt:Date.now()
+    },{merge:true});
+    return true;
   });
-  if(nextCount>AUDIT_LOG_LIMIT)await trimCloudAuditLog(nextCount);
+  if(created){
+    // Retention is maintenance only; it must never block login or the core data sync.
+    trimCloudAuditLog().catch(err=>console.warn('Audit retention cleanup deferred',err));
+  }
 }
 async function flushPendingAuditQueue(){
   if(!cloudAuditReady||!fsDb||!firebaseUser||!pendingAuditQueue.length)return;
@@ -1617,7 +1664,7 @@ async function flushPendingAuditQueue(){
 function syncAuditLog(entry){
   if(!entry)return Promise.resolve();
   if(!fsDb||!firebaseUser||!cloudAuditReady){if(!pendingAuditQueue.some(x=>x.id===entry.id)){pendingAuditQueue.push(entry);if(pendingAuditQueue.length>AUDIT_LOG_LIMIT)pendingAuditQueue.shift();}return Promise.resolve();}
-  return writeAuditLogToCloud(entry).catch(e=>{if(!pendingAuditQueue.some(x=>x.id===entry.id))pendingAuditQueue.push(entry);console.error('Audit log sync failed',e);setCloudStatus(uiLang==='en'?'Audit sync pending':'مزامنة سجل الحركة معلّقة','offline')});
+  return writeAuditLogToCloud(entry).catch(e=>{if(!pendingAuditQueue.some(x=>x.id===entry.id))pendingAuditQueue.push(entry);console.error('Audit log sync failed; event retained for retry:',e);});
 }
 function audit(action,entity,details){
   const entry={id:uid('log'),time:new Date().toISOString(),user:currentUser?.name||'Guest',role:currentUser?.role||'guest',action,entity,details,device:navigator.userAgent||'',deviceType:deviceLabel(),platform:navigator.platform||'',language:navigator.language||'',timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'',screen:`${screen.width}×${screen.height}`,deviceId:cloudDeviceId,sessionId:cloudSessionId};
@@ -1659,12 +1706,15 @@ async function initializeFirebaseSync(){
 
   // Only the essential application data is awaited during sign-in. Audit history,
   // device presence and retention cleanup run in the background after the app opens.
-  const readsPromise=Promise.all(CLOUD_COLLECTIONS.map(name=>fsDb.collection(name).get()));
-  const metaPromise=fsDb.collection('system_meta').doc('main').get();
-  const [reads,meta]=await Promise.all([
-   firebaseWithTimeout(readsPromise,25000,uiLang==='en'?'Loading core data took more than 25 seconds.':'استغرق تحميل البيانات الأساسية أكثر من 25 ثانية.'),
-   firebaseWithTimeout(metaPromise,25000,uiLang==='en'?'Loading settings took more than 25 seconds.':'استغرق تحميل إعدادات النظام أكثر من 25 ثانية.')
-  ]);
+  cloudReadStartedAt=Date.now();
+  if(loginStatus)loginStatus.textContent=uiLang==='en'?'Reading shared account settings…':'جارٍ قراءة إعدادات الحساب المشتركة…';
+  const meta=await firebaseWithTimeout(
+   fsDb.collection('system_meta').doc('main').get(),
+   18000,
+   uiLang==='en'?'Reading shared settings timed out. Check Firestore Rules.':'انتهت مهلة قراءة إعدادات النظام. تحقق من قواعد Firestore.'
+  );
+  if(loginStatus)loginStatus.textContent=uiLang==='en'?'Loading shared inventory and transaction history in pages…':'جارٍ تحميل المخزون وسجل الحركات على دفعات…';
+  const reads=await Promise.all(CLOUD_COLLECTIONS.map(name=>readCloudCollectionPaged(name,250)));
   const anyRemote=meta.exists||reads.some(snap=>!snap.empty);
   if(anyRemote){
    reads.forEach((snap,i)=>{
@@ -1694,7 +1744,7 @@ async function initializeFirebaseSync(){
   cloudAuditReady=false;cloudSyncReady=true;cloudInitDone=true;persistLocalOnly();
 
   // Attach live listeners only after the initial server read has completed.
-  CLOUD_COLLECTIONS.forEach(subscribeCoreCollection);
+  CLOUD_COLLECTIONS.forEach(name=>subscribeCoreCollection(name,cloudReadStartedAt-60000));
   cloudUnsubs.push(fsDb.collection('system_meta').doc('main').onSnapshot(doc=>{
    if(doc.exists&&doc.data().updatedByDevice!==cloudDeviceId){
     const md=doc.data();state.counter=md.counter||state.counter;
@@ -1957,7 +2007,7 @@ async function saveSupplierPayment(){
  state.transactions.push(payment);audit('إضافة','دفعة مورد',`تسجيل دفعة ${money(amount)} للمورد ${supplier.name} — ${number}`);save();closeModal();renderPage();setTimeout(()=>buildSupplierStatement(),50);toast(uiLang==='en'?'Supplier payment saved.':'تم حفظ دفعة المورد.');
 }
 
-/* Full settings permission editor: available only to admin. */
+/* Full settings permission editor: available only to Admin. */
 function renderUserPermissionEditor(){
  if(currentUser?.role!=='superadmin')return '';
  const L=(ar,en)=>uiLang==='en'?en:ar;const profiles=state.userProfiles||defaultUserProfiles();
@@ -1967,7 +2017,7 @@ function renderUserPermissionEditor(){
 }
 function userPermissionPanel(){
  if(currentUser?.role!=='superadmin')return '';
- return `<section class="panel" style="margin-top:15px"><div class="panel-head"><div><h3>إدارة المستخدمين والصلاحيات التفصيلية</h3><div class="sub">admin فقط · يمكن تخصيص الوصول للصفحات والعمليات بشكل مستقل</div></div><span class="badge orange">admin</span></div><div class="form-grid two"><div class="field"><label>اختر المستخدم</label><select id="permissionTarget" class="searchbox" onchange="renderUserPermissionEditor()"><option value="hany">Hany</option><option value="user">مستخدم عادي</option><option value="admin" disabled>admin — مدير النظام (محمي)</option></select></div><div class="field"><label>ملاحظة</label><div class="small muted" style="padding:10px">لا يمكن إزالة صلاحيات admin أو إيقاف حسابه من هذه الشاشة.</div></div></div><div id="permissionEditorBody"></div></section>`;
+ return `<section class="panel" style="margin-top:15px"><div class="panel-head"><div><h3>إدارة المستخدمين والصلاحيات التفصيلية</h3><div class="sub">Admin فقط · يمكن تخصيص الوصول للصفحات والعمليات بشكل مستقل</div></div><span class="badge orange">Admin</span></div><div class="form-grid two"><div class="field"><label>اختر المستخدم</label><select id="permissionTarget" class="searchbox" onchange="renderUserPermissionEditor()"><option value="hany">Hany</option><option value="user">مستخدم عادي</option><option value="admin" disabled>Admin — مدير النظام (محمي)</option></select></div><div class="field"><label>ملاحظة</label><div class="small muted" style="padding:10px">لا يمكن إزالة صلاحيات Admin أو إيقاف حسابه من هذه الشاشة.</div></div></div><div id="permissionEditorBody"></div></section>`;
 }
 const _renderSettingsForPermissions=renderSettings;
 renderSettings=function(){
@@ -2044,7 +2094,7 @@ deleteTransaction=function(id){if(!guardMutation('deleteData'))return;return _de
 const _deleteClinicWithPermission=deleteClinic;deleteClinic=function(id){if(!guardMutation('deleteData'))return;return _deleteClinicWithPermission(id);};
 const _exportAuditCSVWithPermission=exportAuditCSV;exportAuditCSV=function(){if(!guardMutation('audit'))return;return _exportAuditCSVWithPermission();};
 
-/* admin is the only Settings / audit manager; Hany receives the dedicated supplier statement page. */
+/* Admin is the only Settings / audit manager; Hany receives the dedicated supplier statement page. */
 renderAudit=function(){
  if(!userCan('audit'))return `<section class="panel"><div class="empty">غير مصرح بعرض سجل الحركة.</div></section>`;
  const rows=(state.logs||[]).map(l=>`<tr data-search="${esc((l.user+' '+l.action+' '+l.entity+' '+l.details+' '+l.device).toLowerCase())}"><td>${new Date(l.time).toLocaleString('en-GB')}</td><td>${esc(l.user||'')}</td><td>${esc(l.action||'')}</td><td>${esc(l.entity||'')}</td><td>${esc(l.details||'')}</td><td>${esc(l.deviceType||'')} · ${esc(l.platform||'')}</td></tr>`).join('');
@@ -2060,7 +2110,7 @@ const CHANZ_AUTH_DOMAIN='@chanz-store.firebaseapp.com';
 function chanzEmailFor(username){return normalizeLoginName(username)+CHANZ_AUTH_DOMAIN;}
 function chanzUserMeta(username){
  const key=normalizeLoginName(username);
- const defaults={admin:{name:'admin',role:'superadmin'},hany:{name:'Hany',role:'supplierViewer'},user:{name:uiLang==='en'?'Standard User':'مستخدم عادي',role:'user'}};
+ const defaults={admin:{name:'Admin',role:'superadmin'},hany:{name:'Hany',role:'supplierViewer'},user:{name:uiLang==='en'?'Standard User':'مستخدم عادي',role:'user'}};
  return defaults[key]||{name:username,role:'user'};
 }
 function chanzAuthErrorMessage(err){
@@ -2113,10 +2163,14 @@ async function login(username,password){
   if(Array.isArray(cloudUnsubs)){cloudUnsubs.forEach(fn=>{try{fn()}catch(e){}});cloudUnsubs=[];}
   if(cloudHeartbeat){clearInterval(cloudHeartbeat);cloudHeartbeat=null;}
   if(status)status.textContent=uiLang==='en'?'Credentials accepted. Loading shared data…':'تم قبول بيانات الدخول. جارٍ تحميل البيانات المشتركة…';
-  await initializeFirebaseSync();
+  await firebaseWithTimeout(
+   initializeFirebaseSync(),
+   120000,
+   uiLang==='en'?'Firebase sign-in succeeded, but loading the shared database exceeded 2 minutes. The collection may be large or Firestore Rules may be blocking access.':'تم تسجيل الدخول في Firebase، لكن تحميل قاعدة البيانات تجاوز دقيقتين. قد يكون حجم السجلات كبيراً أو قواعد Firestore تمنع الوصول.'
+  );
   if(!cloudSyncReady)throw new Error(uiLang==='en'?'Firebase signed in, but the database could not be synchronized. Check Firestore Rules.':'تم التحقق من الحساب، لكن تعذرت مزامنة قاعدة البيانات. راجع قواعد Firestore.');
   const profile=profileFor(key);
-  if(profile&&profile.active===false){await firebaseAuth.signOut();firebaseUser=null;currentUser=null;throw new Error(uiLang==='en'?'This account is disabled. Contact admin.':'هذا الحساب موقوف. يرجى التواصل مع admin.');}
+  if(profile&&profile.active===false){await firebaseAuth.signOut();firebaseUser=null;currentUser=null;throw new Error(uiLang==='en'?'This account is disabled. Contact Admin.':'هذا الحساب موقوف. يرجى التواصل مع Admin.');}
   currentUser={username:key,name:profile?.name||profile?.displayName||display.name,role:key==='admin'?'superadmin':(profile?.role||display.role)};
   document.getElementById('loginScreen').classList.add('hidden');document.getElementById('appShell').classList.remove('hidden');
   const label=document.getElementById('userLabel');if(label)label.textContent=currentUser.name;
@@ -2128,7 +2182,8 @@ async function login(username,password){
  }catch(err){
   console.error('Chanz Firebase login failed:',err);
   const friendly=chanzAuthErrorMessage(err);
-  if(status)status.textContent=friendly;
+  chanzLoginLastError=friendly+(err?.code?` [${err.code}]`:'');
+  if(status)status.textContent=chanzLoginLastError;
   setCloudStatus('Sync error: '+String(err?.code||err?.message||'connection'),'offline');
   const loginCloud=document.getElementById('loginCloudStatus');if(loginCloud){loginCloud.textContent=friendly;loginCloud.classList.remove('syncing');loginCloud.classList.add('offline');}
   toast(friendly);
@@ -2156,9 +2211,11 @@ const chanzLoginAnchor=document.getElementById('loginAnchor');
 let chanzLoginX=0,chanzLoginY=0;
 function chanzLoginValid(){return !!normalizeLoginName(chanzLoginUser?.value)&&String(chanzLoginPass?.value||'').length>=6;}
 function chanzLoginTether(){if(!chanzLoginSocket||!chanzLoginCta)return;const a=chanzLoginSocket.getBoundingClientRect(),b=chanzLoginCta.getBoundingClientRect(),x1=a.left+a.width/2,y1=a.top+a.height/2,x2=b.left+b.width/2,y2=b.top+b.height/2;chanzLoginAnchor?.setAttribute('cx',x1);chanzLoginAnchor?.setAttribute('cy',y1);chanzLoginLine?.setAttribute('x1',x1);chanzLoginLine?.setAttribute('y1',y1);chanzLoginLine?.setAttribute('x2',x2);chanzLoginLine?.setAttribute('y2',y2);const active=Math.hypot(x2-x1,y2-y1)>4;if(chanzLoginLine)chanzLoginLine.style.opacity=active?'1':'0';if(chanzLoginAnchor)chanzLoginAnchor.style.opacity=active?'1':'0';}
-function checkChanzLoginUnlock(){if(!chanzLoginCta)return;const ok=chanzLoginValid();chanzLoginCta.classList.toggle('unlocked',ok);if(ok){chanzLoginX=chanzLoginY=0;chanzLoginCta.style.transform='translate(0px,0px)';}const status=document.getElementById('loginStatus');if(status&&!chanzLoginCta.classList.contains('loading'))status.textContent=ok?(uiLang==='en'?'Details entered. Sign in securely through Firebase.':'تم إدخال البيانات. اضغط للدخول الآمن عبر Firebase.'):(uiLang==='en'?'Choose a username and enter a password (6+ characters).':'اختر اسم المستخدم وأدخل كلمة المرور (6 أحرف على الأقل).');chanzLoginTether();}
+var chanzLoginLastError='';
+function checkChanzLoginUnlock(){if(!chanzLoginCta)return;const ok=chanzLoginValid();chanzLoginCta.classList.toggle('unlocked',ok);if(ok){chanzLoginX=chanzLoginY=0;chanzLoginCta.style.transform='translate(0px,0px)';}const status=document.getElementById('loginStatus');if(status&&!chanzLoginCta.classList.contains('loading')){if(chanzLoginLastError){status.textContent=chanzLoginLastError;}else{status.textContent=ok?(uiLang==='en'?'Details entered. Sign in securely through Firebase.':'تم إدخال البيانات. اضغط للدخول الآمن عبر Firebase.'):(uiLang==='en'?'Choose a username and enter a password (6+ characters).':'اختر اسم المستخدم وأدخل كلمة المرور (6 أحرف على الأقل).');}}chanzLoginTether();}
 if(chanzLoginForm){
- chanzLoginUser?.addEventListener('change',checkChanzLoginUnlock);chanzLoginPass?.addEventListener('input',checkChanzLoginUnlock);
+ const clearLoginError=()=>{chanzLoginLastError='';const cloud=document.getElementById('loginCloudStatus');if(cloud){cloud.classList.remove('offline');cloud.textContent=uiLang==='en'?'Ready to sign in':'جاهز لتسجيل الدخول';}checkChanzLoginUnlock();};
+ chanzLoginUser?.addEventListener('change',clearLoginError);chanzLoginPass?.addEventListener('input',clearLoginError);
  chanzLoginForm.addEventListener('submit',async e=>{e.preventDefault();if(!chanzLoginValid()){checkChanzLoginUnlock();return;}const cloud=document.getElementById('loginCloudStatus');if(cloud){cloud.textContent=uiLang==='en'?'Signing in to Firebase…':'جارٍ تسجيل الدخول إلى Firebase…';cloud.classList.add('syncing');cloud.classList.remove('offline');}await login(chanzLoginUser.value,chanzLoginPass.value);});
  document.addEventListener('mousemove',e=>{if(chanzLoginValid()||matchMedia('(pointer:coarse)').matches||!chanzLoginCta)return;const r=chanzLoginCta.getBoundingClientRect(),dx=r.left+r.width/2-e.clientX,dy=r.top+r.height/2-e.clientY,dist=Math.hypot(dx,dy);if(dist<100){const a=Math.atan2(dy,dx),push=(100-dist)*.75+25;chanzLoginX=Math.max(-180,Math.min(180,chanzLoginX+Math.cos(a)*push));chanzLoginY=Math.max(-125,Math.min(125,chanzLoginY+Math.sin(a)*push));chanzLoginCta.style.transform=`translate(${chanzLoginX}px,${chanzLoginY}px)`;}chanzLoginTether();});
  window.addEventListener('resize',chanzLoginTether);checkChanzLoginUnlock();
