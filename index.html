@@ -204,6 +204,18 @@ input[data-numeric="1"]{-moz-appearance:textfield;appearance:textfield}
 .login-cloud-status.syncing{background:#eaf4fb!important;border-color:#9ec9e3!important;color:#174d73!important}
 #loginStatus{white-space:normal;overflow-wrap:anywhere}
 
+
+/* Post-authentication cloud loading gate: keep the authenticated app visible while remote history loads. */
+.app-sync-overlay{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(10,35,63,.28);backdrop-filter:blur(3px)}
+.app-sync-card{width:min(430px,94vw);padding:28px 24px;text-align:center;background:#fff;border:1px solid #d5e4f2;border-radius:22px;box-shadow:0 22px 65px rgba(18,58,96,.22);color:#143b60}
+.app-sync-mark{width:58px;height:58px;margin:0 auto 14px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#ddecfa,#b8d7f1);color:#14588f;font-weight:900;font-size:18px;letter-spacing:.5px}
+.app-sync-card h3{font-size:17px;margin:0 0 9px;color:#103c67}
+.app-sync-card p{font-size:12px;line-height:1.8;color:#345a7c;margin:0 0 18px;overflow-wrap:anywhere}
+.app-sync-progress{height:8px;border-radius:20px;background:#e8f1f9;overflow:hidden;margin:0 auto 18px;max-width:270px}
+.app-sync-progress span{display:block;width:38%;height:100%;border-radius:20px;background:linear-gradient(90deg,#4e91c9,#1766a6);animation:chanzSyncSlide 1.25s ease-in-out infinite alternate}
+@keyframes chanzSyncSlide{from{transform:translateX(-15%)}to{transform:translateX(165%)}}
+.app-sync-overlay.error .app-sync-progress{display:none}
+.app-sync-card .btn{min-width:160px}
 </style>
 
 <style id="naif-card-theme-overrides">
@@ -389,6 +401,15 @@ th{background:#eaf6fa!important;color:#254052!important} .table-wrap{border-colo
     <button data-page="supplierStatements" data-supplier-statements="true"><span>▤</span>كشوف حسابات الموردين</button>
     <button data-page="audit" data-manager="true"><span>◷</span>حركة السجل</button>
     <button data-page="settings" data-manager="true"><span>⚙</span>الإعدادات</button>
+  </div>
+  <div id="appSyncOverlay" class="app-sync-overlay hidden" role="status" aria-live="polite">
+    <section class="app-sync-card">
+      <div class="app-sync-mark">CS</div>
+      <h3 id="appSyncTitle">جارٍ تحميل بيانات شانزليزيه</h3>
+      <p id="appSyncMessage">جارٍ تحميل البيانات المشتركة…</p>
+      <div class="app-sync-progress"><span></span></div>
+      <button id="appSyncRetry" class="btn primary hidden" type="button" onclick="retryChanzCloudSync()">إعادة المحاولة</button>
+    </section>
   </div>
 </div>
 <div id="modalRoot"></div><div id="toastRoot"></div><div id="printArea"></div>
@@ -1575,6 +1596,7 @@ async function readCloudCollectionPaged(collectionName,pageSize=250){
     if(status){
       const label=uiLang==='en'?`Loading ${collectionName}: page ${page} (${docs.length.toLocaleString('en-US')} loaded)…`:`تحميل ${collectionName}: الصفحة ${page} (تم تحميل ${docs.length.toLocaleString('en-US')})…`;
       status.textContent=label;
+      const appMsg=document.getElementById('appSyncMessage');if(appMsg&&!document.getElementById('appSyncOverlay')?.classList.contains('hidden'))appMsg.textContent=label;
     }
     const snap=await firebaseWithTimeout(query.get(),20000,
       uiLang==='en'?`Loading ${collectionName} page ${page} timed out. Check Firestore Rules and network.`:`انتهت مهلة تحميل ${collectionName} (الصفحة ${page}). تحقق من قواعد Firestore والاتصال.`);
@@ -2115,70 +2137,123 @@ function chanzSetLoginBusy(busy){
  if(cta){cta.classList.toggle('loading',!!busy);cta.disabled=!!busy;}
  if(label)label.textContent=busy?(uiLang==='en'?'Signing in…':'جارٍ تسجيل الدخول…'):(uiLang==='en'?'Sign in':'تسجيل الدخول');
 }
+let chanzCloudStartupPromise=null;
+function updateAppSyncOverlay(message,mode='loading'){
+ const overlay=document.getElementById('appSyncOverlay');
+ const msg=document.getElementById('appSyncMessage');
+ const retry=document.getElementById('appSyncRetry');
+ const title=document.getElementById('appSyncTitle');
+ if(!overlay)return;
+ overlay.classList.remove('hidden','error');
+ overlay.classList.toggle('error',mode==='error');
+ if(msg)msg.textContent=message|| (uiLang==='en'?'Loading shared data…':'جارٍ تحميل البيانات المشتركة…');
+ if(title)title.textContent=mode==='error'?(uiLang==='en'?'The database did not finish loading':'لم يكتمل تحميل قاعدة البيانات'):(uiLang==='en'?'Loading Chanzelise data':'جارٍ تحميل بيانات شانزليزيه');
+ if(retry)retry.classList.toggle('hidden',mode!=='error');
+}
+function hideAppSyncOverlay(){document.getElementById('appSyncOverlay')?.classList.add('hidden');}
+async function startChanzCloudSync(username){
+ if(chanzCloudStartupPromise)return chanzCloudStartupPromise;
+ chanzCloudStartupPromise=(async()=>{
+  try{
+   updateAppSyncOverlay(uiLang==='en'?'Reading shared settings and inventory…':'جارٍ قراءة إعدادات المركز وبيانات المخزون…','loading');
+   // The original application initialized Firebase independently from the local login.
+   // Keep the same non-blocking UX: authenticate first, open the shell, then load Firestore.
+   const initPromise=initializeFirebaseSync();
+   await firebaseWithTimeout(initPromise,180000,uiLang==='en'?'Initial database loading exceeded 3 minutes.':'تجاوز تحميل قاعدة البيانات الأولية 3 دقائق.');
+   if(!cloudSyncReady)throw firebaseSyncLastError||new Error(uiLang==='en'?'Firebase connected but the shared data did not finish loading.':'تم الاتصال بـ Firebase لكن لم يكتمل تحميل البيانات المشتركة.');
+   const profile=profileFor(username);
+   if(profile&&profile.active===false){
+    await firebaseWithTimeout(firebaseAuth.signOut(),8000,'Firebase sign-out timed out');
+    firebaseUser=null;currentUser=null;cloudSyncReady=false;cloudAuditReady=false;
+    document.getElementById('appShell')?.classList.add('hidden');
+    document.getElementById('loginScreen')?.classList.remove('hidden');
+    hideAppSyncOverlay();
+    const status=document.getElementById('loginStatus');if(status)status.textContent=uiLang==='en'?'This account is disabled. Contact Admin.':'هذا الحساب موقوف. يرجى التواصل مع Admin.';
+    return false;
+   }
+   currentUser={username,name:profile?.name||profile?.displayName||chanzUserMeta(username).name,role:username==='admin'?'superadmin':(profile?.role||chanzUserMeta(username).role)};
+   const label=document.getElementById('userLabel');if(label)label.textContent=currentUser.name;
+   applyRole();
+   if(!canOpenPage(currentPage))currentPage=username==='hany'?'supplierStatements':'dashboard';
+   renderPage();
+   hideAppSyncOverlay();
+   setCloudStatus(uiLang==='en'?'Connected':'تم الاتصال بقاعدة البيانات','online');
+   toast(uiLang==='en'?'Shared data loaded successfully.':'تم تحميل البيانات المشتركة بنجاح.');
+   return true;
+  }catch(err){
+   console.error('Chanz background database initialization failed:',err);
+   const detail=String(err?.code||err?.message||'connection error');
+   setCloudStatus((uiLang==='en'?'Sync error: ':'تعذر إكمال المزامنة: ')+detail,'offline');
+   updateAppSyncOverlay((uiLang==='en'?'The account is signed in, but the shared data did not load. ':'تم تسجيل الدخول، لكن لم يكتمل تحميل البيانات المشتركة. ')+detail,'error');
+   return false;
+  }
+ })();
+ try{return await chanzCloudStartupPromise;}finally{chanzCloudStartupPromise=null;}
+}
+async function retryChanzCloudSync(){
+ if(chanzCloudStartupPromise)return;
+ if(Array.isArray(cloudUnsubs)){cloudUnsubs.forEach(fn=>{try{fn()}catch(e){}});cloudUnsubs=[];}
+ if(cloudHeartbeat){clearInterval(cloudHeartbeat);cloudHeartbeat=null;}
+ cloudSyncReady=false;cloudAuditReady=false;cloudInitDone=false;
+ await startChanzCloudSync(currentUser?.username||'admin');
+}
 async function login(username,password){
  const key=normalizeLoginName(username);
- if(!key||String(password||'').length<6){return false;}
+ if(!key||String(password||'').length<6)return false;
  const display=chanzUserMeta(key);
  chanzSetLoginBusy(true);
- const status=document.getElementById('loginStatus');if(status)status.textContent=uiLang==='en'?'Verifying your account with Firebase…':'جارٍ التحقق من الحساب عبر Firebase…';
+ const status=document.getElementById('loginStatus');
+ if(status)status.textContent=uiLang==='en'?'Verifying your account with Firebase…':'جارٍ التحقق من الحساب عبر Firebase…';
  try{
   if(!window.firebase||!firebase.initializeApp)throw new Error('Firebase SDK did not load');
   firebaseApp=firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE_CONFIG);
   firebaseAuth=firebase.auth();fsDb=firebase.firestore();
   await firebaseWithTimeout(firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL),10000,uiLang==='en'?'Firebase session setup timed out.':'انتهت مهلة تجهيز جلسة Firebase.');
-  const email=chanzEmailFor(key),authCredential=firebase.auth.EmailAuthProvider.credential(email,String(password));
-  let result;
-  const existing=firebaseAuth.currentUser;
-  // Preserve the legacy anonymous UID, if this browser still has it, by linking it to the named account.
+  const email=chanzEmailFor(key),credential=firebase.auth.EmailAuthProvider.credential(email,String(password));
+  let result;const existing=firebaseAuth.currentUser;
   if(existing&&existing.isAnonymous){
-   try{result=await firebaseWithTimeout(existing.linkWithCredential(authCredential),15000,uiLang==='en'?'Firebase account linking timed out.':'انتهت مهلة ربط حساب Firebase.');}
+   try{result=await firebaseWithTimeout(existing.linkWithCredential(credential),15000,uiLang==='en'?'Firebase account linking timed out.':'انتهت مهلة ربط حساب Firebase.');}
    catch(linkErr){
-    if(['auth/email-already-in-use','auth/credential-already-in-use'].includes(linkErr.code))result=await firebaseWithTimeout(firebaseAuth.signInWithEmailAndPassword(email,String(password)),15000,uiLang==='en'?'Firebase sign-in timed out.':'انتهت مهلة تسجيل الدخول إلى Firebase.')
+    if(['auth/email-already-in-use','auth/credential-already-in-use'].includes(linkErr.code))result=await firebaseWithTimeout(firebaseAuth.signInWithEmailAndPassword(email,String(password)),15000,uiLang==='en'?'Firebase sign-in timed out.':'انتهت مهلة تسجيل الدخول إلى Firebase.');
     else throw linkErr;
    }
   }else{
    result=await firebaseWithTimeout(firebaseAuth.signInWithEmailAndPassword(email,String(password)),15000,uiLang==='en'?'Firebase sign-in timed out.':'انتهت مهلة تسجيل الدخول إلى Firebase.');
   }
   firebaseUser=result.user;
-  currentUser={username:key,name:display.name,role:display.role};
+  const localProfile=profileFor(key);
+  if(localProfile&&localProfile.active===false){await firebaseWithTimeout(firebaseAuth.signOut(),8000,'Firebase sign-out timed out');firebaseUser=null;throw new Error(uiLang==='en'?'This account is disabled. Contact Admin.':'هذا الحساب موقوف. يرجى التواصل مع Admin.');}
+  currentUser={username:key,name:localProfile?.name||localProfile?.displayName||display.name,role:key==='admin'?'superadmin':(localProfile?.role||display.role)};
   cloudSyncReady=false;cloudAuditReady=false;cloudInitDone=false;
   if(Array.isArray(cloudUnsubs)){cloudUnsubs.forEach(fn=>{try{fn()}catch(e){}});cloudUnsubs=[];}
   if(cloudHeartbeat){clearInterval(cloudHeartbeat);cloudHeartbeat=null;}
-  if(status)status.textContent=uiLang==='en'?'Credentials accepted. Loading shared data…':'تم قبول بيانات الدخول. جارٍ تحميل البيانات المشتركة…';
-  await firebaseWithTimeout(
-   initializeFirebaseSync(),
-   120000,
-   uiLang==='en'?'Firebase sign-in succeeded, but loading the shared database exceeded 2 minutes. The collection may be large or Firestore Rules may be blocking access.':'تم تسجيل الدخول في Firebase، لكن تحميل قاعدة البيانات تجاوز دقيقتين. قد يكون حجم السجلات كبيراً أو قواعد Firestore تمنع الوصول.'
-  );
-  if(!cloudSyncReady)throw new Error(uiLang==='en'?'Firebase signed in, but the database could not be synchronized. Check Firestore Rules.':'تم التحقق من الحساب، لكن تعذرت مزامنة قاعدة البيانات. راجع قواعد Firestore.');
-  const profile=profileFor(key);
-  if(profile&&profile.active===false){await firebaseAuth.signOut();firebaseUser=null;currentUser=null;throw new Error(uiLang==='en'?'This account is disabled. Contact Admin.':'هذا الحساب موقوف. يرجى التواصل مع Admin.');}
-  currentUser={username:key,name:profile?.name||profile?.displayName||display.name,role:key==='admin'?'superadmin':(profile?.role||display.role)};
-  document.getElementById('loginScreen').classList.add('hidden');document.getElementById('appShell').classList.remove('hidden');
+  // Open the application immediately after Firebase Authentication succeeds.
+  // Firestore's full historical download continues behind a clear in-app loading gate.
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appShell').classList.remove('hidden');
   const label=document.getElementById('userLabel');if(label)label.textContent=currentUser.name;
   applyRole();
+  currentPage=key==='hany'?'supplierStatements':'dashboard';
+  renderPage();
   audit('تسجيل دخول','النظام',`تسجيل دخول Firebase للمستخدم ${currentUser.name} (${email})`);
   audit('فتح البرنامج','النظام','بدء جلسة استخدام مصادق عليها بواسطة Firebase');
-  navigate(key==='hany'?'supplierStatements':'dashboard');
+  navigate(currentPage);
+  updateAppSyncOverlay(uiLang==='en'?'Firebase sign-in succeeded. Loading the shared data in the background…':'تم تسجيل الدخول بنجاح. جارٍ تحميل البيانات المشتركة في الخلفية…','loading');
+  // Do not await the complete historical collection download from the login handler.
+  startChanzCloudSync(key);
   return true;
  }catch(err){
-  console.error('Chanz Firebase login failed:',err);
+  console.error('Chanz Firebase authentication failed:',err);
   const friendly=chanzAuthErrorMessage(err);
   chanzLoginLastError=friendly+(err?.code?` [${err.code}]`:'');
   if(status)status.textContent=chanzLoginLastError;
-  setCloudStatus('Sync error: '+String(err?.code||err?.message||'connection'),'offline');
   const loginCloud=document.getElementById('loginCloudStatus');if(loginCloud){loginCloud.textContent=friendly;loginCloud.classList.remove('syncing');loginCloud.classList.add('offline');}
   toast(friendly);
-  try{if(Array.isArray(cloudUnsubs)){cloudUnsubs.forEach(fn=>{try{fn()}catch(e){}});cloudUnsubs=[];}if(cloudHeartbeat){clearInterval(cloudHeartbeat);cloudHeartbeat=null;}if(firebaseAuth&&firebaseAuth.currentUser)await firebaseAuth.signOut();}catch(signOutErr){console.warn('Cleanup after failed login did not complete',signOutErr)}
+  try{if(firebaseAuth&&firebaseAuth.currentUser)await firebaseWithTimeout(firebaseAuth.signOut(),8000,'Firebase sign-out timed out');}catch(signOutErr){console.warn('Cleanup after failed authentication did not complete',signOutErr)}
   firebaseUser=null;currentUser=null;cloudSyncReady=false;cloudAuditReady=false;cloudInitDone=false;
   return false;
  }finally{
   chanzSetLoginBusy(false);checkChanzLoginUnlock();
-  const loginCloud=document.getElementById('loginCloudStatus');
-  if(loginCloud&&!document.getElementById('loginScreen')?.classList.contains('hidden')&&loginCloud.classList.contains('syncing')){
-    loginCloud.textContent=uiLang==='en'?'The attempt ended. Check the message above and retry.':'انتهت المحاولة. راجع رسالة الحالة ثم أعد المحاولة.';
-    loginCloud.classList.remove('syncing');loginCloud.classList.add('offline');
-  }
  }
 }
 
